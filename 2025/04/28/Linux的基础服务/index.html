@@ -1,0 +1,1802 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Linux的基础服务 - 墨香笔记@技术博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="墨香笔记@技术博客"><meta name="msapplication-TileImage" content="https://cdn.jsdelivr.net/gh/removeif/removeif-demo@latest/img/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="墨香笔记@技术博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Linux的基础服务"><meta property="og:type" content="blog"><meta property="og:title" content="罗宇"><meta property="og:url" content="https://luovip.github.io/"><meta property="og:site_name" content="罗宇"><meta property="og:description" content="Linux的基础服务"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://luovip.github.io/img/avatar.png"><meta property="article:published_time" content="2025-04-28T05:50:42.000Z"><meta property="article:modified_time" content="2025-04-28T06:11:17.473Z"><meta property="article:author" content="removeif"><meta property="article:tag" content="Linux的基础服务"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="https://luovip.github.io/img/avatar.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/"},"headline":"墨香笔记@技术博客","image":["http://example.com/img/Linux.png"],"datePublished":"2025-04-28T05:50:42.000Z","dateModified":"2025-04-28T06:11:17.473Z","author":{"@type":"Person","name":"罗宇"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject"}},"description":"Linux的基础服务"}</script><link rel="canonical" href="http://example.com/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/"><link rel="icon" href="https://cdn.jsdelivr.net/gh/removeif/removeif-demo@latest/img/favicon.png"><meta name="referrer" content="no-referrer-when-downgrade"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/6.0.0/css/all.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"><link rel="stylesheet" href="https://fonts.loli.net/css?family=Ubuntu:400,600|Source+Code+Pro|Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Microsoft YaHei:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&amp;amp;subset=latin,latin-ext|Inconsolata|Itim|Lobster.css"><script src="https://cdnjs.loli.net/ajax/libs/jquery/3.3.1/jquery.min.js"></script><script src="/js/globalUtils.js"></script><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdnjs.loli.net/ajax/libs/pace/1.2.4/pace.min.js"></script><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body class="is-3-column has-navbar-fixed-top"><nav class="navbar navbar-main is-fixed-top"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.png" alt="墨香笔记@技术博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a><a class="navbar-item" href="/media">音乐</a><a class="navbar-item" href="/album">相册</a><a class="navbar-item" href="/about">关于我</a></div><div class="navbar-end"><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a><a class="navbar-item" id="night-nav" title="Night Mode" href="javascript:;"><i class="fas fa-moon" id="night-icon"></i></a></div></div></div></nav><script type="text/javascript" src="/js/theme-setting.js"></script><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><!--!--><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/img/Linux.png" alt="Linux的基础服务"></span></div><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2025-04-28  <a class="commentCountImg" href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/#comment-container"><span class="display-none-class">/2025/04/28/Linux的基础服务/</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="246ed7d8da32697d97fec6f5c24efee3">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>7 小时  <i class="fas fa-pencil-alt"> </i>59.2 k</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Linux的基础服务</h1><div class="content"><h1 id="Linux的基础服务"><a href="#Linux的基础服务" class="headerlink" title="Linux的基础服务"></a>Linux的基础服务</h1><span id="more"></span>
+
+<h1 id="1-RAID存储技术与实践"><a href="#1-RAID存储技术与实践" class="headerlink" title="1 RAID存储技术与实践"></a>1 RAID存储技术与实践</h1><h2 id="1-1-RAID存储概念"><a href="#1-1-RAID存储概念" class="headerlink" title="1.1 RAID存储概念"></a>1.1 RAID存储概念</h2><p><strong>独立磁盘冗余阵列(RAID)是一种存储技术</strong></p>
+<p><strong>通过将两个或多个硬盘驱动器(HDD)或固态硬盘(SSD)合并成一个协调的存储单元或阵列</strong></p>
+<p><strong>从而创建数据丢失的故障安全机制</strong></p>
+<p><img src="/media/8be2b35f3a47718210cbecdc409eef95.png" alt="Snipaste_2024-07-29_20-25-15.png"></p>
+<p><strong>RAID存储通过将数据重复或重新创建，并将其存储在附加的驱动器上来防止磁盘驱动器数据的完全丢失，这个过程也被称为数据冗余。</strong></p>
+<p><strong>提供数据丢失保护的配置被称为“容错”配置，这意味着即使磁盘驱动器发生故障，阵列仍然可以成功运行并提供可恢复的数据。</strong></p>
+<h2 id="1-2-RAID的历史与级别"><a href="#1-2-RAID的历史与级别" class="headerlink" title="1.2 RAID的历史与级别"></a>1.2 RAID的历史与级别</h2><p><strong>1.RAID的历史</strong></p>
+<p><strong>RAID的概念最早由加州大学伯克利分校的计算机科学家David Patterson、Garth Gibson和Randy Katz在1987年提出。他们的研究论文“关于RAID的论证”提出了将多个磁盘驱动器组合起来，以提高性能和可靠性的想法。</strong></p>
+<p><strong>最初RAID的目标是通过将多个廉价的磁盘驱动器组合起来，以取代昂贵的大型磁盘驱动器，从而提供更高的性能和容错能力。因此，RAID的原始名称是“Redundant Array of Inexpensive Disks”(廉价磁盘冗余阵列)。</strong></p>
+<p><strong>余和性能特征的不同，RAID级别分为多个类型，如RAID 0、RAID 1、RAID 5、RAID 6等。</strong></p>
+<p><strong>RAID的发展离不开硬件和软件技术的进步。早期的RAID实施通常依赖于软件，即操作系统提供的RAID功能。然而，随着硬件技术的进步，硬件RAID控制器出现了，提供更高的性能和更强大的功能。</strong></p>
+<p><strong>RAID的标准化工作也逐渐展开。Storage Networking Industry Association（SNIA）成立了RAID专门兴趣小组，致力于制定和推动RAID的标准化和发展。这些标准化工作为不同RAID级别的实施提供了一致性和互操作性。</strong></p>
+<p><strong>2.RAID级别</strong></p>
+<p><strong>RAID存储提供了不同的级别，每个级别具有不同的冗余和性能特性。</strong></p>
+<p><img src="/media/4e71544adaf5c3f4606248984d34a630.png" alt="Snipaste_2024-07-29_20-34-27.png"></p>
+<p><strong>常见的RAID级别：</strong></p>
+<p><strong>RAID 0：条带化(数据分块)但没有冗余，提供较高的读写性能。</strong></p>
+<p><strong>RAID 1：镜像，数据完全复制到另一个驱动器，提供容错能力。</strong></p>
+<p><strong>RAID 5：条带化加分布式奇偶校验，提供数据冗余和读取性能。</strong></p>
+<p><strong>RAID 6：类似于RAID 5，但提供更高级别的容错能力。</strong></p>
+<p><strong>RAID 10：RAID 1+0，将RAID 1镜像组合成RAID 0条带化，提供较高的容错能力和读写性能。</strong></p>
+<p><strong>RAID 50：RAID 5组合成RAID 0，提供较高的性能和容错能力。</strong></p>
+<p><strong>RAID 60：RAID 6组合成RAID 0，提供更高级别的性能和容错能力。</strong></p>
+<h2 id="1-3-详解RAID各级别"><a href="#1-3-详解RAID各级别" class="headerlink" title="1.3 详解RAID各级别"></a>1.3 详解RAID各级别</h2><p><strong>1.RAID 0</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 0使用数据条带化(striping)的方式将数据分散存储在多个磁盘驱动器上，而不进行冗余备份。数据被分成固定大小的块，并依次存储在每个磁盘上。例如，如果有两个驱动器(驱动器A和驱动器B)，一块数据的第一个部分存储在驱动器A上，第二个部分存储在驱动器B上，以此类推。这种条带化的方式可以同时从多个驱动器读取或写入数据，从而提高系统的性能。</strong></p>
+<p><img src="/media/457086c3c4ce5a20e839b2c6fc0f3d1e.png" alt="Snipaste_2024-07-29_20-42-41.png"></p>
+<p><strong>RAID 0的原理与冗余原理图，展示了数据条带化存储的方式</strong></p>
+<p><strong>在上述示例中，数据被分成块，并依次存储在两个驱动器上。每个块的一部分存储在驱动器A上，另一部分存储在驱动器B上。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 0适用于需要高性能而不关心数据冗余的场景。</strong></p>
+<p><strong>以下是几种适合使用RAID 0的场景：</strong></p>
+<p><strong>1.视频编辑和处理:在视频编辑中，需要快速读取和写入大量数据。RAID 0可以通过并行读写操作提高数据传输速度，加快视频编辑和处理的速度。</strong></p>
+<p><strong>2.大型数据库应用:对于需要频繁访问和查询数据库的应用程序，RAID 0可以提供更快的数据访问速度，加快数据库操作的响应时间。</strong></p>
+<p><strong>3.实时流媒体:对于需要实时传输和处理大量数据的流媒体应用，RAID 0可以提供足够的带宽和吞吐量，确保流媒体内容的平滑播放。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>高性能:通过数据条带化和并行读写操作，可提供更快的数据传输速度和更高的系统性能。</strong></p>
+<p><strong>成本效益:相对于其他RAID级别(如RAID 1或RAID 5)，RAID 0不需要额外的磁盘用于冗余备份，因此在成本上更具竞争力。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>缺乏冗余:由于RAID 0不提供数据冗余，如果任何一个驱动器发生故障，所有数据都可能丢失。因此，RAID 0不适合存储关键数据。</strong></p>
+<p><strong>可靠性降低:由于没有冗余备份，RAID 0的可靠性相对较低。如果任何一个驱动器发生故障，整个阵列的可用性将受到影响。</strong></p>
+<p><strong>2.RAID 1</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 1使用数据镜像(mirroring)的方式将数据完全复制到两个或多个磁盘驱动器上。当写入数据时，数据同时写入所有驱动器。这样，每个驱动器都具有相同的数据副本，从而实现数据的冗余备份。如果其中一个驱动器发生故障，系统可以继续从剩余的驱动器中读取数据，确保数据的可用性和完整性。</strong></p>
+<p><img src="/media/3e6909dddc006216b460d20a1040b887.png" alt="Snipaste_2024-07-29_20-52-00.png"></p>
+<p><strong>RAID 1的原理和冗余原理图，展示了数据镜像的方式</strong></p>
+<p><strong>在上述示例中，数据被完全复制到两个驱动器上。每个块的数据都同时存储在两个驱动器上，以实现数据的冗余备份。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 1适用于对数据冗余和高可用性要求较高的场景。</strong></p>
+<p><strong>以下是几种适合使用RAID 1的场景：</strong></p>
+<p><strong>1.关键数据存储：对于关键数据的存储，如企业的财务数据、客户信息等，RAID 1可以提供数据冗余备份，以防止数据丢失。</strong></p>
+<p><strong>2.数据库服务器：对于需要高可用性和容错性的数据库服务器，RAID 1可以确保数据的持久性和可用性，即使一个驱动器发生故障，也可以从其他驱动器中读取数据。</strong></p>
+<p><strong>3.文件服务器：对于共享文件的服务器，RAID 1可以提供冗余备份，确保文件的可靠性和高可用性。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>数据冗余备份：RAID 1通过数据镜像将数据完全复制到多个驱动器上，提供冗余备份，保护数据免受驱动器故障的影响。</strong></p>
+<p><strong>高可用性：由于数据的冗余备份，即使一个驱动器发生故障，系统仍然可以从其他驱动器中读取数据，保证数据的可用性和连续性。</strong></p>
+<p><strong>读取性能提升：RAID 1可以通过并行读取数据的方式提升读取性能，从而加快数据访问速度。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>成本增加:由于需要额外的磁盘用于数据冗余备份，RAID 1的成本相对较高。需要考虑额外的硬件成本。</strong></p>
+<p><strong>写入性能略低:由于数据需要同时写入多个驱动器，相对于单个驱动器的写入性能，RAID 1的写入性能可能略低。</strong></p>
+<p><strong>3.RAID 5</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 5使用数据条带化(striping)的方式将数据分散存储在多个磁盘驱动器上，并通过分布式奇偶校验实现数据的冗余备份。数据和奇偶校验信息被组织成数据块，其中奇偶校验信息被分布式存储在不同的驱动器上。当写入数据时，奇偶校验信息也会被更新。如果其中一个驱动器发生故障，系统可以通过重新计算奇偶校验信息来恢复丢失的数据。这种方式可以同时提供性能增强和数据冗余。</strong></p>
+<p><img src="/media/16b47ff9819a1a2f4a546d897956e614.png" alt="Snipaste_2024-07-29_20-59-37.png"></p>
+<p><strong>RAID 5的原理和冗余原理图，展示了数据条带化和分布式奇偶校验的方式</strong></p>
+<p><strong>在上述示例中，数据被分成块，并依次存储在不同的驱动器上。奇偶校验信息被分布式存储在驱动器中。通过奇偶校验信息，可以计算和恢复丢失的数据。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 5适用于需要性能增强和数据冗余的场景</strong></p>
+<p><strong>以下是几种适合使用RAID 5的场景：</strong></p>
+<p><strong>文件服务器:对于文件服务器，RAID 5可以提供高性能的数据访问和数据冗余备份，确保文件的安全性和可用性。</strong></p>
+<p><strong>数据库服务器:对于需要高性能和数据冗余的数据库服务器，RAID 5可以提供快速的数据读取和写入，同时保护数据免受驱动器故障的影响。</strong></p>
+<p><strong>小型企业环境:对于小型企业，RAID 5提供了经济实惠的解决方案，同时提供了性能和数据冗余的好处。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>性能增强:通过数据条带化和并行读写操作，RAID 5可以提供较高的数据传输速度和系统性能。</strong></p>
+<p><strong>数据冗余备份:通过分布式奇偶校验，RAID 5可以提供数据的冗余备份，保护数据免受驱动器故障的影响。</strong></p>
+<p><strong>成本效益:相对于其他RAID级别(如RAID 1)，RAID 5只需要额外一个驱动器用于奇偶校验信息，从而在成本上更具竞争力。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>写入性能受限:由于写入数据时需要重新计算奇偶校验信息，相对于读取操作，RAID 5的写入性能较低。</strong></p>
+<p><strong>驱动器故障期间的数据完整性:如果一个驱动器发生故障，系统在恢复数据时需要进行计算，这可能导致数据访问速度较慢，并且在此期间可能会有数据完整性的风险。</strong></p>
+<p><strong>4.RAID 6</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 6使用数据条带化(striping)的方式将数据分散存储在多个磁盘驱动器上，并通过分布式奇偶校验和双重奇偶校验实现数据的冗余备份。数据和奇偶校验信息被组织成数据块，其中奇偶校验信息被分布式存储在不同的驱动器上，并通过双重奇偶校验提供更高的数据冗余性。当写入数据时，奇偶校验信息也会被更新。如果其中两个驱动器发生故障，系统可以通过重新计算奇偶校验信息来恢复丢失的数据。这种方式可以同时提供性能增强和更高级别的数据冗余。</strong></p>
+<p><img src="/media/8c297338947dd565e2c6a600ea38332c.png" alt="Snipaste_2024-07-29_21-07-06.png"></p>
+<p><strong>RAID 6的原理和冗余原理图，展示了数据条带化、分布式奇偶校验和双重奇偶校验的方式</strong></p>
+<p><strong>在上述示例中，数据被分成块，并依次存储在不同的驱动器上。奇偶校验信息被分布式存储在驱动器中，并通过双重奇偶校验提供更高级别的数据冗余性。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 6适用于需要更高级别的数据冗余和性能增强的场景。</strong></p>
+<p><strong>以下是几种适合使用RAID 6的场景：</strong></p>
+<p><strong>大容量存储系统:对于需要大容量存储和数据冗余备份的系统，如大型文件服务器或存档系统，RAID 6可以提供更高级别的数据冗余性。</strong></p>
+<p><strong>长时间运行的应用程序:对于需要长时间运行的关键应用程序，如数据库服务器，RAID 6可以提供更高级别的数据冗余和故障容忍性。</strong></p>
+<p><strong>虚拟化环境:在虚拟化环境中，需要高性能和更高级别的数据冗余来支持多个虚拟机的运行。RAID 6可以满足这些要求。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>更高级别的数据冗余:通过分布式奇偶校验和双重奇偶校验，RAID 6可以提供更高级别的数据冗余性，即使同时发生两个驱动器故障，仍能恢复丢失的数据。</strong></p>
+<p><strong>性能增强:通过数据条带化和并行读写操作，RAID 6可以提供较高的数据传输速度和系统性能。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>写入性能略低:由于数据需要同时写入多个驱动器，并进行双重奇偶校验计算，相对于读取操作，RAID 6的写入性能较低。</strong></p>
+<p><strong>较高的成本:由于需要额外的磁盘用于奇偶校验信息和更复杂的计算，RAID 6的成本相对较高。需要考虑额外的硬件成本。</strong></p>
+<p><strong>5.RAID 10</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 10使用条带化(striping)的方式将数据分散存储在多个磁盘驱动器上，并通过镜像（mirroring）实现数据的冗余备份。数据被分成固定大小的块，并依次存储在不同的驱动器上，类似于RAID 0。然而，每个数据块都会被完全复制到另一个驱动器上，实现数据的冗余备份，类似于RAID 1。这样，RAID 10在提供性能增强的同时，也提供了数据的冗余保护。</strong></p>
+<p><img src="/media/634a2ce69a987ad77a465c59278519bc.png" alt="Snipaste_2024-07-29_21-13-56.png"></p>
+<p><strong>RAID 10的原理和冗余原理图，展示了数据条带化和镜像的方式</strong></p>
+<p><strong>在上述示例中，数据被分成块，并依次存储在不同的驱动器上。每个块的数据都完全复制到另一个驱动器上，实现数据的冗余备份。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 10适用于需要高性能和数据冗余的场景。</strong></p>
+<p><strong>以下是几种适合使用RAID 10的场景：</strong></p>
+<p><strong>数据库服务器:对于需要高可用性和性能的数据库服务器，RAID 10可以提供快速的数据读取和写入，同时保护数据免受驱动器故障的影响。</strong></p>
+<p><strong>虚拟化环境:在虚拟化环境中，需要高性能和数据冗余来支持多个虚拟机的运行。RAID 10可以满足这些要求，提供性能增强和数据保护。</strong></p>
+<p><strong>关键业务应用:对于关键业务应用，如金融交易系统或在线电子商务平台，RAID 10可以提供高可用性和快速的数据访问，确保业务的连续性和稳定性。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>高性能:通过数据条带化和并行读写操作，RAID 10可以提供较高的数据传输速度和系统性能。</strong></p>
+<p><strong>数据冗余备份:通过数据镜像将数据完全复制到另一个驱动器上，RAID 10提供了数据的冗余备份，保护数据免受驱动器故障的影响。</strong></p>
+<p><strong>较高的可靠性:由于RAID 10采用镜像的方式进行数据冗余备份，即使一个驱动器发生故障，仍然可以从其他驱动器中读取数据，确保数据的可用性和连续性。</strong></p>
+<p><strong>快速的故障恢复:在RAID 10中，如果一个驱动器发生故障，系统可以直接从镜像驱动器中恢复数据，而无需进行复杂的计算，从而加快故障恢复的速度。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>较高的成本:相对于其他RAID级别，RAID 10需要更多的驱动器用于数据镜像，增加了硬件成本。</strong></p>
+<p><strong>低效的空间利用:由于RAID 10的数据镜像特性，有效的存储容量只等于所有驱动器中一半的容量，因此空间利用率较低。</strong></p>
+<p><strong>6.RAID 50</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 50使用条带化(striping)的方式将数据分散存储在多个RAID 5组中，并通过RAID 0的条带化方式对这些RAID 5组进行条带化。每个RAID 5组由多个磁盘驱动器组成，并使用分布式奇偶校验来提供数据冗余备份。RAID 0则通过将数据划分为固定大小的块，并将这些块依次存储在多个驱动器上，提供了更高的性能。这样，RAID 50既提供了数据冗余备份，又提供了性能增强。</strong></p>
+<p><img src="/media/fdc0fafc7ec473c881d59fe80534442b.png" alt="Snipaste_2024-07-29_21-21-25.png"></p>
+<p><strong>RAID 50的原理和冗余原理图，展示了数据条带化和分布式奇偶校验的方式</strong></p>
+<p><strong>在上述示例中，数据被分成块，并依次存储在不同的RAID 5组中。每个RAID 5组由多个驱动器组成，并使用分布式奇偶校验提供数据的冗余备份。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 50适用于需要高性能和更高级别的数据冗余的场景。</strong></p>
+<p><strong>以下是几种适合使用RAID 50的场景：</strong></p>
+<p><strong>大规模数据存储:对于需要大规模数据存储和数据冗余备份的系统，如视频编辑、数据分析或大型数据库，RAID 50可以提供高性能和较高级别的数据冗余性。</strong></p>
+<p><strong>图形渲染和动画制作:在图形渲染和动画制作领域，需要高性能的存储系统来处理大型文件和复杂的渲染任务。RAID 50可以满足这些要求，提供快速的数据读取和写入速度。</strong></p>
+<p><strong>虚拟化环境:在虚拟化环境中，需要高性能和更高级别的数据冗余来支持多个虚拟机的运行。RAID 50可以满足这些要求，提供性能增强和数据保护。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>高性能:通过数据条带化和并行读写操作，RAID 50可以提供较高的数据传输速度和系统性能。</strong></p>
+<p><strong>更高级别的数据冗余:由于采用了多个RAID 5组的方式，RAID 50提供了更高级别的数据冗余备份，即使同时发生多个驱动器故障，仍能恢复丢失的数据。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>较高的成本:由于需要更多的驱动器用于数据条带化和数据冗余备份，RAID 50的硬件成本相对较高。</strong></p>
+<p><strong>配置和管理复杂性:由于涉及多个RAID 5组和驱动器，RAID 50的配置和管理相对复杂，需要更多的注意和维护。</strong></p>
+<p><strong>7.RAID 60</strong></p>
+<p><strong>原理:</strong></p>
+<p><strong>RAID 60采用条带化(striping)的方式将数据分散存储在多个RAID 6组中，并通过RAID 0的条带化方式对这些RAID 6组进行条带化。每个RAID 6组由多个磁盘驱动器组成，并使用分布式奇偶校验来提供数据的冗余备份。RAID 0则通过将数据划分为固定大小的块，并将这些块依次存储在多个驱动器上，提供了更高的性能。这样，RAID 60既提供了更高级别的数据冗余备份，又提供了性能增强。</strong></p>
+<p><img src="/media/25161f499c0fa9db95b32e7ac0e0592f.png" alt="Snipaste_2024-07-29_21-29-49.png"></p>
+<p><strong>RAID 60的原理和冗余原理图，展示了数据条带化和分布式奇偶校验的方式</strong></p>
+<p><strong>在上述示例中，数据被分成块，并依次存储在不同的RAID 6组中。每个RAID 6组由多个驱动器组成，并使用分布式奇偶校验提供数据的冗余备份。</strong></p>
+<p><strong>适用场景:</strong></p>
+<p><strong>RAID 60适用于需要更高级别的数据冗余和更高性能的场景。</strong></p>
+<p><strong>以下是几种适合使用RAID 60的场景：</strong></p>
+<p><strong>大型数据库系统:对于大型数据库系统，需要高可用性、高性能和更高级别的数据冗余来确保数据的完整性和可靠性。RAID 60可以提供这些要求。</strong></p>
+<p><strong>大规模数据分析:在大规模数据分析领域，需要高性能的存储系统来处理大量数据的读取和写入。RAID 60可以满足这些要求，提供较高的数据传输速度和系统性能。</strong></p>
+<p><strong>视频流媒体处理:对于视频流媒体处理应用，需要快速的数据读取和写入，以确保流畅的视频播放和高质量的媒体处理。RAID 60可以满足这些要求。</strong></p>
+<p><strong>优点:</strong></p>
+<p><strong>更高级别的数据冗余：由于采用了多个RAID 6组的方式，RAID 60提供了更高级别的数据冗余备份，即使同时发生多个驱动器故障，仍能恢复丢失的数据。</strong></p>
+<p><strong>高性能:通过数据条带化和并行读写操作，RAID 60可以提供较高的数据传输速度和系统性能。</strong></p>
+<p><strong>缺点:</strong></p>
+<p><strong>较高的成本:由于需要更多的驱动器用于数据条带化和数据冗余备份，RAID 60的硬件成本相对较高。</strong></p>
+<p><strong>配置和管理复杂性:由于涉及多个RAID 6组和驱动器，RAID 60的配置和管理相对复杂，需要更多的注意和维护。</strong></p>
+<h2 id="1-4-RAID级别对比"><a href="#1-4-RAID级别对比" class="headerlink" title="1.4 RAID级别对比"></a>1.4 RAID级别对比</h2><p><img src="/media/5815e72ba5a1625da808cf7ed5558b5d.png" alt="Snipaste_2024-07-29_21-34-46.png"></p>
+<h2 id="1-5-RAID的实践"><a href="#1-5-RAID的实践" class="headerlink" title="1.5 RAID的实践"></a>1.5 RAID的实践</h2><p><strong>DELL服务器R730xd配置RAID5：</strong></p>
+<p><strong>1.开机等待DELL图标出现，连续按ctrl+r，进入RAID配置界面</strong></p>
+<p><img src="/media/23ed10255f51a6a4e91122e34e38f338.jpeg" alt="微信图片_20240729214323.jpg"></p>
+<p><strong>2.进入RAID配置界面，如果是下面这个界面，选择Disk group 0这项需要按F2</strong></p>
+<p><img src="/media/3a9efc35a24c30f0e0d4a90ba9ba2c00.jpeg" alt="微信图片_20240729214828.jpg"></p>
+<p><strong>3.按完F2后会出现下面的信息，选择delete这行，删掉当前的磁盘组</strong></p>
+<p><img src="/media/2dd44372f89320b83975cfa966312dd8.jpeg" alt="微信图片_20240729214904.jpg"></p>
+<p><strong>4.还原到没有RAID的时候</strong></p>
+<p><img src="/media/d3305f7540c91aa5869f6d664d8b6d25.jpeg" alt="微信图片_20240729214912.jpg"></p>
+<p><strong>5.选中上图中的Controller 0这个选项，按F2，出现下面的界面，挨个选中后，OK确定</strong></p>
+<p><img src="/media/1dd100468f284b72b92bbd24e283ad5f.jpeg" alt="微信图片_20240729215258.jpg"></p>
+<p><strong>6.上一步确定后会返回如下界面</strong></p>
+<p><img src="/media/01c40d401b35cd5fe83c272da392fdbf.png" alt="Snipaste_2024-07-29_21-54-53.png"></p>
+<p><strong>7.然后按F2后找到有create的选项，会出现如下选RAID级别的界面，选定级别后，选择OK</strong></p>
+<p><img src="/media/4fdea3caa978bb0ec689bfe0f8bae640.jpeg" alt="微信图片_20240729215859.jpg"></p>
+<p><strong>8.上一步确定后会返回如下界面</strong></p>
+<p><img src="/media/66f70001f91d1a5e5dcafd5ae2bb1fcb.jpeg" alt="微信图片_20240729220022.jpg"></p>
+<p><strong>9.在数字上按F2后找到fast init进行快速格式化</strong></p>
+<p><img src="/media/76b7d7b47007f6a9194bf48cdfff18e2.jpeg" alt="微信图片_20240729220210.jpg"></p>
+<p><strong>10.重装系统后查看RAID–lsblk</strong></p>
+<p><img src="/media/5b3e0161e1b7e96211c09df411904184.png" alt="Snipaste_2024-07-29_22-03-43.png"></p>
+<h2 id="1-6-RAID的演进"><a href="#1-6-RAID的演进" class="headerlink" title="1.6 RAID的演进"></a>1.6 RAID的演进</h2><p><strong>随着时间的推移，RAID存储技术不断演进和改进。</strong></p>
+<p><strong>以下是RAID存储领域的一些重要演进：</strong></p>
+<p><strong>硬件RAID控制器:</strong></p>
+<p><strong>硬件RAID控制器是RAID技术发展的重要里程碑之一。硬件RAID控制器是一种独立的设备，具有自己的处理器和缓存，用于执行RAID级别的计算和管理。它通过降低主机系统的负担，提供更高的性能和更好的数据保护。</strong></p>
+<p><strong>RAID级别的增加:</strong></p>
+<p><strong>随着RAID技术的发展，不断引入了新的RAID级别，以满足不同的需求。RAID 5和RAID 6提供了更高级别的容错能力，可以容忍多个磁盘故障。RAID 10结合了RAID 1和RAID 0的优势，提供了更高的性能和容错能力。RAID 50和RAID 60结合了不同级别的RAID，提供更高级别的性能和容错能力。</strong></p>
+<p><strong>SSD和RAID:</strong></p>
+<p><strong>随着固态硬盘(SSD)技术的发展，SSD在RAID存储中的应用也逐渐增多。SSD具有更高的读写性能和更好的可靠性，可以提供更高的RAID性能。SSD的低延迟和高吞吐量使得RAID存储能够更好地满足高性能计算和数据密集型应用的需求。</strong></p>
+<h2 id="1-7-RAID存储的未来"><a href="#1-7-RAID存储的未来" class="headerlink" title="1.7 RAID存储的未来"></a>1.7 RAID存储的未来</h2><p><strong>RAID存储技术在过去几十年中取得了巨大的进步，为数据存储提供了更高的可靠性和性能。然而，随着大数据、云计算和人工智能等技术的快速发展，对存储系统的需求也在不断增长和变化。</strong></p>
+<p><strong>未来的RAID存储将面临更大的挑战和机遇。新的技术和创新将推动RAID存储在容错能力、性能、扩展性和成本效益方面的进一步发展。例如，分布式RAID、混合存储技术和软件定义存储等新兴技术将在未来的RAID存储中发挥重要作用。</strong></p>
+<h1 id="2-使用ssh服务管理远程主机"><a href="#2-使用ssh服务管理远程主机" class="headerlink" title="2 使用ssh服务管理远程主机"></a>2 使用ssh服务管理远程主机</h1><h2 id="2-1-配置网络服务"><a href="#2-1-配置网络服务" class="headerlink" title="2.1 配置网络服务"></a>2.1 配置网络服务</h2><p><strong>1.配置网卡参数</strong></p>
+<p><strong>后续服务的计划IP为:</strong></p>
+<p><strong>服务器主机IP地址均为192.168.1.31</strong></p>
+<p><strong>客户端主机均为192.168.1.41及192.168.1.51</strong></p>
+<p><strong>前面讲解了如何使用Vim文本编辑器来配置网卡参数。在RHEL 8系统中至少 有5种网络的配置方法，下面使用nmtui 命令来配置网络，其具体的配置步骤如下面各图所示。</strong></p>
+<p><strong>执行nmtui命令运行网络配置工具:</strong></p>
+<p><img src="/media/2f1d82d071f2e7019358b76f087198a5.png" alt="截图.png"></p>
+<p><strong>选中Edit a connection并按下回车键:</strong></p>
+<p><img src="/media/e759dc8146de9c81e754edaa9330fed1.png" alt="截图.png"></p>
+<p><strong>RHEL 5、RHEL 6系统及其他大多数早期的Linux系统中，网卡的名称是eth0、 eth1eth2、……；RHEL 7中变成了类似于eno16777736这样的名字；而在RHEL 8系 统中网卡的最新名称是类似ens160、ens192这样的，除了网卡的名称发生变化之外，其他一切几乎照旧，因 此这里演示的网络配置实验完全可适用于各种版本的Linux系统。</strong></p>
+<p><strong>在服务器主机的网络配置信息中填写IP地址192.168.1.31&#x2F;24。24表示子网掩码 中的前24位为网络号，后8位是主机号(与写成255.255.255.0的效果一样)。网关、DNS等 信息暂可不必填写，等用到时再补充。</strong></p>
+<p><strong>选中要配置的网卡名称，然后按下Edit按钮:</strong></p>
+<p><img src="/media/0934358eda3da5f4ecd15b70bea9230a.png" alt="截图.png"></p>
+<p><strong>把网卡IPv4的配置方式改成Manual(手动):</strong></p>
+<p><img src="/media/fd34876cbbe236154306c54d6c5bce7b.png" alt="截图.png"></p>
+<p><strong>按下Show按钮:</strong></p>
+<p><img src="/media/038085ded0ce3d3cbdadd7d2a33fcfde.png" alt="截图.png"></p>
+<p><strong>填写IP地址和子网掩码:</strong></p>
+<p><img src="/media/d74fcab733f4c2e44face9372edbab3c.png" alt="截图.png"></p>
+<p><strong>单击OK按钮保存配置:</strong></p>
+<p><img src="/media/64df6a04c7f35ba3dc7f71b3bb07e9b1.png" alt="截图.png"></p>
+<p><strong>至此，在Linux系统中配置网络的步骤就结束了。</strong></p>
+<p><strong>如果在安装RHEL 8系统时默认没有激活网卡。只需使用Vim编辑器将网卡配置文件中的ONBOOT 参数修改成yes，在系统重启后网卡就被激活了。</strong></p>
+<p><strong>单击Back按钮结束配置工作:</strong></p>
+<p><img src="/media/e012848f2d583d901197756e793e7c99.png" alt="截图.png"></p>
+<p><img src="/media/d709ab2b1f09e209d770ef691d33f6da.png" alt="截图.png"></p>
+<p><img src="/media/54a8156cc8ba6d314d83dea4d1ff85a8.png" alt="截图.png"></p>
+<p><strong>修改完Linux系统中的服务配置文件后，并不会对服务程序立即产生效果。想让服 务程序获取到最新的配置文件，需要手动重启相应的服务，之后就可以看到网络畅通了：</strong></p>
+<p><img src="/media/556e080435e4c5ade80a2e31e21e4030.png" alt="截图.png"></p>
+<p><strong>2.创建网络会话</strong></p>
+<p><strong>RHEL和CentOS系统默认使用NetworkManager来提供网络服务，这是一种动态管理网络配 置的守护进程，能够让网络设备保持连接状态。可使用nmcli命令来管理NetworkManager服务程 序。nmcli是一款基于命令行的网络配置工具，功能丰富，参数众多。可以轻松地查看网络信息 或网络状态：</strong></p>
+<p><img src="/media/4d03899db2edbfdb4d6fa1372b36a47a.png" alt="截图.png"></p>
+<p><strong>RHEL 8系统支持网络会话功能，允许用户在多个配置文件中快速切换(类似 firewalld防火墙服务中的区域技术)。在公司网络中使用笔记本电脑需手动指 定网络的IP地址，回到家中则使用DHCP自动分配IP地址，就需要频繁修改 IP地址，使用了网络会话功能后就简单多了—只需在不同的使用环境中激活相应 的网络会话，就可以实现网络配置信息的自动切换了。</strong></p>
+<p><strong>使用nmcli命令并按照“connection add con-name type ifname”的格式来创建网络会话。 假设将公司网络中的网络会话称之为company，将家庭网络中的网络会话称之为house，依次创建各自的网络会话。</strong></p>
+<p><strong>使用con-name参数指定公司所使用的网络会话名称company，然后依次用ifname参数指 定本机的网卡名称(以实际环境为准)，用autoconnect no参 数将网络会话设置为默认不被自动激活，用ip4及 gw4参数手动指定网络的IP地址：</strong></p>
+<p><img src="/media/d87a3f264580c7fd524d9926916d64f7.png" alt="截图.png"></p>
+<p><strong>使用con-name参数指定家庭所使用的网络会话名称house。因为要从外部DHCP服务器 自动获得 IP地址，所以这里不需要进行手动指定。</strong></p>
+<p><img src="/media/c5136ba0ed1192bb3c5e590389a4b2de.png" alt="截图.png"></p>
+<p><strong>成功创建网络会话后，使用nmcli命令查看创建的所有网络会话：</strong></p>
+<p><img src="/media/58796949cb19372e976568e89e64b1a4.png" alt="截图.png"></p>
+<p><strong>使用nmcli命令配置过的网络会话是永久生效的，当上班后，启动company 网络会话，网卡信息就自动配置好了：</strong></p>
+<p><img src="/media/674f9915cb464ad037531e546001f0bd.png" alt="截图.png"></p>
+<p><strong>把虚拟机系统的网卡(网络适配器)切换成桥接模式，如 下图所示。然后重启虚拟机系统即可。</strong></p>
+<p><img src="/media/fbcaf28edd9b00e392f8e21a3a4db899.png" alt="截图.png"></p>
+<p><strong>操作过后就能使用家庭中的路由器设备了。启动 house家庭会话，看一下效果：</strong></p>
+<p><img src="/media/d11e920aa314d72604ebd404c2ed7ad8.png" alt="截图.png"></p>
+<p><strong>如果启用company会话成功，但启用house会话失败且不能获取到动态地址，证明配置是正确的，问题出在了外部网络环境。有3种常见的情况，首先，家中的设备没有 连接路由器，而是通过拨号网络或共享WiFi的方式上网；其次，还在上学或上班的读者在浏 览网页前必须通过学校或公司的验证页面才能访问互联网；最后，检查物理机的防火墙设置， 可暂时关闭后再重试。</strong></p>
+<p><strong>不需要网络会话时，用delete命令就能删除：</strong></p>
+<p><img src="/media/f833fddfa6ac201358c100a6f3c8cac5.png" alt="截图.png"></p>
+<p><strong>3.绑定两块网卡</strong></p>
+<p><strong>生产环境必须提供7×24小时的网络传输服务。借助网卡绑定技术，不仅能 提高网络传输速度，还可以确保其中一块网卡出现故障时，依然可正常 提供网络服务。假设对两块网卡实施绑定技术，这样在正常工作中会共同传输数 据，使得网络传输的速度变得更快；而且即使有一块网卡突然出现了故障，另外一块网卡便 会立即自动顶替上去，保证数据传输不会中断。</strong></p>
+<p><strong>在虚拟机系统中再添加一块网卡设备，确保两块网卡都处在同一种网络连接模式中，</strong></p>
+<p><strong>如图1和图2所示。处于相同模式的网卡设备才可以进行网卡绑定，否则这两块网卡无 法互相传送数据。</strong></p>
+<p><strong>在虚拟机中再添加一块网卡设备并确保两块网卡处在同一个网络连接中(网卡模式相同):</strong></p>
+<p><img src="/media/aadcb138e73813b3a11f408943456aea.png" alt="截图.png"></p>
+<p><strong>前面是使用nmtui命令配置网络信息，下面使用nmcli命令配置网卡设备的绑定 参数。网卡绑定的 理论知识类似于前面学习的RAID硬盘组，需要对参与绑定的网卡设备逐个进行“初始 设置”。如下图所示，左侧的ens160及ens192这些原本独立的网卡设备此 时需要被配置成为一块“从属”网卡，服务于右侧的bond0“主”网卡，不应该再有自己的 IP地址等信息。在进行了初始设置之后，它们就可以支持网卡绑定</strong></p>
+<p><img src="/media/c9cb7585804ca99b20e77d1f1e351565.png" alt="截图.png"></p>
+<p><strong>3.1 创建出一个bond网卡</strong></p>
+<p><strong>使用nmcli命令配置网络信息有一定的难度。首先 使用如下命令创建一个bond网卡。其中，命令与参数的意思是创建一个类型为bond(绑定)、 名称为bond0、网卡名为bond0的绑定设备，绑定模式为 balance-rr：</strong></p>
+<p><img src="/media/d0f74b6e007924855daaf4117ad22674.png" alt="截图.png"></p>
+<p><strong>这里使用的是balance-rr网卡绑定模式，其中rr是round-robin的缩写，全称为轮循模式。</strong></p>
+<p><strong>round-robin的特点是会根据设备顺序依次传输数据包，提供负载均衡的效果，让带宽的性能 更好一些；而且一旦某个网卡发生故障，会马上切换到另外一台网卡设备上，保证网络传输 不被中断。active-backup是另外一种比较常用的网卡绑定模式，它的特点是平时只有一块网 卡正常工作，另一个网卡随时待命，一旦工作中的网卡发生损坏，待命的网卡会自动顶替上 去。可见，这种网卡绑定模式的冗余能力比较强，因此也称为主备模式。</strong></p>
+<p><strong>有一台用于提供NFS或Samba服务的文件服务器，能提供的最大网络传输 速度为100Mbit&#x2F;s，但访问该服务器的用户数量特别多，因此它的访问压力也很大。在生产 环境中，网络的可靠性是极为重要的，而且网络的传输速度也必须得以保证。针对这样的情 况，比较好的选择就是使用balance-rr网卡绑定模式了。因为balance-rr模式能够让两块网卡 同时一起工作，当其中一块网卡出现故障后能自动备援，且无须交换机设备支援，从而提供 了可靠的网络传输保障。</strong></p>
+<p><strong>3.2 向bond0设备添加从属网卡</strong></p>
+<p><strong>刚创建成功的bond0设备当前仅仅是个名称，并没有真正能为用户传输数据的网 卡设备，使用命令把ens160和ens192网卡添加进来。其中，con-name参数后 接的是从属网卡的名称(可随时设置)；ifname参数后面接的是两块网卡的名称。</strong></p>
+<p><img src="/media/ced545628f2d985486b2cc9e1a8b7ccf.png" alt="截图.png"></p>
+<p><strong>3.3 配置bond0设备的网络信息</strong></p>
+<p><strong>用 nmcli命令依次配置网络的IP地址及子网掩码、网关、DNS、搜索域和手动配置等参数。也可以直接编辑网卡配置文件或使用nmtui命令完成下面的操作：</strong></p>
+<p><img src="/media/0b7a857a98682b811e8e504fc6b64143.png" alt="截图.png"></p>
+<p><strong>3.4 启动bond0网卡</strong></p>
+<p><img src="/media/0add72ec47426adf091e8419ef2ab619.png" alt="截图.png"></p>
+<p><strong>当用户访问主机IP地址192.168.1.31时，主机实际上是由两块网卡在共同提供服务。可以在本地主机执行ping 192.168.1.31命令检查网络的连通性。为了检验网卡绑定技 术的自动备援功能，可以突然在虚拟机硬件配置中随机移除一块网卡设备，如图下所示。</strong></p>
+<p><img src="/media/ed47c22ff3ccebead43184f185a615ba.png" alt="截图.png"></p>
+<p><strong>可以非常清晰地看到网卡切换的过程（一般只丢失一个数据包），另外一块网卡会继续为 用户提供服务。</strong></p>
+<p><img src="/media/45ad679142f55ffa34444b465ec56b77.png" alt="截图.png"></p>
+<p><strong>RHEL 8系统中，网卡绑定切换间隔为1毫秒(1&#x2F;1000秒)，发生一个 丢包的情况大概率不会出现。</strong></p>
+<h2 id="2-2-远程控制服务"><a href="#2-2-远程控制服务" class="headerlink" title="2.2 远程控制服务"></a>2.2 远程控制服务</h2><p><strong>1.配置sshd服务</strong></p>
+<p><strong>SSH是以安全的方式提供远程登录的协议，也是目前远程管理Linux系统的首选方式。在此之前，一般使用FTP或Telnet来进行远程登录。但因为它们 以明文的形式在网络中传输账户密码和数据信息，因此很不安全，很容易受到黑客发起的中 间人攻击，轻则篡改传输的数据信息，重则直接抓取服务器的账户密码。</strong></p>
+<p><strong>想要使用SSH协议来远程管理Linux系统，则需要配置部署sshd服务程序。sshd是基于SSH 协议开发的一款远程管理服务程序，不仅使用起来方便快捷，而且能够提供两种安全验证的方法：</strong></p>
+<p><strong>基于密码的验证 :用账户和密码来验证登录；</strong></p>
+<p><strong>基于密钥的验证 :需要在本地生成密钥对，然后把密钥对中的公钥上传至服务器，并与服务器中的公钥进行比较；该方式相较来说更安全</strong></p>
+<p><strong>“Linux系统中的一切都是文件”，因此在Linux系统中修改服务程序的 运行参数，实际上就是在修改程序配置文件的过程。 sshd服务的配置信息保存在 &#x2F;etc&#x2F;ssh&#x2F;sshd_config文件中。运维人员一般会把保存着最主要配置信息的文件称为主配置文件， 配置文件中有许多以井号（#）开头的注释行，要想让这些配置参数生效，需要在修改参数 后再去掉前面的井号。sshd服务配置文件中包含的重要参数如下表所示。</strong></p>
+<p><img src="/media/09fd07fdf126a4072e4babbefe066a7a.png" alt="截图.png"></p>
+<p><strong>接下来的实验会使用两台虚拟机，分别充当服务器和客户端，其IP地址及 作用如下表所示:</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>主机地址</strong></th>
+<th><strong>操作系统</strong></th>
+<th><strong>作用</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>192.168.1.31</strong></td>
+<td>Linux</td>
+<td>服务器</td>
+</tr>
+<tr>
+<td><strong>192.168.1.41</strong></td>
+<td>Linux</td>
+<td>客户端</td>
+</tr>
+</tbody></table>
+<p><strong>在RHEL 8系统中，已默认安装并启用了sshd服务程序。接下来在客户端使用ssh命令远程连接服务器，其格式为”ssh [参数] 主机IP地址”，要退出登录则执行exit命令。第一 次访问时需要输入 yes来确认对方主机的指纹信息：</strong></p>
+<p><img src="/media/57190e9e12bceb1a949d77a1e97ac873.png" alt="截图.png"></p>
+<p><strong>如果禁止以root管理员的身份远程登录到服务器，可降低被黑客暴力破解密码 的概率。使用Vim文本编辑器打开服务器上的sshd服务主配置文件(&#x2F;etc&#x2F;ssh&#x2F;sshd_config)， 把第46行#PermitRootLogin yes参数前的井号(#)去掉，并把参数值yes改成no，这样 就不再允许root管理员远程登录了。</strong></p>
+<p><img src="/media/81ee30264a275f3ab1a5021edf2c7be6.png" alt="截图.png"></p>
+<p><strong>一般的服务程序并不会在配置文件修改之后立即获得最新的参数。想让新配置文件生效，需要手动重启相应的服务程序。最好也将这个服务程序加入到开机 启动项中，这样系统在下一次启动时，该服务程序便会自动运行，继续为用户提供服务。</strong></p>
+<p><img src="/media/841831764c2e31b79890c015f329782c.png" alt="截图.png"></p>
+<p><strong>当root管理员再来尝试访问sshd服务程序时，系统会提示”不可访问”的错 误信息。虽然sshd服务程序的参数相对比较简单，但这就是在Linux系统中配置服务程序的 正确方法。</strong></p>
+<p><img src="/media/d5e66677fdc4ed32959c009731331127.png" alt="截图.png"></p>
+<p><strong>2.安全密钥验证</strong></p>
+<p><strong>加密是对信息进行编码和解码的技术，通过一定的算法(密钥)将原本能被直接阅读 的明文信息转换成密文形式。密钥即是密文的钥匙，有私钥和公钥之分。在传输数据时，如 果担心被他人监听或截获，就可以在传输前先使用公钥对数据加密处理，然后再进行传送。 只有掌握私钥的用户才能解密这段数据，除此之外的其他人即便截获了数据，一般也 很难将其破译为明文信息。</strong></p>
+<p><strong>在生产环境中使用密码进行验证终归存在着被暴力破解或嗅探截获的风险。如果 正确配置了密钥验证方式，那么sshd服务程序将更加安全。具体的配置步骤如下:</strong></p>
+<p><strong>第1步:在客户端主机中生成”密钥对”，记住是客户端</strong></p>
+<p><img src="/media/7cb5ac16085bcd3be514449e54ce8b4d.png" alt="截图.png"></p>
+<p><strong>第2步:把客户端主机中生成的公钥文件传送至远程服务器</strong></p>
+<p><img src="/media/654f841e69858d677fabde4b76242ae4.png" alt="截图.png"></p>
+<p><strong>第3步:对服务器进行设置，使其只允许密钥验证，拒绝传统的密码验证方式</strong></p>
+<p><strong>配置文件路径:&#x2F;etc&#x2F;ssh&#x2F;sshd_config</strong></p>
+<p><img src="/media/c3668d6b98fc9d67d994cf49aead256c.png" alt="截图.png"></p>
+<p><img src="/media/a6ea08c37723f9e85233ceb808dd69c0.png" alt="截图.png"></p>
+<p><strong>第4步:客户端尝试登录到服务器，此时无须输入密码也可成功登录</strong></p>
+<p><img src="/media/a45dd28607adb3f9658530af62b43c37.png" alt="截图.png"></p>
+<p><strong>如果用户没有密钥信息，即便有密码也会被拒绝，系统甚至不会给用户输入密码 的机会，如下图所示:</strong></p>
+<p><img src="/media/67c8b19b1d328d15d66872a6b04a0ac5.png" alt="截图.png"></p>
+<p><strong>3.远程传输命令</strong></p>
+<p><strong>既然SSH协议可以让用户远程控制服务器、传输命令 信息，那么是不是也能传输文件呢？</strong></p>
+<p><strong>scp是一个基于SSH协议在网络之间进行安全传输的命令，其格式为:</strong></p>
+<p><strong>“scp [参数] 本地文件 远程账户@远程IP地址:远程目录”</strong></p>
+<p><strong>cp命令只能在本地硬盘中进行文件复制，而scp不仅能够 通过网络传送数据，而且所有的数据都将进行加密处理。如果想把一些文件通过网络 从一台主机传递到其他主机，这两台主机又恰巧都是 Linux系统，这时使用scp命令就可以轻 松完成文件的传递</strong></p>
+<p><strong>scp命令可用的参数以及作用如下表所示:</strong></p>
+<p><img src="/media/3b3fb60de7b52dd944bcc0126bd8d9da.png" alt="截图.png"></p>
+<p><strong>使用scp命令把文件从本地复制到远程主机时，需要以绝对路径的形式写清本地 文件的存放位置。如果要传送整个文件夹内的所有数据，还需要额外添加参数-r进行递归操 作。然后写上要传送到的远程主机的IP地址，远程服务器便会要求进行身份验证了。当前用 户名称为root，而密码则为远程服务器的密码。如果想使用指定用户的身份进行验证，可使 用用户名@主机地址的参数格式。最后需要在远程主机的IP地址后面添加冒号，并在后面写 上要传送到远程主机的哪个文件夹中。只要参数正确并且成功验证了用户身份，即可开始传 送工作。由于scp命令是基于SSH协议进行文件传送的，而当前又设置好了密钥验证，因 此当前在传输文件时，并不需要账户和密码。</strong></p>
+<p><img src="/media/cfd928327d47f830b5a696d35dc3e1e8.png" alt="截图.png"></p>
+<p><strong>还可以使用scp命令把远程服务器上的文件下载到本地主机，其命令格式为:</strong></p>
+<p><strong>scp [参数] 远程用户@远程IP地址:远程文件 本地目录。这样就无须先登录远程主机再进行文件 传送了，也就省去了很多周折。例如，可以把远程主机的系统版本信息文件下载过来。</strong></p>
+<p><img src="/media/b164446bf14e17dcc680b56500c8fdf3.png" alt="截图.png"></p>
+<h2 id="2-3-不间断会话服务"><a href="#2-3-不间断会话服务" class="headerlink" title="2.3 不间断会话服务"></a>2.3 不间断会话服务</h2><p><strong>当与远程主机的会话被关闭 时，在远程主机上运行的命令也随之被中断。 如果正在使用命令来打包文件，或者正在使用脚本安装某个服务程序，中途是绝对不能关闭 在本地打开的终端窗口或断开网络连接的，甚至连网速的波动都有可能导致任务中断，此时只能 重新进行远程连接并重新开始任务。有时正在执行文件打包操作，同时又想用脚本 来安装某个服务程序，这时会因为打包操作的输出信息占满用户的屏幕界面，而只能再打开一个 执行远程会话的终端窗口。时间久了，难免会忘记这些打开的终端窗口是做什么用的了。</strong></p>
+<p><strong>Terminal Multiplexer(终端复用器，简称为Tmux)是一款能够实现多窗口远程控制的开源 服务程序。简单来说就是为了解决网络异常中断或为了同时控制多个远程终端窗口而设计的程 序。用户还可以使用Tmux服务程序同时在多个远程会话中自由切换，能够实现如下功能。</strong></p>
+<p><strong>会话恢复:即便网络中断，也可让会话随时恢复，确保用户不会失去对远程会话的控制。</strong></p>
+<p><strong>多窗口:每个会话都是独立运行的，拥有各自独立的输入输出终端窗口，终端窗口内 显示过的信息也</strong></p>
+<p><strong>将被分开隔离保存，以便下次使用时依然能看到之前的操作记录</strong></p>
+<p><strong>会话共享:多个用户同时登录到远程服务器时，可使用会话共享功能让用户之间的输入输出信息共享</strong></p>
+<p><strong>在RHEL 8系统中，默认没有安装Tmux服务程序，需要配置软件仓库来安装:</strong></p>
+<p><img src="/media/72d4e48abe183ed4c5a2962c439754a4.png" alt="截图.png"></p>
+<p><strong>1.管理远程会话</strong></p>
+<p><strong>Tmux服务能做的事情非常多，例如创建不间断会话、恢复离线工作、将界面切分为不 同的窗格、共享会话等。直接敲击tmux命令进入会话窗口，如下图所示:</strong></p>
+<p><strong>会话窗口底部出现一个绿色的状态栏，分别显示的是会话编号、名称、主机名及系统时间。</strong></p>
+<p><img src="/media/ff7571c9a48f032853a130ac20c6f94d.png" alt="截图.png"></p>
+<p><strong>退出会话窗口的命令是exit，敲击后即可返回到正常的终端界面，如下图所示:</strong></p>
+<p><img src="/media/e5c70c18b453f6d5088e6c1eda1f1869.png" alt="截图.png"></p>
+<p><strong>会话窗口的编号从0开始自动排序(即0、1、2、3、……)，会话窗口数量少的时候 还没关系，数量多的时候区分起来就很麻烦了。创建一个指定名称为backup的会话窗 口。当在命令行中敲下下面这条命令的一瞬间，屏幕会快速闪动一下， 这时就已经进入Tmux会话中了，在里面执行的任何操作都会被后台记录下来。</strong></p>
+<p><img src="/media/85f8f70360e43b7e42b847337e7b497b.png" alt="截图.png"></p>
+<p><strong>假设突然要去忙其他事情，但会话窗口中执行的进程还不能被中断，此时便可以用 detach参数将会话隐藏到后台。虽然看起来与刚才没有不同，但实际上可以看到当前的会话 正在工作中：</strong></p>
+<p><img src="/media/e4c0a18e0a4fb205664054fe42e6375e.png" alt="截图.png"></p>
+<p><img src="/media/4b913581a9a0dcfb78251a1cb76bdbf6.png" alt="截图.png"></p>
+<p><strong>如果觉得每次输入detach参数都很麻烦，可以直接如下图所示关闭中断窗口(与进 行远程连接时突然断网具有相同的效果)，Tmux服务程序会自动帮我们进行保存。</strong></p>
+<p><img src="/media/5c8a429151cb1c1ff95291ae32767f5d.png" alt="截图.png"></p>
+<p><strong>操作之后，服务和进程都会一直在后台默默运行，不因为窗口被关闭而造成数据 丢失。查看后台有哪些会话：</strong></p>
+<p><img src="/media/650ac8b590b9fc5943d4430798dc3333.png" alt="截图.png"></p>
+<p><strong>传统的远程控制中，如果突然关闭会话窗口，一定会导致正在运行的命令也突然终止， 但在 Tmux的不间断会话服务中不会这样。只需查看一下刚刚关闭的离线会话名称， 然后尝试恢复回来，这个会话就可以继续工作了。回归到backup会话中的方法很简单，直接 在tmux命令后面加attach和会话编号或会话名称就可以。关闭会话窗口之前正在进行的一切 工作状态都会被原原本本地呈现出来，丝毫不受影响：</strong></p>
+<p><img src="/media/9d39f93421a4c024901e53175c48f97c.png" alt="截图.png"></p>
+<p><strong>如果不再需要使用这个Tmux会话了，也不用先在tmux命令后面添加attach，再执行exit 命令退出，而是可以直接使用kill命令杀死这个会话。</strong></p>
+<p><img src="/media/71c82d0d4168ee09ea4733b72ac27096.png" alt="截图.png"></p>
+<p><strong>生产环境中并不是必须先创建会话，然后再开始工作。可以直接使用tmux 命令执行要运行的指令，这样命令中的一切操作都会被记录下来，当命令执行结束后，后台 会话也会自动结束。</strong></p>
+<p><img src="/media/7586676809ce257b4c3e74d0d142e743.png" alt="截图.png"></p>
+<p><strong>2.管理多窗格</strong></p>
+<p><strong>实际工作中一个Shell终端窗口总是不够用。Tmux服务有个多窗格功 能，能够把一个终端界面按照上下或左右进行切割，从而使得能同时做多件事情。</strong></p>
+<p><strong>创建一个会话。使用”tmux split-window”命令可以创建上下切割的多窗格终端界面， 图1所示。使用”tmux split-window -h”命令可以创建左右切割的多窗格终端界面， 图2所示。</strong></p>
+<p><strong>上下切割的多窗格:</strong></p>
+<p><img src="/media/c7ee3c303dfbb8731745cda4f07a4259.png" alt="截图.png"></p>
+<p><strong>左右切割的多窗格:</strong></p>
+<p><img src="/media/44c5ac23838c8dd73d542681efb5b236.png" alt="截图.png"></p>
+<p><strong>创建多窗格终端界面后，同时做几件事情都不会乱了。如果觉得两个窗格还不够， 再执行几次上面的命令，退出时执行exit命令即可。 同时按下”Ctrl + B +方向键”调整窗格的尺寸。例如，现在使用的 窗格有些小，想向右扩大一些，则同时如下”Ctrl + B +右箭头键”就行了。</strong></p>
+<p><strong>如果需切换到其他窗格工作，但又不能关闭当前的窗格，可使用如下表所示 的命令进行切换。</strong></p>
+<p><img src="/media/a7319251705f5a3de5c7ad9ff9ac48d5.png" alt="截图.png"></p>
+<p><strong>想调整窗格的位置，把上面与下面的窗格位置互换，可以用如下表所示的命令 进行互换。</strong></p>
+<p><img src="/media/77200846015e1d2fb3e85ee3c85f776e.png" alt="截图.png"></p>
+<p><strong>如图1所示，原本执行过uptime命令的窗格在下方，只需要在该窗格中执行”tmux swap-pane -U”命令即可与上方窗格互换位置，效果如图2所示。</strong></p>
+<p><strong>切换窗格位置前:</strong></p>
+<p><img src="/media/b75b4e1a1a682efee81c28e85f027af1.png" alt="截图.png"></p>
+<p><strong>切换窗格位置后:</strong></p>
+<p><img src="/media/27009dbce3729d758b7e2e01e44c426a.png" alt="截图.png"></p>
+<p><strong>通过输入命令来切换窗格难免有些麻烦，实际上Tmux服务为用户提供 了一系列快捷键来执行窗格的切换。方法是先同时按下Ctrl+B组合键，然后松手后再迅 速按下其他后续按键，而不是一起按下。用于操作会话窗格的常见快捷键如下表所示。</strong></p>
+<p><img src="/media/e540f4d32f5a017a1e500e871569b80d.png" alt="截图.png"></p>
+<p><strong>3.会话共享功能</strong></p>
+<p><strong>Tmux服务不仅可确保用户在极端情况下也不丢失对系统的远程控制，保证了生产环 境中远程工作的不间断性，而且具有会话共享、分屏切割窗格、会话锁定等实用的功能。 当多个用户同时控制服务器的时候，可把服务 器屏幕内容共享出来。也就是说，每个用户都能够看到相同的内容，还能一起同时操作。会 话共享功能的技术拓扑如下图所示:</strong></p>
+<p><img src="/media/6727a014796e2b801aa20893e218a149.png" alt="截图.png"></p>
+<p><strong>接下来实验会使用三台虚拟机，分别充当服务器、客户端A、客户端B，其IP地址及作用如下表:</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>主机地址</strong></th>
+<th><strong>操作系统</strong></th>
+<th><strong>作用</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.1.31</td>
+<td>Linux</td>
+<td>服务器</td>
+</tr>
+<tr>
+<td>192.168.1.41</td>
+<td>Linux</td>
+<td>客户端</td>
+</tr>
+<tr>
+<td>192.168.1.51</td>
+<td>Linux</td>
+<td>客户端</td>
+</tr>
+</tbody></table>
+<p><strong>要实现会话共享功能，首先使用ssh服务将客户端A远程连接到服务器，随后使用Tmux 服务创建一个新的会话窗口，名称为share：</strong></p>
+<p><img src="/media/6ec02f34d0bf4d81f2dd35746d0a15a7.png" alt="截图.png"></p>
+<p><strong>使用ssh服务将客户端 B 也远程连接到服务器，并执行获取远程会话的命令。接 下来，两台客户端就能看到相同的内容了。</strong></p>
+<p><img src="/media/5d362f80a48c33e4de9257bdd8dab664.png" alt="截图.png"></p>
+<p><strong>操作完成后，两台客户端的所有终端信息都会被实时同步，它们可以一起共享同一个会 话窗口，为了让大家更好地感受会话共享功能的强大之处，读者可以从两台不同 的客户端同时远程控制到服务器上面，也可以在同一台电脑上创建出两个窗格(下图 )来模拟这一行为，更能清晰地看到数据被同步的过程。</strong></p>
+<p><strong>终端界面进行会话同步:</strong></p>
+<p><img src="/media/54166b53c3068d7bd23c4d80da55765a.png" alt="3.png"></p>
+<h2 id="2-4-检索日志信息"><a href="#2-4-检索日志信息" class="headerlink" title="2.4 检索日志信息"></a>2.4 检索日志信息</h2><p><strong>Linux的日志系统用于保存几乎所有的操作记录和服务运行状态， 并按“报错”“警告”“提示”和“其他”等标注进行分类。可根据所需的信 息进行检索，快速找出想要的信息， RHEL 8系统默认的日志服务程序是rsyslog。可将rsyslog理解成之前syslogd 服务的增强版本，更加注重日志的安全性和性能指标。为便于日后的检索，不同的日志 信息会被写入到不同的文件中。Linux系统中常见的日志文件如下表所示:</strong></p>
+<p><img src="/media/4b93eda9572c23ac631024ec472a565a.png" alt="截图.png"></p>
+<p><strong>&#x2F;var&#x2F;log&#x2F;message这个综合性的文件用得最多。在处理Linux系统中出 现的各种故障时，一般是最先发现故障的症状，而找到故障的原因则一定离不开日志信息 的帮忙。</strong></p>
+<p><strong>从理论上讲，日志文件分为下面3种类型:</strong></p>
+<p><strong>系统日志:记录系统的运行情况和内核信息</strong></p>
+<p><strong>用户日志:记录用户的访问信息，包含用户名、终端名称、登入及退出时间、来源IP地址和执行过</strong></p>
+<p><strong>的操作等</strong></p>
+<p><strong>程序日志:稍微大一些的服务一般都会保存一份与其同名的日志文件，里面记录着服务运行过程中</strong></p>
+<p><strong>各种事件的信息；每个服务程序都有自己独立的日志文件，且格式相差较大</strong></p>
+<p><strong>稍微大一些的服务都有自己独立的日志文件，为了用户在检索信息时 不至于很麻烦，journalctl 命令应运而生。journalctl命令用于检索和管理系统日志信息，语法格式为“journalctl 参数”。可以根据事件、类型、服务名 称等信息进行信息检索，从而提高了日常排错的效率。</strong></p>
+<p><strong>journalctl命令的常见参数如下表所示:</strong></p>
+<p><img src="/media/8e83664556f711bc0327a214a7117777.png" alt="截图.png"></p>
+<p><strong>1.查看系统中最后5条日志信息：</strong></p>
+<p><img src="/media/569a85498aa393814eb09ffbe5e506b1.png" alt="截图.png"></p>
+<p><strong>2.使用-f参数实时刷新日志的最新内容(与tail -f &#x2F;var&#x2F;log&#x2F;message 命令的效果相同)：</strong></p>
+<p><img src="/media/70f929c281f8257eccfd01a7556b8610.png" alt="截图.png"></p>
+<p><strong>3.rsyslog服务程序中，日志根据重要程度被分为9个等级，如下表所示:</strong></p>
+<p><img src="/media/f45f9047129915418bc0cb5def101d61.png" alt="截图.png"></p>
+<p><strong>只看系统中较高级别的报错信息，可在journalctl命令中用-p参数进行指定：</strong></p>
+<p><img src="/media/267276e738ef4f5d78d12d5e0548f1b4.png" alt="截图.png"></p>
+<p><strong>4.不仅能够根据日志等级进行检索，还可以用–since参数按照今日(today)、近N小 时(hour)、指定时间范围的格式进行检索，找出最近的日志数据</strong></p>
+<p><strong>仅查询今日的日志信息：</strong></p>
+<p><img src="/media/98b903cb7f005860fc3a4444b1ab8adf.png" alt="截图.png"></p>
+<p><strong>仅查询最近1小时的日志信息：</strong></p>
+<p><img src="/media/933fdcb38e6838357b98937a44f3d7ce.png" alt="截图.png"></p>
+<p><strong>仅查询12点整到14点整的日志信息：</strong></p>
+<p><img src="/media/60307d4a08a736e6d9a1fbc19112ca0e.png" alt="截图.png"></p>
+<p><strong>仅查询从2024年12月1日至2024年12月27日的日志信息：</strong></p>
+<p><img src="/media/26e137fc57c6470a0457169629daac5a.png" alt="截图.png"></p>
+<p><strong>5.查询指定服务的日志信息。默认情况下所有日志信息 都是混在一起的。如果想看具体某项服务的日志信息，可使用_SYSTEMD_UNIT参数 查询，服务名称的后面要有”.service(标准服务名称的写法)”</strong></p>
+<p><img src="/media/4892f4f391c33417db9175a3883a8dba.png" alt="截图.png"></p>
+<h1 id="3-使用Apache服务部署静态网站"><a href="#3-使用Apache服务部署静态网站" class="headerlink" title="3 使用Apache服务部署静态网站"></a>3 使用Apache服务部署静态网站</h1><h2 id="3-1-网站服务程序"><a href="#3-1-网站服务程序" class="headerlink" title="3.1 网站服务程序"></a>3.1 网站服务程序</h2><p><strong>网站服务就是 Web网络服务，指允许用户通过浏览器访问互联网中各种资源的服务。如下图所示， Web网络服务是一种被动访问的服务程序，只有接收到互联网中其他主机发出的请求后才 会响应，最终用于提供服务程序的Web服务器会通过HTTP(超文本传输协议)或HTTPS(安 全超文本传输协议)把请求的内容传送给用户。</strong></p>
+<p><strong>目前能提供Web网络服务的程序有IIS、Nginx和Apache等。IIS是Windows系统默认的Web服务程序，这是一款图 形化的网站管理工具，不仅可以提供Web网站服务，还可以提供FTP、NMTP、SMTP等服</strong></p>
+<p><strong>务。IIS只能在Windows系统中使用</strong></p>
+<p><strong>主机与Web服务器之间的通信:</strong></p>
+<p><img src="/media/6995b0af9d71d196bb894ef6825f6bfd.png" alt="截图.png"></p>
+<p><strong>Nginx 程序作为一款轻量级的网站服务软件，因其稳定性和丰富的功能而快速占领服务器市场，但</strong></p>
+<p><strong>Nginx最被认可的还是其系统资源消耗低且并发能力强的特性，因此得到了国内诸如新浪、网 易、腾讯等门户网站的青睐。</strong></p>
+<p><strong>Apache程序是目前拥有很高市场占有率的Web服务程序之一，其跨平台和安全性广泛被 认可且拥有快速、可靠、简单的API扩展。下图所示为Apache 服务基金会的著名Logo。Apache 服务程序可以运行在Linux系统、UNIX系统甚至是Windows系统中，支持基于IP、域名 及端口号的虚拟主机功能，支持多种认证方式，集成有代理服务器模块、安全Socket层(SSL)， 能实时监视服务状态与定制日志消息，并支持各类丰富的模块。</strong></p>
+<p><img src="/media/ef2a49e7330f9eee84af206c4082ef41.png" alt="截图.png"></p>
+<p><strong>总体来说，Nginx服务程序作为后起之秀，已经通过自身的优势与努力赢得了大批站长 的信赖。 但Apache程序作为老牌的Web服务程序，一方面在Web服务器软件市场具有相当 高的占有率，另一方面 Apache也是RHEL 8系统中默认的Web服务程序，而且还是RHCSA 和RHCE认证考试的必考内容，因此无论从实际应用角度还是从应对红帽认证考试的角度， 都有必要好好学习Apache服务程序的部署，并深入挖掘其可用的丰富功能。</strong></p>
+<p><strong>注明:软件仓库的配置过程之前已做笔记</strong></p>
+<p><strong>1.安装Apache服务程序。使用dnf命令进行安装时，命令后面 的Apache服务的软件包名称为httpd</strong></p>
+<p><img src="/media/0b9f4d856f42bf55e8021f8c10f5599d.png" alt="截图.png"></p>
+<p><strong>2.启用httpd服务程序并将其加入到开机启动项中，使其能够随系统开机而运行， 从而持续为用户提供Web服务:</strong></p>
+<p><img src="/media/e978e616c58e3d1bcc1ccb535c067e18.png" alt="截图.png"></p>
+<p><strong>3.在浏览器(以Firefox为例)的地址栏中输入</strong><a target="_blank" rel="noopener" href="http://127.0.0.1/"><strong>http://127.0.0.1</strong></a><strong>并按回车键， 可以看到用于提供 Web服务的默认页面了，如下图所示。</strong></p>
+<p><img src="/media/959b25e56bdbf244fcf8b3549d073f2e.png" alt="截图.png"></p>
+<p><strong>httpd服务程序的默认页面:</strong></p>
+<p><img src="/media/e27fb3cfd456363e8f053b8679307499.png" alt="截图.png"></p>
+<h2 id="3-2-配置服务文件参数"><a href="#3-2-配置服务文件参数" class="headerlink" title="3.2 配置服务文件参数"></a>3.2 配置服务文件参数</h2><p><strong>Linux系统中配置服务就是修改服务的配 置文件。因此需要知道这些配置文件的所在位置以及用途。httpd服务程序的主要配置文 件及存放位置如下表所示:</strong></p>
+<p><img src="/media/c438836b72b4e8cc103393f92f556cd6.png" alt="截图.png"></p>
+<p><strong>主配置文件中保存的是最重要的服务参数，一般会被保存到&#x2F;etc目录中以软件名称命名 的一个文件夹之中，名字为”服务名称.conf”，例如”&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf”</strong></p>
+<p><strong>配置文件中所有以井号(#)开始的行都是注释行，其目的是对httpd服务 程序的功能或某一行参数进行介绍，在httpd服务程序的主配置文件中，存在3种类型的信息:注释行信息、全局配置、区域 配置，如下图所示:</strong></p>
+<p><strong>httpd服务主配置文件的参数结构:</strong></p>
+<p><img src="/media/51a5fe7ec04a3904e1c860f9c01e5b2f.png" alt="截图.png"></p>
+<p><strong>全局配置参数是一种全局性的配置参数，可作用于所 有的子站点，既保证了子站点的正常访问，也有效降低了频繁写入重复参数的工作量。区 域配置参数则是单独针对每个独立的子站点进行设置的。httpd服务程序主配置文件中最为常用的参 数如下表所示。</strong></p>
+<p><img src="/media/083979d21f1fe5cf8d40baaf29ebef2b.png" alt="截图.png"></p>
+<p><strong>DocumentRoot参数用于定义网站数据的保存路径，参数的默认值 是&#x2F;var&#x2F;www&#x2F;html(网站数据存放到这个目录中)；当前网站普遍的首页面名称是 index.html，因此可向&#x2F;var&#x2F;www&#x2F;html&#x2F;index.html文件中写入一段内容，替换掉httpd服务程 序的默认首页面。该操作会立即生效。</strong></p>
+<p><img src="/media/aa026019fe9fca86b62be06a5fb60bed.png" alt="截图.png"></p>
+<p><strong>执行上述操作之后，在Firefox浏览器中刷新httpd服务程序，可看到该程序的首 页面内容已发生改变，如下图所示。</strong></p>
+<p><img src="/media/adac2b19052b9d712ecb915ef390e201.png" alt="截图.png"></p>
+<p><strong>网站数据一般保存在 &#x2F;var&#x2F;www&#x2F;html目录中，把保存网站数据的目录修为&#x2F;home&#x2F;wwwroot目录</strong>:</p>
+<p><strong>第1步:建立网站数据的保存目录，并创建首页文件</strong></p>
+<p><img src="/media/c37780e5a0b93756700f3c2192351b57.png" alt="截图.png"></p>
+<p><strong>第2步:打开httpd服务程序的主配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf)，将约第122行用于定义</strong></p>
+<p><strong>网站数据保存路径的 参数DocumentRoot修改为&#x2F;home&#x2F;wwwroot，同时还需要将约第127行与</strong></p>
+<p><strong>第134行用于定义目 录权限的参数Directory后面的路径也修改为&#x2F;home&#x2F;wwwroot</strong></p>
+<p><img src="/media/f1929b7bb1f90e0c2bbd05b20927e997.png" alt="截图.png"></p>
+<p><strong>第3步:重新启动httpd服务程序并验证效果，浏览器刷新页面后的内容如下图所示。</strong></p>
+<p><strong>注明:提示权限不足</strong></p>
+<p><img src="/media/05ffefbcfd5e03af52343b7bff8e3c4b.png" alt="截图.png"></p>
+<p><img src="/media/efa260ef524bc8754af8cf58f1bc9e6f.png" alt="截图.png"></p>
+<h2 id="3-3-SELinux安全子系统"><a href="#3-3-SELinux安全子系统" class="headerlink" title="3.3 SELinux安全子系统"></a>3.3 SELinux安全子系统</h2><p><strong>SELinux是一个强制访问控制的安全子系统。Linux系统使用SELinux 技术的目的是为了让各个服务进程都受到约束，使其仅获取到本应获取的资源。</strong></p>
+<p><strong>SELinux安全子系统对服务程序的功能进行限制、对文件资源的访问进行限制</strong></p>
+<p><strong>SELinux服务比较复杂，配 置难度也很大，加之很多运维人员对这项技术理解不深，从而导致很多服务器在部署好Linux 系统后直接将SELinux禁用了。这绝对不是明智的选择。</strong></p>
+<p><strong>SELinux服务有3种配置模式，具体如下:</strong></p>
+<p><strong>enforcing:强制启用安全策略模式，将拦截服务的不合法请求</strong></p>
+<p><strong>permissive:遇到服务越权访问时，只发出警告而不强制拦截</strong></p>
+<p><strong>disabled:对于越权的行为不警告也不拦截</strong></p>
+<p><strong>本书中所有的实验都是在强制启用安全策略模式下进行的，虽然禁用SELinux服务后 确实能够减少报错几率，但这在生产环境中相当不推荐。</strong></p>
+<p><strong>SELinux服务主配置文件路径:&#x2F;etc&#x2F;selinux&#x2F;config</strong></p>
+<p><img src="/media/6ef93cc9074f1514a4a1e1e3a4ac933c.png" alt="截图.png"></p>
+<p><strong>SELinux服务主配置文件中定义的是SELinux的默认运行状态，可将其理解为系 统重启后的状态，因此它不会在更改后立即生效。使用getenforce命令获得当前SELinux 服务的运行模式：</strong></p>
+<p><img src="/media/3bd6c55a502f129f27f6c8c5fe75d7e8.png" alt="截图.png"></p>
+<p><strong>为了确认上节图中所示的提示权限不足的结果是因为SELinux而导致的，可以用setenforce [0|1]命令修改 SELinux当前的运行模式(0为禁用，1为启用)。</strong></p>
+<p><strong>注明:这种修改只是临时的，在系统重启 后就会失效</strong>：</p>
+<p><img src="/media/985189920eafe8d158b70564a2caea6e.png" alt="截图.png"></p>
+<p><strong>再次刷新网页，会看到正常的网页内容，如下图所示。可见，问题是出在了SELinux 服务上。</strong></p>
+<p><img src="/media/2b18fa374bbd4cc92db7dca9bd550513.png" alt="截图.png"></p>
+<p><strong>httpd服务程序的功能是允许用户访问网站内容，因此SELinux肯定会默认放行用户 对网站的请求操作。但是将网站数据的默认保存目录修改为&#x2F;home&#x2F;wwwroot，这就 产生问题了。&#x2F;home目录是用来存放普通用户的家目录数据的，而现在httpd提供的网站服务却要去获取普通用户家目录中的数据，这显然违反了SELinux的监 管原则。</strong></p>
+<p><strong>把SELinux服务恢复到强制启用安全策略模式，然后分别查看原始网站数据的保 存目录与当前网站数据的保存目录是否拥有不同的SELinux安全上下文值。</strong></p>
+<p><strong>在ls命令中，-Z参数用于查看文件的安全上下文值，-d参数代表对象是个文件夹。</strong></p>
+<p><img src="/media/73584f837dcd139cf7a35340350e56a7.png" alt="截图.png"></p>
+<p><strong>文件上设置的SELinux安全上下文是由用户段、角色段以及类型段等多个信息项共同 组成的。其中，用户段system_u代表系统进程的身份，角色段object_r代表文件目录的角色， 类型段 httpd_sys_content_t代表网站服务的系统文件。</strong></p>
+<p><strong>针对当前这种情况，只需要使用semanage命令，将当前网站目录&#x2F;home&#x2F;wwwroot的 SELinux安全上下文修改为跟原始网站目录的一样就行了。</strong></p>
+<p><strong>semanage命令</strong></p>
+<p><strong>semanage命令用于管理SELinux的策略，语法格式为 “semanage [参数] [文件]”</strong></p>
+<p><strong>SELinux服务极大地提升了Linux系统的安全性， semanage命令不仅能够像传统的chcon命令那样设置文件、目录的策略，还能够管理网络端 口、消息接口。使用semanage命令时，经常用到的几个 参数及其作用如下表所示:</strong></p>
+<p><img src="/media/0ddb42bc9629fd582d7e54b10d44f56e.png" alt="截图.png"></p>
+<p><strong>向新的网站数据目录中新添加一条SELinux安全上下文，让这个目录以及里面的 所有文件能够被 httpd服务程序访问到：</strong></p>
+<p><img src="/media/2f92434de6deee401371f83f4e5405ea.png" alt="截图.png"></p>
+<p><strong>执行上述设置之后，还无法立即访问网站，需要使用restorecon命令将设置 好的SELinux安全上下文立即生效。在使用restorecon命令时，可加上-Rv参数对指定的目 录进行递归操作以及显示SELinux安全上下文的修改过程。再次刷新页面，就可以 正常看到网页内容了，如下图所示:</strong></p>
+<p><img src="/media/fb407f5c35fc7cc227ed597925788183.png" alt="截图.png"></p>
+<p><img src="/media/87231d4cec89143c174ff39c16175684.png" alt="截图.png"></p>
+<p><strong>注明:在RHCSA、RHCE或RHCA考试中，都需要先重启您的机器然后再执行判分脚本。 在日常工作中要养</strong></p>
+<p><strong>成将所需服务添加到开机启动项中的习惯，比如这 里就需要添加systemctl enable httpd命令</strong></p>
+<h2 id="3-4-个人用户主页功能"><a href="#3-4-个人用户主页功能" class="headerlink" title="3.4 个人用户主页功能"></a>3.4 个人用户主页功能</h2><p><strong>如果想在系统中为每位用户建立一个独立的网站，通常的方法是基于虚拟网站主机功能 来部署多个网站。但这个工作会让管理员苦不堪言(用户数量很庞大时)，而且用户 自行管理网站还会碰到各种权限限制。其实，httpd服务程 序提供的个人用户主页功能完全可以胜任这个工作。该功能可以让系统内所有的用户在自己 的家目录中管理个人的网站，而且访问起来也非常容易。</strong></p>
+<p><strong>第1步:在httpd服务程序中，默认没有开启个人用户主页功能。</strong></p>
+<p><strong>需要编辑配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;userdir.conf)，在第17行的UserDir disabled</strong></p>
+<p><strong>参数前面加上井号(#)，表示让httpd服务 程序开启个人用户主页功能；同时把第24行的UserDir</strong></p>
+<p><strong>public_html参数前面的井号(#)去掉。UserDir参数表示网站数据在用户家目录中的保存目录名</strong></p>
+<p><strong>称，即public_html目录。</strong></p>
+<p><img src="/media/5908cd2dbabf9e1d3fe5a656f33a4d39.png" alt="截图.png"></p>
+<p><strong>第2步:在用户家目录中建立用于保存网站数据的目录及首页面文件。还需要把 家目录的权限修改</strong></p>
+<p><strong>为755，保证其他人也有权限读取里面的内容。</strong></p>
+<p><img src="/media/c5cf80f079eb1b04ed1119711099060a.png" alt="截图.png"></p>
+<p><strong>第3步:重新启动httpd服务程序，在浏览器的地址栏中输入网址，其格式为”网址&#x2F;～用户名”(其</strong></p>
+<p><strong>中的波浪号是必需的，而且网址、波浪号、用户名之间没有空格)。从理论上讲，现在就</strong></p>
+<p><strong>可以看到用户的个人网站了。出乎意料的是，系统显示报错页面，如下图所示。</strong></p>
+<p><strong>这一定还是SELinux惹的祸。</strong></p>
+<p><img src="/media/a1b60a89f23e4ecaed3ef748f6f35cab.png" alt="截图.png"></p>
+<p><img src="/media/a8eacacbba391d91d48f8989c02414a2.png" alt="截图.png"></p>
+<p><strong>第4步:思考这次报错的原因是什么？httpd服务程序提供个人用户主页功能时，用 户的网站数据目录本身就应该是存放到与用户对应的家目录中的，应该不需要修改 家目录的SELinux安全上下文。但前文还讲到了SELinux域的概念。SELinux域确保服 务程序不能执行违规的操作，只能为用户提供服务。httpd服务中突然开启的这项 个人用户主页功能到底有没有被SELinux域默认允许呢？</strong></p>
+<p><strong>使用getsebool命令查询并过滤出所有与HTTP协议相关的安全策略。其中，off 为禁止状</strong></p>
+<p><strong>态，on为允许状态</strong></p>
+<p><img src="/media/54dbbfa121d399188ffa2bf2e5139fc9.png" alt="截图.png"></p>
+<p><strong>没必要逐个理解SELinux域安全策略规则，只要能通过 名字猜测出相关的策略用途就足够了。比如，想要开启httpd服务的个人用户主页功能， 用到的SELinux域安全策略应该是httpd_enable_homedirs，大致确定后就可以用 setsebool命令修改SELinux策略中各条规则的布尔值了。在setsebool命令 后面加上-P 参数，让修改后的SELinux策略规则永久生效且立即生效。随后刷新网页，其效 果如下图所示:</strong></p>
+<p><img src="/media/78e39d76b617ffa3be36b89dd1c5321d.png" alt="截图.png"></p>
+<p><img src="/media/048aaed447ad5f566fa8d24a96e677dc.png" alt="截图.png"></p>
+<p><strong>有时候网站的拥有者并不希望直接将网页内容显示出来，而只想让通过身份验证的用户 看到里面的内容，这时就可以在网站中添加密码功能了。</strong></p>
+<p><strong>第1步:先使用htpasswd命令生成密码数据库。-c参数表示第一次生成；后面再分别添 加密码数据库的存放文件，以及验证要用到的用户名称(该用户不必是系统中已有的本地 账户)。</strong></p>
+<p><img src="/media/f1f21e88097c578484bf9152b1b3deaf.png" alt="截图.png"></p>
+<p><strong>第2步:继续编辑个人用户主页功能的配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;userdir.conf)。把第31～40行的参数信息修改成下列内容，其中以井号(#)开头的内容为添加的注释信息，可将其忽略。随后保存并退出配置文 件，重启httpd服务程序即可生效。</strong></p>
+<p><img src="/media/4a01ab8b957153b28f5b1f6eba189213.png" alt="截图.png"></p>
+<p><img src="/media/cecb84271e6e2d39e65376fbf3d9d527.png" alt="截图.png"></p>
+<p><strong>此后，当用户再想访问某个用户的个人网站时，就必须输入账户和密码才能正常访问了。 另外，验证时使用的账户和密码是用htpasswd命令生成的专门用于网站登录的账户和密码， 而不是系统中的账户和密码。登录界面如图1与图2所示:</strong></p>
+<p><img src="/media/c369e6d5d27b8c53ad0b8669e9c361f5.png" alt="截图.png"></p>
+<p><img src="/media/e709996bc75f25a7012377d75a479e59.png" alt="截图.png"></p>
+<h2 id="3-5-虚拟主机功能"><a href="#3-5-虚拟主机功能" class="headerlink" title="3.5 虚拟主机功能"></a>3.5 虚拟主机功能</h2><p><strong>在虚拟专用服 务器(VPS)与云计算技术诞生以前，IDC服务供应商为了充分 地利用服务器资源，同时也为了降低购买门槛，纷纷启用了虚拟主机功能。</strong></p>
+<p><strong>利用虚拟主机功能，可以把一台处于运行状态的物理服务器分割成多个”虚拟的服 务器”。但该技术无法实现目前云主机技术的硬件资源隔离，而只能让这些虚拟的 服务器共同使用物理服务器的硬件资源，供应商只能限制硬盘的使用空间大小。出于各 种考虑的因素(价格低廉)，目前依然有很多企业或个人站长在使用虚拟主机的 形式部署网站。</strong></p>
+<p><strong>Apache的虚拟主机功能是服务器基于用户请求的不同IP地址、主机域名或端口号，提 供多个网站同时为外部提供访问服务的技术。如下图所示，用户请求的资源不同，最终 获取到的网页内容也各不相同。</strong></p>
+<p><img src="/media/0cf0c62b416842e65522647019e35ed6.png" alt="截图.png"></p>
+<p><strong>1.基于IP地址</strong></p>
+<p><strong>如果一台服务器有多个IP地址，而每个IP地址与服务器上部署的每个网站一一对应， 当用户请求访问不同的IP地址时，会访问到不同网站的页面资源。而且，每个网站都有 一个独立的IP地址，这对搜索引擎优化也大有裨益。</strong></p>
+<p><strong>就当前的实验来讲，需要配置的IP地址如图1所示。在配置完毕并重启网络服务之 后，需检查网络的连通性，确保3个IP地址均可正常访问，如图2所示:</strong></p>
+<p><strong>使用nmtui命令配置网络参数:</strong></p>
+<p><img src="/media/a2163181454e63cb94fb1b03f0cb5605.png" alt="截图.png"></p>
+<p><img src="/media/5ba14232b4ce587d29d7f926125d5648.png" alt="截图.png"></p>
+<p><strong>分别检查3个IP地址的连通性:</strong></p>
+<p><img src="/media/4d4250e32c36505bbd4e78d9186ab987.png" alt="截图.png"></p>
+<p><strong>第1步:分别在&#x2F;home&#x2F;wwwroot中创建用于保存不同网站数据的3个目录，并向其中分 别写入网站的首页文件</strong></p>
+<p><img src="/media/d333be4268c4a69856cf848f748fbdff.png" alt="截图.png"></p>
+<p><strong>第2步:从httpd服务的配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf )中大约第132行处开始，分别追加写入3个基于IP地 址的虚拟主机网站参数，然后保存并退出。需重启httpd服务，这些配置才生效</strong></p>
+<p><img src="/media/7dadf3b2f2005512f347c8d4fd31bc1c.png" alt="截图.png"></p>
+<p><img src="/media/67a6298fefd1e6f021d709ab0dc37a23.png" alt="截图.png"></p>
+<p><strong>第3步:此时访问网站，则会看到httpd服务程序的默认首页面中显示“权限不足”。</strong></p>
+<p><img src="/media/9af4032c32279666636cd3c000310791.png" alt="截图.png"></p>
+<p><strong>由于当前的&#x2F;home&#x2F;wwwroot目录及里 面的网站数据目录的SELinux安全上下文与网站服务不吻合，因此httpd服务程序无法获取到 这些网站数据目录。需要手动把新的网站数据目录的SELinux安全上下文设置正确，并使用restorecon命令让新设置的SELinux安全上下文立即生效，就可以 立即看到网站的访问效果了，如下图所示：</strong></p>
+<p><img src="/media/172a4154b1415b2632f400724aa5ece7.png" alt="截图.png"></p>
+<p><img src="/media/56e40a4ef5fe53ecdb263b331d883395.png" alt="截图.png"></p>
+<p><strong>基于不同的IP地址访问虚拟主机网站:</strong></p>
+<p><img src="/media/5abb967fac17396fcf870af725da20f0.png" alt="截图.png"></p>
+<p><strong>2.基于主机域名</strong></p>
+<p><strong>当服务器无法为每个网站都分配一个独立IP地址的时候，可以尝试让Apache自动识别 用户请求的域名，从而根据不同的域名请求来传输不同的内容。这种情况下的配置更加简 单，只需要保证位于生产环境中的服务器上有一个可用的IP地址(以192.168.1.31为例) 就可以。由于当前还没有介绍如何配置DNS解析服务，因此需要手动定义IP地址与域名 之间的对应关系。&#x2F;etc&#x2F;hosts是Linux系统中用于强制把某个主机域名解析到指定IP地址的配 置文件。简单来说，只要这个文件配置正确，即使网络参数中没有DNS信息也依然能够将域 名解析为某个IP地址。</strong></p>
+<p><strong>第1步:手动定义IP地址与域名之间对应关系的配置文件(&#x2F;etc&#x2F;hosts)，保存并退出后会立即生效。 可通过分别ping这些域名来验证域名是否已经成功解析为IP地址</strong></p>
+<p><img src="/media/8ed1787bd2d5d4265d1b99cf1465769e.png" alt="截图.png"></p>
+<p><img src="/media/43b7f7015cc6bf6ff8061b3ae7ef4744.png" alt="截图.png"></p>
+<p><strong>第2步:分别在&#x2F;home&#x2F;wwwroot中创建用于保存不同网站数据的3个目录，向其中分 别写入网站的首页文件。</strong></p>
+<p><img src="/media/2c9a545b028339ae624a7734601dc423.png" alt="截图.png"></p>
+<p><strong>3.从httpd服务的配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf)中大约第132行处开始，分别追加写入3个基于主机名 的虚拟主机网站参数，然后保存并退出。需要重启httpd服务，这些配置才生效。</strong></p>
+<p><img src="/media/922d6a0948ceefba9f97d139b6e5f168.png" alt="截图.png"></p>
+<p><img src="/media/ed2c0a7086b022a363939feca99bc64c.png" alt="截图.png"></p>
+<p><strong>4.因当前的网站数据目录还是在&#x2F;home&#x2F;wwwroot目录中，因此还是必须要正确 设置网站数据目录文件的SELinux安全上下文，使其与网站服务功能相吻合。用 restorecon命令让新配置的SELinux安全上下文立即生效，就可以立即访问到虚拟主机网 站，效果如下图所示:</strong></p>
+<p><img src="/media/9c86a12c6bacc301904f9e4486741411.png" alt="截图.png"></p>
+<p><strong>基于主机域名访问虚拟主机网站:</strong></p>
+<p><img src="/media/33547b2c7018fb286804430cebe604e3.png" alt="截图.png"></p>
+<p><strong>3.基于端口号</strong></p>
+<p><strong>基于端口号的虚拟主机功能让用户通过指定端口号访问服务器上的网站资源。 使用Apache配置虚拟网站主机功能时，基于端口号的配置方式是最复杂的。不仅 要考虑httpd服务程序的配置因素，还需考虑到SELinux服务对新开设端口的监控。一般来 说，使用80、443、8080等端口号来提供网站访问服务是比较合理的，如果使用其他端口号 则会受到SELinux服务的限制。</strong></p>
+<p><strong>下面的实验不但要考虑目录上应用的SELinux安全上下文的限制，还要考虑SELinux域对httpd服务程序的管控。</strong></p>
+<p><strong>第1步:分别在&#x2F;home&#x2F;wwwroot中创建用于保存不同网站数据的3个目录，向其中分 别写入网站的首页文件</strong></p>
+<p><img src="/media/ba20c9c599eb8355a13f2924f5f80923.png" alt="截图.png"></p>
+<p><strong>第2步:在httpd服务配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf)的第46行～48行分别添加用于监听6111、6222和6333 端口的参数</strong></p>
+<p><img src="/media/a40cbfd43ca150c8521624ad3d42f943.png" alt="截图.png"></p>
+<p><strong>第3步:从httpd服务的配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf)中大约第134行处开始，分别追加写入3个基于端口号 的虚拟主机网站参数，然后保存并退出。需要重启httpd服务，这些配置才生效。</strong></p>
+<p><img src="/media/b5d89f135135fcb2913fd525c66de00c.png" alt="截图.png"></p>
+<p><strong>第4步:因为把网站数据目录存放在&#x2F;home&#x2F;wwwroot目录中，因此还是必须要正确 设置网站数据目录文件的SELinux安全上下文，使其与网站服务功能相吻合。用 restorecon命令让新配置的SELinux 安全上下文立即生效。</strong></p>
+<p><img src="/media/1fecb2a690e60a4c6eaacd79744147fb.png" alt="截图.png"></p>
+<p><img src="/media/c2bd8576518e0fe6bec4b2b11ed02c2d.png" alt="截图.png"></p>
+<p><strong>配置httpd服务程序和SELinux安全上下文并重启httpd服务后，出 现报错信息。因为SELinux服务检测到6111、6222和6333端口原本不属于Apache服务 应该需要的资源，但现在却以 httpd服务程序的名义监听使用了，所以SELinux会拒绝使用 Apache服务使用这3个端口。可以使用semanage命令查询并过滤出所有与HTTP协议相关且 SELinux服务允许的端口列表。</strong></p>
+<p><img src="/media/2ba1393ab3994b32dc68ca3ff17f9a9e.png" alt="截图.png"></p>
+<p><strong>第5步:SELinux允许的与HTTP协议相关的端口号中默认没有包含6111、6222和6333， 因此需要将这3个端口号手动添加进去。该操作会立即生效，而且在系统重启过后依然有效。 设置好后再重启httpd服务程序，然后就可以看到网页内容了，结果如下图所示。</strong></p>
+<p><img src="/media/fc4ac8a36df70cdd10298562abcbd19f.png" alt="截图.png"></p>
+<p><strong>基于端口号访问虚拟主机网站:</strong></p>
+<p><img src="/media/5b88251b7d89a1835986ab4135c3046d.png" alt="截图.png"></p>
+<h2 id="3-6-Apache的访问控制"><a href="#3-6-Apache的访问控制" class="headerlink" title="3.6 Apache的访问控制"></a>3.6 Apache的访问控制</h2><p><strong>Apache可以基于源主机名、源IP地址或源主机上的浏览器特征等信息对网站上的资源 进行访问控制。通过Allow指令允许某个主机访问服务器上的网站资源，通过Deny指令实 现禁止访问。在允许或禁止访问网站资源时，还会用到Order指令，这个指令用来定义Allow 或Deny指令起作用的顺序，匹配原则是按照顺序进行匹配，若匹配成功则执行后面的默认 指令。比如”Order Allow, Deny”表示先将源主机与允许规则进行匹配，若匹配成功则允许访 问请求，反之则拒绝访问请求。</strong></p>
+<p><strong>第1步:先在服务器上的网站数据目录中新建一个子目录，并在这个子目录中创建一个 包含 Successful单词的首页文件</strong></p>
+<p><img src="/media/9ac8cae68a5b73e1fd584a1424b94a1b.png" alt="截图.png"></p>
+<p><strong>第2步:打开httpd服务的配置文件(&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf)，在第161行后面添加下述规则来限制源主机的访问。 这段规则的含义是允许使用Firefox浏览器的主机访问服务器上的首页文件，除此之外的所有 请求都将被拒绝。使用Firefox浏览器的访问效果如图1所示，使用其他浏览器的访问效 果如图2所示。</strong></p>
+<p><img src="/media/367a29defeb1cd215c3a25584bb9d52a.png" alt="截图.png"></p>
+<p><img src="/media/68fde5a1d7ff12336af49fe09322ca10.png" alt="截图.png"></p>
+<p><strong>Firefox浏览器成功访问:</strong></p>
+<p><img src="/media/f2ecbb12a5a3763755b4d06f2131092f.png" alt="截图.png"></p>
+<p><strong>除了匹配源主机的浏览器特征之外，还可以通过匹配源主机的IP地址进行访问控制。 例如只允许 IP地址为192.168.1.41的主机访问网站资源，那么就可以在httpd服 务配置文件的第161行后面添加下述规则。这样在重启httpd 服务程序后再用本机(即服 务器，其IP地址为192.168.1.31)来访问网站的首页面时就会提示访问被拒绝了，如下图 所示:</strong></p>
+<p><img src="/media/6c7509d79f67cc249cbf68e057aa0eb3.png" alt="截图.png"></p>
+<p><img src="/media/7de7f9c7de3684570ae0ea73f22d5caa.png" alt="截图.png"></p>
+<p><strong>因IP地址不符合要求而被拒绝访问:</strong></p>
+<p><img src="/media/b2fa41dbfc7153bd87ba063d6470983d.png" alt="截图.png"></p>
+<h1 id="4-使用vsftpd服务传输文件"><a href="#4-使用vsftpd服务传输文件" class="headerlink" title="4 使用vsftpd服务传输文件"></a>4 使用vsftpd服务传输文件</h1><h2 id="4-1-文件传输协议"><a href="#4-1-文件传输协议" class="headerlink" title="4.1 文件传输协议"></a>4.1 文件传输协议</h2><p><strong>将计算机联网的首要目的就是获取资料，文件传输是重要的 获取资料的方式。互联网是由几千万台个人计算机、工作站、服务器、小型机、大型 机、巨型机等具有不同型号、不同架构的物理设备共同组成的，即便是个人计算机，也 可能会装有Windows、Linux、UNIX、macOS等不同的操作系统。为了能够在如此复杂多样 的设备之间解决文件传输的问题，文件传输协议(FTP)应运而生。</strong></p>
+<p><strong>FTP是一种在互联网中进行文件传输的协议，基于客户端&#x2F;服务器模式，默认使用20、21号端</strong></p>
+<p><strong>口，端口20用于进行数据传输，端口21用于接受客户端发出的相关FTP命令与参数。FTP服 务器普遍部署于内网中，具有容易搭建、方便管理的特点。有些FTP客户端工具还可以支持文 件的多点下载以及断点续传技术，因此得到了广大用户的青睐。FTP的传输拓扑如下图所示:</strong></p>
+<p><strong>FTP的传输拓扑:</strong></p>
+<p><img src="/media/946ce8deea04eddc7fbe0d1d8d6a438f.png" alt="截图.png"></p>
+<p><strong>FTP服务器是按照FTP协议在互联网上提供文件存储和访问服务的主机，FTP客户端则 是向服务器发送连接请求，以建立数据传输链路的主机。FTP协议有下面两种工作模式:</strong></p>
+<p><strong>主动模式:FTP服务器主动向客户端发起连接请求</strong></p>
+<p><strong>被动模式:FTP服务器等待客户端发起连接请求(默认工作模式)</strong></p>
+<p><strong>防火墙一般用于过滤从外网进入内网的流 量，因此有些时候需要将FTP的工作模式设置为主动模式，才可以传输数据。</strong></p>
+<p><strong>由于FTP、HTTP、Telnet等协议的数据都是用明文进行传输的，从设计上就是不 可靠的。为了满足以密文方式传输文件的需求，发明了vsftpd服务程序。vsftpd(very secure ftp daemon，非常安全的FTP守护进程)是一款运行在Linux操作系统上的FTP服务程序， 不仅完全开源而且免费。具有很高的安全性、传输速度以及支持虚拟用户验证 等其他FTP服务程序不具备的特点。在不影响使用的前提下，管理者可自行决定客户端是 采用匿名开放、本地用户还是虚拟用户的验证方式来登录vsftpd服务器。这样即便黑客拿到 了虚拟用户的账号密码，也不见得能成功登录vsftpd服务器。</strong></p>
+<p><strong>配置妥当软件仓库之后，就可以安装vsftpd服务程序了。无论是使用yum还是dnf命 令都可以安装，优先选择使用dnf命令。</strong></p>
+<p><img src="/media/a1ef341296c68e5a484d0ac820eb7783.png" alt="截图.png"></p>
+<p><strong>iptables防火墙管理工具默认禁止了FTP协议的端口号，因此在正式配置vsftpd服务程序 之前，为了避免默认的防火墙策略”捣乱”，需要清空iptables防火墙的默认策略，并 把当前已经被清理的防火墙策略状态保存下来：</strong></p>
+<p><img src="/media/c4b201813a69900522196bd4d7f738ae.png" alt="截图.png"></p>
+<p><strong>把FTP协议添加到firewalld服务的允许列表中：</strong></p>
+<p><img src="/media/1461d65ac2958bc37005db16bed85394.png" alt="截图.png"></p>
+<p><strong>vsftpd服务程序的主配置文件(&#x2F;etc&#x2F;vsftpd&#x2F;vsftpd.conf)内容总长度有127行之多，其 中大多数参数在开头都添加了井号(#)，在grep命令后面添加-v参数，过滤并反选出没有包含井号(#)的 参数行(过滤掉所有的注释信息)，然后将过滤后的参数行通过输出重定向符写回原始的主 配置文件中。这样操作之后，就只剩下12行有效参数了:</strong></p>
+<p><img src="/media/ddb34c36583fbb01f0b59b1677024fc2.png" alt="截图.png"></p>
+<p><strong>下表罗列了vsftpd服务程序主配置文件中常用的参数以及作用:</strong></p>
+<p><img src="/media/e30215f6eae55a2639bd5bf00546f42a.png" alt="截图.png"></p>
+<h2 id="4-2-vsftpd服务程序"><a href="#4-2-vsftpd服务程序" class="headerlink" title="4.2 vsftpd服务程序"></a>4.2 vsftpd服务程序</h2><p><strong>vsftpd作为更加安全的文件传输协议服务程序，允许用户以3种认证模式登录FTP服务器。</strong></p>
+<p><strong>匿名开放模式:最不安全的一种认证模式，任何人都可以无须密码验证而直接登录 到FTP服务器</strong></p>
+<p><strong>本地用户模式:通过Linux系统本地的账户密码信息进行认证的模式，相较于匿名 开放模式更安全，配置起来也很简单。但如果黑客破解了账户的信息，就可以 畅通无阻地登录FTP服务器，从而完全控制整台服务器</strong></p>
+<p><strong>虚拟用户模式:更安全的一种认证模式，需要为FTP服务单独建立用户数据库文件， 虚拟出用来进行密码验证的账户信息，这些账户信息在服务器系统中实际是不存 在的，仅供FTP服务程序进行认证使用。这样，即使黑客破解了账户信息也无法登录 服务器，从而有效降低了破坏范围和影响</strong></p>
+<p><strong>ftp是Linux系统中以命令行界面的方式管理FTP传输服务的客户端工具。手 动安装ftp客户端工具:</strong></p>
+<p><img src="/media/33b3530f6849b71dce063ec83a0991e8.png" alt="截图.png"></p>
+<p><strong>1.匿名访问模式</strong></p>
+<p><strong>vsftpd服务程序中，匿名开放模式是最不安全的一种认证模式。任何人都可以 无须密码验证而直接登录FTP服务器。这种模式一般用来访问不重要的公开文件。如果用防火墙管理工具(如TCP Wrapper服 务程序)将vsftpd服务程序允许访问的主机范围设置为企业内网，也可提供基本的安全性</strong></p>
+<p><strong>vsftpd服务程序默认关闭了匿名开放模式，需要做的就是开放匿名用户上传、下载文 件的权限，以及创建、删除、更名文件的权限。需要注意的是，针对匿名用户放开这 些权限会带来潜在危险，不建议在生产环境中如此行事。下表罗列了可以向匿名用户开放的权限参数以及作用:</strong></p>
+<p><img src="/media/9fd787b71a88d426b81d24913be70c85.png" alt="截图.png"></p>
+<p><strong>修改vsftpd服务程序配置文件(&#x2F;etc&#x2F;vsftpd&#x2F;vsftpd.conf):</strong></p>
+<p><img src="/media/60891f8834b02018442f21760248cdda.png" alt="截图.png"></p>
+<p><strong>在vsftpd服务程序的主配置文件中正确填写参数，然后保存并退出。还需要重启vsftpd 服务程序，让新的配置参数生效。在生产环境中或者在RHCSA、 RHCE、RHCA认证考试中一定要把配置过的服务程序加入到开机启动项中，以保证服务器在 重启后依然能够正常提供传输服务：</strong></p>
+<p><img src="/media/332b367bd30ee49777e8fa0265852df7.png" alt="截图.png"></p>
+<p><strong>现在就可以在客户端执行ftp命令连接到远程的FTP服务器了。在vsftpd服务程序的匿 名开放认证模式下，账户统一为anonymous，密码为空。连接FTP服务器后，默认 访问的是&#x2F;var&#x2F;ftp目录。可切换到该目录下的pub目录中，尝试创建一个新的目录文件， 以检验是否拥有写入权限：</strong></p>
+<p><img src="/media/7ccec5c42b7a6b85cb9a44e39f930ad9.png" alt="截图.png"></p>
+<p><strong>系统显示拒绝创建目录！在前面已清空iptables防火墙策略，也在vsftpd 服务程序的主配置文件中添加了允许匿名用户创建目录和写入文件的权限。在vsftpd服务程序的匿名开放认证模式下，默认访问的是&#x2F;var&#x2F;ftp目录。查看 该目录的权限得知，只有root管理员才有写入权限。将目录 的所有者身份改成系统账户ftp即可</strong></p>
+<p><img src="/media/92c36d40b7a3b4b6a334f9c48830adcd.png" alt="截图.png"></p>
+<p><strong>尽管使用ftp命令登入FTP服务器后，创建目录时系统依然提示操 作失败，但是报错信息却发生了变化。应该是SELinux服务的问题，使用getsebool命令查看与FTP相关的SELinux域策略都有哪些：</strong></p>
+<p><img src="/media/b582198e9062ef482bf7cc9de8f6df5e.png" alt="截图.png"></p>
+<p><strong>根据经验和策略的名称判断出是ftpd_full_access–&gt; off策略规则导致操作失败。修改策略规则，并在设置时使用-P参数让修改过的 策略永久生效，确保服务器重启后依然能够顺利写入文件。</strong></p>
+<p><img src="/media/6c24c74849bece0c82bd2e08b5cde99b.png" alt="截图.png"></p>
+<p><strong>SELinux域策略修改完毕后，就能够顺利执行文件的创建、修改及删除等操作了：</strong></p>
+<p><img src="/media/1891aed7e5d4d7b1ade419919a11b02c.png" alt="截图.png"></p>
+<p><strong>上面的操作中，由于权限不足，将&#x2F;var&#x2F;ftp&#x2F;pub目录的所有者设置成ftp用户本 身。除了这种方法，也可以通过设置权限的方法让其他用户获取到写入权限（例如777这样 的权限）。但由于vsftpd服务自身带有安全保护机制，因此不要直接修改&#x2F;var&#x2F;ftp的权限， 这有可能导致服务被“安全锁定”而不能登录。一定要记得是对里面的pub目录修改权限哦：</strong></p>
+<p><img src="/media/98f259b4c8b6c6ca4ec484fbb3bae430.png" alt="截图.png"></p>
+<p><strong>2.本地用户模式</strong></p>
+<p><strong>相较于匿名开放模式，本地用户模式要更安全，配置也更简单。针对本地用户模式的权限参数以及作用如下表所示:</strong></p>
+<p><img src="/media/811d60d982533b4181a8c7ce2511f94c.png" alt="截图.png"></p>
+<p><strong>默认情况下本地用户所需的参数都已经存在，不需要修改。unmask一般被称为”权限掩码”或”权限补码”，能直接影 响到新建文件的权限值。在Linux系统中，新建的普通文件的权限是644，新建的目录的 权限是755。 其实，普通文件的默认权限是666，目录的默认权限是777，这都是写在系统配置文件中 的。但默认值不等于最终权限值。umask参数的默认值是022，根据公式”默认权限−umask ＝实际权限”，所以普通文件的默认权限到手后就剩下644，而目录文件就剩下755了。</strong></p>
+<p><strong>配置(&#x2F;etc&#x2F;vsftpd&#x2F;vsftpd.conf)本地用户的参数：</strong></p>
+<p><img src="/media/cd8e499f93671b26f862ff2e786b1b02.png" alt="截图.png"></p>
+<p><strong>在vsftpd服务程序的主配置文件中正确填写参数，然后保存并退出。还需要重启vsftpd 服务程序，让新的配置参数生效。还需要将配置好 的服务添加到开机启动项中，以便在系统重启后依然可以正常使用vsftpd服务。</strong></p>
+<p><img src="/media/506c78935b548f892e382941c1c2d7cc.png" alt="截图.png"></p>
+<p><strong>现在已经完全可以用本地用户的身份登录FTP服务器了。但使用root管 理员身份登录后，系统提示如下的错误信息：</strong></p>
+<p><img src="/media/698c5cbc7bdb13136e8fb099a5f1cf68.png" alt="截图.png"></p>
+<p><strong>输入root管理员的密码之前，就已经被系统拒绝访问了。这是因为vsftpd 服务程序所在的目录中默认存放着两个名为”用户名单”的文件(ftpusers和user_list)。 只要里面写有某位用户的名字，就不再允许这位用户登录到FTP服务器上。</strong></p>
+<p><img src="/media/9b90722b96eeee4bae561bbdbc76f4e8.png" alt="截图.png"></p>
+<p><img src="/media/f49656a1fee5eb73c3f191a3c6e64bca.png" alt="截图.png"></p>
+<p><strong>vsftpd服务程序为了保证服务器的安全性而默认禁止了root管理员和大多数系统用 户的登录行为，有效地避免黑客通过FTP服务对root管理员密码进行暴力破解。如果确 认在生产环境中使用root管理员不会对系统安全产生影响，只需按照上面的提示删除掉root用户名 即可。也可以选择ftpusers和user_list文件中不存在的一个普通用户尝试登录FTP服务器：</strong></p>
+<p><img src="/media/0aa813f2cd45546c319208f7731f363c.png" alt="截图.png"></p>
+<p><strong>为什么同样是禁止用 户登录的功能，却要制作两个一模一样的文件呢？ 在user_list文件上面。如果把上面主配置文件中userlist_deny的参数 值改成NO，那么user_list列表就变成了强制白名单。它的功能与之前完全相反，只允许列表 内的用户访问，拒绝其他人的访问。</strong></p>
+<p><strong>采用本地用户模式登录FTP服务器后，默认访问的是用户的家目录，而且该 目录的默认所有者、所属组都是该用户自己，因此不存在写入权限不足的情况。但是当前的 操作仍然被拒绝，这是因为刚才将虚拟机系统还原到最初的状态了。为此，需要再次开 启SELinux域中对FTP服务的允许策略：</strong></p>
+<p><img src="/media/4ecf89e53521064b084803090885a7a6.png" alt="截图.png"></p>
+<p><strong>设置SELinux域策略时，一定记得添加-P 参数，否则服务器在重启后会按照原有的策略进行控制，从而导致配置过的服务无法使用。</strong></p>
+<p><strong>在配置妥当后再使用本地用户尝试登录FTP服务器，分别执行文件的创建、重命名及删 除等命令。操作均成功！</strong></p>
+<p><img src="/media/fbb7ce3118d37befad0258274028e2fe.png" alt="截图.png"></p>
+<p><strong>3.虚拟用户模式</strong></p>
+<p><strong>虚拟用户模式是这3种模式中最安全的一种认证模式，是专门创建出一个账 号来登录FTP传输服务的，而且这个账号不能用于以SSH方式登录服务器。因为安全性较之于前面两种模式有了提升，所以配置流程也会稍微复杂一些。</strong></p>
+<p><strong>第1步:安装vsftpd服务。创建用于进行FTP认证的用户数据库文件，其中奇数行 为账户名，偶数行为密码。分别创建zhangsan和lisi两个用户，密码均为redhat</strong></p>
+<p><img src="/media/f9e874258c5f7eca6e6269679eba62fc.png" alt="截图.png"></p>
+<p><strong>由于明文信息既不安全，也不符合让vsftpd服务程序直接加载的格式，因此需要使用 db_load命令用哈希(hash)算法将原始的明文信息文件转换成数据库文件，并且降低数据库 文件的权限，然后再把原始的明文信息文件删除。</strong></p>
+<p><img src="/media/4b660adbf6aca4cc6785f63f63fdf887.png" alt="截图.png"></p>
+<p><strong>第2步:创建vsftpd服务程序用于存储文件的根目录以及用于虚拟用户映射的系统本地 用户。vsftpd服务用于存储文件的根目录指的是当虚拟用户登录后所访问的默认位置。</strong></p>
+<p><strong>Linux系统中的每一个文件都有所有者、所属组属性，例如使用虚拟账户”张三” 新建了一个文件，但系统中找不到账户”张三”，就会导致这个文件的权限出现错误。为此，需要再创建一个可以映射到虚拟用户的系统本地用户。简单来说，就是让虚拟用户默认登录 到与之有映射关系的这个系统本地用户的家目录中。虚拟用户创建的文件的属性也都归属于 这个系统本地用户，从而避免Linux系统无法处理虚拟用户所创建文件的属性权限。</strong></p>
+<p><strong>为了方便管理FTP服务器上的数据，可以把这个系统本地用户的家目录设置为&#x2F;var目录(用来存放经常发生改变的数据)。为了安全起见，将这个系统本地用户设置为不允许登 录FTP服务器，这不会影响虚拟用户登录，而且还能够避免黑客通过这个系统本地用户进行登录。</strong></p>
+<p><img src="/media/8fc2a992ecb15d852d577edf29fca043.png" alt="截图.png"></p>
+<p><strong>第3步:建立用于支持虚拟用户的PAM文件</strong></p>
+<p><strong>PAM(可插拔认证模块)是一种认证机制，通过一些动态链接库和统一的API把系统提 供的服务与认证方式分开，使得系统管理员可根据需求灵活调整服务程序的不同认证方式。 PAM是一组安全机制的模块，系统管理员可以用来轻易地调整服务程序的认 证方式，而不必对应用程序进行任何修改。PAM采取了分层设计(应用程序层、应用接口层、 鉴别模块层)的思想，其结构如下图所示:</strong></p>
+<p><img src="/media/79818cc003bb2c670a8c9d33094a9cf3.png" alt="截图.png"></p>
+<p><strong>新建一个用于虚拟用户认证的PAM文件vsftpd.vu，其中PAM文件内的”db&#x3D;”参数为使用 db_load 命令生成的账户密码数据库文件的路径，但不用写数据库文件的后缀：</strong></p>
+<p><img src="/media/403f9377c64ea558b2ed8608db5585b2.png" alt="截图.png"></p>
+<p><img src="/media/3314d04a058796d819c35b1ce02f67fe.png" alt="截图.png"></p>
+<p><strong>第4步:在vsftpd服务程序的主配置文件中通过pam_service_name参数将PAM认证文 件的名称修改为vsftpd.vu。PAM作为应用程序层与鉴别模块层的连接纽带，可以让应用程序 根据需求灵活地在自身插入所需的鉴别功能模块。当应用程序需要PAM认证时，则需要在应 用程序中定义负责认证的PAM配置文件，实现所需的认证功能。</strong></p>
+<p><strong>例如，在vsftpd服务程序的主配置文件中默认就带有参数pam_service_name&#x3D;vsftpd，表示登录 FTP服务器时是根据&#x2F;etc&#x2F;pam.d&#x2F;vsftpd文件进行安全认证的。把 vsftpd主配置文件中原有的PAM认证文件vsftpd修改为新建的vsftpd.vu文件即可。该操作中 用到的参数以及作用如下表所示:</strong></p>
+<p><img src="/media/50f8804cd96e8d2b33a09fe5b90ed404.png" alt="截图.png"></p>
+<p><img src="/media/31ee92bc8ed15801db8bfd0b894d9903.png" alt="截图.png"></p>
+<p><img src="/media/513709085a2a0bdc58f800db3e601537.png" alt="截图.png"></p>
+<p><strong>第5步:为虚拟用户设置不同的权限。虽然账户zhangsan和lisi都是用于vsftpd服务程 序认证的虚拟账户，但依然想对这两人进行区别对待。比如，允许张三上传、创建、 修改、查看、删除文件，只允许李四查看文件。这可以通过vsftpd服务程序来实现。只需新 建一个目录，在里面分别创建两个以zhangsan和lisi命名的文件，其中在名为zhangsan的文 件中写入允许的相关权限(使用匿名用户的参数)：</strong></p>
+<p><img src="/media/98d07d38463a8a9bb5bff8561561ab27.png" alt="截图.png"></p>
+<p><strong>再次修改vsftpd主配置文件(&#x2F;etc&#x2F;vsftpd&#x2F;vsftpd.conf)，通过添加user_config_dir参数来定义这两个虚拟用户 不同权限的配置文件所存放的路径。为了让修改后的参数立即生效，需要重启vsftpd服务程 序并将该服务添加到开机启动项中：</strong></p>
+<p><img src="/media/dff116cc7b5d006740bb9223d5dea5fd.png" alt="截图.png"></p>
+<p><img src="/media/ce95eec140afb319734413fb1d66c2bf.png" alt="截图.png"></p>
+<p><strong>第6步:设置SELinux域允许策略，然后使用虚拟用户模式登录FTP服务器</strong></p>
+<p><img src="/media/6134af348e35ade95b26aec6e4478526.png" alt="截图.png"></p>
+<p><strong>此时，不但可以使用虚拟用户模式成功登录到 FTP 服务器，还可以分别使用账户zhangsan 和lisi来检验他们的权限。李四只能登录，没有其他权限：</strong></p>
+<p><img src="/media/afba75780f906748228f9ef074152823.png" alt="截图.png"></p>
+<p><strong>张三不仅可以登录，还可以创建、改名和删除文件，因此张三的权限是满的。生产环境中要根据真实需求来灵活配置参数:</strong></p>
+<p><img src="/media/734e6fabc346493f5d04bcc3516c38b5.png" alt="截图.png"></p>
+<p><strong>使用不同的方式登录文件传输服务器后，默认所在的位置，如下表所 示:</strong></p>
+<p><img src="/media/f8ccefc26065c048de200594ca18856f.png" alt="截图.png"></p>
+<h2 id="4-3-TFTP-简单文件传输协议"><a href="#4-3-TFTP-简单文件传输协议" class="headerlink" title="4.3 TFTP(简单文件传输协议)"></a>4.3 TFTP(简单文件传输协议)</h2><p><strong>简单文件传输协议(TFTP)是基于UDP协议在客户端 和服务器之间进行简单文件传输的协议。提供不复杂、开销不大的文件传输服 务，可将其当作FTP协议的简化版本。</strong></p>
+<p><strong>TFTP的命令功能不如FTP服务强大，甚至不能遍历目录，在安全性方面也弱于FTP服 务。由于TFTP 在传输文件时采用的是UDP协议，占用的端口号为69，因此文件的传 输过程也不像FTP协议那样可靠。但因为TFTP不需要客户端的权限认证，也就减少了 无谓的系统和网络带宽消耗，因此在传输琐碎的文件时，效率更高。</strong></p>
+<p><strong>在系统上安装相关的软件包，进行体验。其中，tftp-server是服务程序，tftp是用 于连接测试的客户端工具，xinetd是管理服务：</strong></p>
+<p><img src="/media/0d434cfeeec1b7a79daca5b483ecd5ab.png" alt="截图.png"></p>
+<p><strong>Linux系统中TFTP服务使用xinetd服务程序来管理。xinetd服务可用来管理 多种轻量级的网络服务，而且具有强大的日志功能。专门用于控制比较小的应用程序 的开启与关闭，想开启那个服务，就编辑对 应的xinetd配置文件的开关参数。</strong></p>
+<p><strong>安装TFTP软件包后，还需要在xinetd服务程序中将其开启。RHEL 8系统中tftp所对应的配置文件默认不存在，需要用户根据示例文件(&#x2F;usr&#x2F;share&#x2F;doc&#x2F;xinetd&#x2F;sample.conf自行创建:</strong></p>
+<p><strong>创建的配置文件路径:&#x2F;etc&#x2F;xinetd.d&#x2F;tftp</strong></p>
+<p><img src="/media/28f31cefd82a580c6d9e6f059869adbf.png" alt="截图.png"></p>
+<p><strong>重启xinetd服务并将它添加到系统的开机启动项中，以确保TFTP服务在系统重 启后依然处于运行状态。考虑到有些系统的防火墙默认没有允许UDP协议的69端口，需要手动将该端口号加入到防火墙的允许策略中：</strong></p>
+<p><img src="/media/4c65e58adc6d8f7ecc0be238078d890a.png" alt="截图.png"></p>
+<p><strong>TFTP的根目录为&#x2F;var&#x2F;lib&#x2F;tftpboot。可使用安装好的tftp命令尝试访问其中的文件。使用tftp 命令访问文件时，会用到下表中的参数:</strong></p>
+<p><img src="/media/7ca48c0f2ef745f67cbf835f0fc86806.png" alt="截图.png"></p>
+<p><img src="/media/c80a590bccb4c968eac3b295753a9ab5.png" alt="截图.png"></p>
+<h1 id="5-Samba或NFS实现文件共享"><a href="#5-Samba或NFS实现文件共享" class="headerlink" title="5 Samba或NFS实现文件共享"></a>5 Samba或NFS实现文件共享</h1><h2 id="5-1-Samba文件共享服务"><a href="#5-1-Samba文件共享服务" class="headerlink" title="5.1 Samba文件共享服务"></a>5.1 Samba文件共享服务</h2><p><strong>FTP文件传输服务确实可以让主机之间的文件传输变得简单方便，但FTP协议的本质是传输文件，而非共享文件。 Samba服务程序现在已经成为在Linux系统与 Windows系统之间共享文件的最佳选择。</strong></p>
+<p><img src="/media/be96a99a8426a2e37b3b448195665ed6.png" alt="截图.png"></p>
+<p><strong>Samba服务程序的配置方法与之前很多服务的配置方法类似，需要先通过软 件仓库来安装Samba 服务程序。顺带再安装 一个samba-client软件包，这是用于测试共享目录的客户端程序：</strong></p>
+<p><img src="/media/f96c4f668a544dd91c7f9e9d1ec06e26.png" alt="截图.png"></p>
+<p><strong>打开Samba服务程序的主配置文件(&#x2F;etc&#x2F;samba&#x2F;smb.conf)。</strong></p>
+<p><strong>第17～22行代表共享每位登录用户的家目录内容，这个默认操作着实有些危险，建议不要共享，将其删除掉。</strong></p>
+<p><strong>第24～29行是用SMB协议共享本地的打印机设备，方便局域网内的用户远程使用打印机设备。当前我们没有打印机设备，因此建议也将其删除掉，不共享。</strong></p>
+<p><strong>第31～37行依然为共享打印机设备的参数，同样建议予以删除。</strong></p>
+<p><img src="/media/f87e772da3990284d12dbdc81df7372f.png" alt="截图.png"></p>
+<p><strong>对Samba服务的主配置文件删减操作之后，最后的有效配置参数只剩下了8 行。所剩不多的参数中，还能继续删除不需要的参数。例如，第5～8行参数中所提到的cups 的全称为Common UNIX Printing System(通用UNIX打印系统)，依然是用于打印机或打印 服务器的，继续予以删除。</strong></p>
+<p><img src="/media/5e2f7d302df7835cf33684bcd693c0bd.png" alt="截图.png"></p>
+<p><strong>为了避免在工作中使用到了打印机服务而不知如何配置，下面对上述代码进行详细的注 释说明(见下表):</strong></p>
+<p><img src="/media/75fb098f72b723489907350ee9d51b94.png" alt="截图.png"></p>
+<p><img src="/media/6710c98154d1ef475a655cea9f26f5cd.png" alt="截图.png"></p>
+<p><img src="/media/fc42bd0023fb75c2826751adb856af3b.png" alt="截图.png"></p>
+<p><strong>上面的代码中，security参数代表用户登录Samba服务时采用的验证方式。共有4 种可用参数:</strong></p>
+<p><strong>share:代表主机无须验证密码。相当于vsftpd服务的匿名公开访问模式</strong></p>
+<p><strong>user:代表登录Samba服务时需要使用账号密码进行验证，通过后才能获取到文件。 默认的验证</strong></p>
+<p><strong>方式，最为常用</strong></p>
+<p><strong>domain:代表通过域控制器进行身份验证，用来限制用户的来源域</strong></p>
+<p><strong>server:代表使用独立主机验证来访用户提供的密码。相当于集中管理账号，并不 常用</strong></p>
+<p><strong>在最早期的RHEL&#x2F;CentOS系统中，Samba服务使用的是PAM(可插拔认证模块)来调 用本地账号和密码信息，后来在5、6版本中替换成了用smbpasswd命令来设置独立的Samba 服务账号和密码。RHEL 7&#x2F;8 版本将传统的验证方式换成使用 tdbsam数据库进行验证。这是一个专门用于保存Samba服务账号密码的数据库，用户需要用 pdbedit命令进行独立的添加操作。</strong></p>
+<p><strong>1.配置共享资源</strong></p>
+<p><strong>Samba服务程序的主配置文件包括全局配置参数和 区域配置参数。全局配置参数用于设置整体的资源共享环境，对里面的每一个独立的共享资 源都有效。区域配置参数则用于设置单独的共享资源，且仅对该资源有效。创建共享资源的 方法很简单，只要将下表中的参数写入到Samba服务程序的主配置文件中，然后重启服 务即可。</strong></p>
+<p><strong>用于设置Samba服务程序的参数以及作用:</strong></p>
+<p><img src="/media/90dee9892b18a191ae4f86e62b3dacc3.png" alt="截图.png"></p>
+<p><strong>第1步:创建用于访问共享资源的账户信息。在RHEL 8系统中，Samba服务程序默认 使用的是用户密码认证模式(user)。这种认证模式可以确保仅让有密码且受信任的用户访问 共享资源。不过，只有建立账户信息数据库之后，才能使用用户 密码认证模式。另外，Samba服务程序的数据库要求账户必须在当前系统中已经存在，否则 日后创建文件时将导致文件的权限属性混乱不堪，由此引发错误。</strong></p>
+<p><strong>pdbedit命令用于管理Samba服务程序的账户信息数据库，格式为”pdbedit [选项] 账户”。第一次把账户信息写入到数据库时需要使用-a参数，以后在执行修改密码、 删除账户等操作时就不再需要该参数了。pdbedit命令中使用的参数以及作用如下表 所示:</strong></p>
+<p><img src="/media/cf1dc981a722cccb94df05d05b7cd5c3.png" alt="截图.png"></p>
+<p><img src="/media/ff79d4bac087c6f06f6c599cb0e27b6b.png" alt="截图.png"></p>
+<p><strong>第2步:创建用于共享资源的文件目录。创建时不仅要考虑到文件读写权限的问题，由于&#x2F;home目录是系统中普通用户的家目录，还需考虑应用于该目录的SELinux安全上下文 带来的限制。在Samba 的帮助手册中显示，正确的文件上下文值应该是samba_share_t，所以只 需要修改完毕后执行restorecon命令，就能让应用于目录的新SELinux安全上下文立即生效。</strong></p>
+<p><img src="/media/de12ea0189a9c473bec01ec870640e07.png" alt="截图.png"></p>
+<p><strong>第3步:设置SELinux服务与策略，使其允许通过Samba服务程序访问普通用户家目 录。执行getsebool命令，筛选出所有与Samba服务程序相关的SELinux域策略，根据策略的 名称选择出正确的策略条目进行开启即可：</strong></p>
+<p><img src="/media/0c9d09237de8c336249fb0a68228c3f0.png" alt="截图.png"></p>
+<p><strong>第4步:在Samba服务程序的主配置文件(&#x2F;etc&#x2F;samba&#x2F;smb.conf) 中，根据上面表中所提到的格式写入共享信息。</strong></p>
+<p><img src="/media/32a9f53fc53e66fa8e9c22464e1aa01c.png" alt="截图.png"></p>
+<p><strong>第5步:Samba服务程序的配置工作基本完毕。Samba服务程序在Linux系统中的名字为 smb，所以重启smb服务并加入到启动项中，保证在重启服务器后依然能够为用户持续提供服务。</strong></p>
+<p><img src="/media/49fd9d6647d9b28eecf0e124ec997668.png" alt="截图.png"></p>
+<p><strong>为了避免防火墙限制用户访问，这里将iptables防火墙清空，再把Samba服务添加到 firewalld防火墙中，确保万无一失。</strong></p>
+<p><img src="/media/c38aaff0fe7fbd758b297f3567981cce.png" alt="截图.png"></p>
+<p><img src="/media/ca33b34f7b5b89e8228daf2911472361.png" alt="截图.png"></p>
+<p><strong>第6步:使用”systemctl status smb”命令查看服务器是否启动了Samba服务。查看Samba服务都共享了哪些目录可以使用smbclient命令来查看共享详情；-U 参数指定了用户名称(用哪位用户挂载了 Samba服务，就用哪位用户的身份进行查看)；-L 参数列出了共享清单。</strong></p>
+<p><img src="/media/cbdd1690d0304e52bda288ae8007fee3.png" alt="截图.png"></p>
+<p><strong>2.Windows挂载共享</strong></p>
+<p><strong>无论Samba共享服务是部署Windows系统上还是部署在Linux系统上，通过Windows 系统进行访问时，其步骤和方法都是一样的。假设Samba共享服务部署在Linux系统上， 并通过Windows系统来访问 Samba服务。Samba共享服务器和Windows客户端的IP地址根据下表来设置。</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Samba共享服务器</td>
+<td>RHEL 8</td>
+<td>192.168.1.31</td>
+</tr>
+<tr>
+<td>Linux客户端</td>
+<td>RHEL 8</td>
+<td>192.168.1.41</td>
+</tr>
+<tr>
+<td>Windows客户端</td>
+<td>Windows 11</td>
+<td>192.168.1.51</td>
+</tr>
+</tbody></table>
+<p><strong>在Windows系统中访问共享资源，只需要单击Windows系统的”开始”按钮后输入两 个反斜杠，然后再添加服务器的IP地址(\\192.168.1.31)即可，如下图所示。</strong></p>
+<p><img src="/media/9cfa4291d1c879055142d8d9a3de9b57.png" alt="截图.png"></p>
+<p><strong>现在应该就能看到 Samba 共享服务的登录界面了。先使用linuxprobe账 户的系统本地密码尝试登录，结果出现了如下图所示的报错信息。由此可以验证，在RHEL 8系统中，Samba服务程序使用的是独立的账户信息数据库。所以，即便在Linux系统中有一 个linuxprobe账户，Samba 服务程序使用的账户信息数据库中也有一个同名的linuxprobe账户。</strong></p>
+<p><img src="/media/602f6bb66685196d717ac29b8861e444.png" alt="截图.png"></p>
+<p><strong>在正确输入Samba服务数据库中的linuxprobe账户名以及使用pdbedit命令设置的密码 后，就可以登录到Samba服务程序的共享界面中了，如下图所示。此时，可以尝试执行查 看、写入、更名、删除文件等操作。</strong></p>
+<p><strong>由于Windows系统的缓存原因，可能在第二次登录时提供了正确的账户和密码，依 然会报错，只需要重新启动Windows客户端就没问题了</strong></p>
+<p><img src="/media/8c93378c699c3adb43c3da7ede96e98f.png" alt="截图.png"></p>
+<p><strong>3.Linux挂载共享</strong></p>
+<p><strong>Samba服务程序还可以实现Linux系统之间 的文件共享，在客户端安装支持文件共享服务的软件包(cifs-utils)</strong></p>
+<p><img src="/media/9bb51261ae88f75233ef99cf6fc64f9b.png" alt="截图.png"></p>
+<p><strong>在Linux客户端创建一个用于挂载Samba服务共享资源的目录(smb_satabase)。mount命令中的-t参数用于指定协议 类型，-o参数用于指定用户名和密码，最后追加上服务器IP地址、共享名称和本地挂载目录 即可。服务器IP地址后面的共享名称指的是配置文件中[database]的值，而不是服务器本地挂 载的目录名称。</strong></p>
+<p><img src="/media/1fcac5ed036437e20b8ea227c877c47f.png" alt="截图.png"></p>
+<p><strong>如果在每次重启电脑后都需要使用mount命令手动挂载远程共享目录会很麻 烦。按照Samba服务的用户名、密码、共享域的顺序将相关信息写入一个认证文 件中，然后让&#x2F;etc&#x2F;fstab文件和系统自动加载它。为了保证不被其他人随意看到，最后把这个 认证文件的权限修改为仅root管理员可读写</strong>：</p>
+<p><img src="/media/c3b75ce2f42070df2d6df13a0782a5c2.png" alt="截图.png"></p>
+<p><strong>将挂载信息写入&#x2F;etc&#x2F;fstab文件中，以确保共享挂载信息在服务器重启后依然生效：</strong></p>
+<p><img src="/media/486e300b91c9a125c395d060dc92e4e9.png" alt="截图.png"></p>
+<p><strong>注明:需执行mount -a让配置生效</strong></p>
+<p><strong>Linux客户端成功挂载了Samba服务的共享资源。进入挂载目录&#x2F;smb_database后可以 看到Windows 系统访问Samba服务程序时留下来的文件</strong></p>
+<p><img src="/media/e34eb073eedd484874f5afae56dfccdc.png" alt="截图.png"></p>
+<h2 id="5-2-NFS-网络文件系统"><a href="#5-2-NFS-网络文件系统" class="headerlink" title="5.2 NFS(网络文件系统)"></a>5.2 NFS(网络文件系统)</h2><p><strong>共享文件的主机都是Linux 系统时，可以在客户端部署NFS(网络文件系统)服务共享文件。NFS服务 可以将远程Linux系统上的文件共享资源挂载到本地主机的目录上，从而使得本地主机 (Linux客户端)基于TCP&#x2F;IP协议，像使用本地主机上的资源那样读写远程Linux系统上的 共享文件。</strong></p>
+<p><strong>由于RHEL 8系统中默认安装了NFS服务，接下来，准备配置NFS服务。 使用软件仓库检查RHEL 8系统中是否已经安装了NFS软件包：</strong></p>
+<p><img src="/media/973eb80c82d0fda1fd25cb4e68ae80db.png" alt="截图.png"></p>
+<p><strong>第1步:为了检验NFS服务配置的效果，使用两台Linux主机(分别充当NFS 服务器和NFS客户端)，并按下表设置所使用的IP地址。</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NFS服务器</td>
+<td>RHEL 8</td>
+<td>192.168.1.31</td>
+</tr>
+<tr>
+<td>NFS客户端</td>
+<td>RHEL 8</td>
+<td>192.168.1.41</td>
+</tr>
+</tbody></table>
+<p><strong>配置好防火墙，以免默认的防火墙策略禁止正常的NFS共享服务:</strong></p>
+<p><img src="/media/2223b88917261005c52f8173bebd6ec5.png" alt="截图.png"></p>
+<p><img src="/media/9e6159c054a0789d5611b5c5592bd07a.png" alt="截图.png"></p>
+<p><strong>第2步:在NFS服务器上建立用于NFS文件共享的目录，设置足够的权限确保其他 人也有写入权限。</strong></p>
+<p><img src="/media/64ebbd19468e96415b759f12f15a87cc.png" alt="截图.png"></p>
+<p><strong>第3步:NFS服务程序的配置文件为&#x2F;etc&#x2F;exports，默认情况下里面没有任何内容。按照”共享目录的路径 允许访问的NFS客户端(共享权限参数)”的格式，定义要共享 的目录与相应的权限。</strong></p>
+<p><strong>例如，如果想要把&#x2F;nfsfile目录共享给192.168.1.0&#x2F;24网段内的所有主机，让这些主机都 拥有读写权限，在将数据写入到NFS服务器的硬盘中后才会结束操作，最大限度保证数据不 丢失，以及把来访客户端root管理员映射为本地的匿名用户等，则可以按照下面命令中的格 式，将下表中的参数写到NFS服务程序的配置文件中。</strong></p>
+<p><img src="/media/8735016764cbc9fcf7d0cbc55942f2cb.png" alt="截图.png"></p>
+<p><strong>注明:NFS客户端地址与权限之间没有空格</strong></p>
+<p><img src="/media/a26b0e57f0b864a142a089c483b31cc2.png" alt="截图.png"></p>
+<p><strong>在NFS服务的配置文件中巧用通配符能够实现很多便捷功能。比如，匹配IP地址就有3 种方法：</strong></p>
+<p><strong>第一种是直接写*号，代表任何主机都可以访问；</strong></p>
+<p><strong>第二种则是采用的 192.168.1.*通配格式，代表来自192.168.1.0&#x2F;24网段的主机</strong></p>
+<p><strong>第三种则是直接写对方的IP 地址，如192.168.1.41，代表仅允许某个主机进行访问</strong></p>
+<p><strong>第4步:启动和启用NFS服务程序。由于在使用NFS服务进行文件共享之前，需要使 用RPC(Remote Procedure Call，远程过程调用)服务将NFS服务器的IP地址和端口号等信 息发送给客户端。因此，在启动NFS服务之前，还需重启并启用rpcbind服务程序， 并将这两个服务一并加入开机启动项中。</strong></p>
+<p><img src="/media/6b34ba9f41d5b2f7ec4884feabdaf42f.png" alt="截图.png"></p>
+<p><strong>NFS客户端的配置步骤也十分简单。先使用showmount命令查询NFS服务器的远程共享信 息，该命令的必要参数如下表所示，其输出格式为”共享的目录名称 允许使用客户端地址”</strong></p>
+<p><img src="/media/9163d6032aad135850fdfc570cf461e5.png" alt="截图.png"></p>
+<p><img src="/media/ca03e837d8b067eedb7ca6af916d62d8.png" alt="截图.png"></p>
+<p><strong>在NFS客户端创建一个挂载目录。使用mount命令并结合-t参数，指定要挂载的文 件系统的类型，并在命令后面写上服务器的IP地址、服务器上的共享目录以及要挂载到本地 系统(客户端)的目录。</strong></p>
+<p><img src="/media/87f53bd724d007735e10fa416b89f7d4.png" alt="截图.png"></p>
+<p><strong>挂载成功后就应该能顺利看到在执行前面的操作时写入的文件内容了。如果希望 NFS文件共享服务能一直有效，则需要将其写入到fstab配置文件(&#x2F;etc&#x2F;fstab)中：</strong></p>
+<p><img src="/media/26c0d7f99bf51070d75acecbe509f26a.png" alt="截图.png"></p>
+<p><img src="/media/8375ed0160329d07bb9c69544f3b4080.png" alt="截图.png"></p>
+<h2 id="5-3-autofs自动挂载服务"><a href="#5-3-autofs自动挂载服务" class="headerlink" title="5.3 autofs自动挂载服务"></a>5.3 autofs自动挂载服务</h2><p><strong>无论是Samba服务还是NFS服务，都要把挂载信息写入到&#x2F;etc&#x2F;fstab中，这样远程 共享资源就会自动随服务器开机而进行挂载。虽然这很方便，但如果挂载的远程资源 太多，则会给网络带宽和服务器的硬件资源带来很大负载。如果在资源挂载后长期不使 用，也会造成服务器硬件资源的浪费。</strong></p>
+<p><strong>autofs自动挂载服务与mount命令不同，autofs服务程序是一 种Linux系统守护进程，当检测到用户试图访问一个尚未挂载的文件系统时，将自动挂载该 文件系统。之前是将挂载信填入&#x2F;etc&#x2F;fstab文件后，系统在每次开机时都自动将其挂载， 而autofs服务程序则是在用户需要使用该文件系统时才去动态挂载，从而节约了网络资源和 服务器的硬件资源。</strong></p>
+<p><strong>首先需安装autofs服务程序:</strong></p>
+<p><img src="/media/3e568d68bf0767298cebf283611a7a76.png" alt="截图.png"></p>
+<p><strong>处于生产环境中的Linux服务器，一般会同时管理许多设备的挂载操作。如果所有设 备的挂载信息都写入autofs服务的主配置文件中，会让主配置文件臃肿不堪，不利于服务 执行效率，也不利于日后修改里面的配置内容。因此，在autofs服务程序的主配置文件中需 要按照”挂载目录 子配置文件”的格式进行填写。挂载目录是设备挂载位置的上一级目录。例 如，光盘设备一般挂载到&#x2F;media&#x2F;cdrom 目录中，那么挂载目录写成&#x2F;media即可。对应的子配置 文件则是对这个挂载目录内的挂载设备信息作进一步的说明。子配置文件需要用户自行定义， 文件名字没有严格要求，但后缀建议以.misc结束。具体的配置参数如下图红框中所示。</strong></p>
+<p><strong>主配置文件路径:&#x2F;etc&#x2F;auto.master</strong></p>
+<p><img src="/media/4b0bbc940d8292d59f4cf2417d2ab8f7.png" alt="截图.png"></p>
+<p><strong>在子配置文件中，应按照”挂载目录 挂载文件类型及权限 :设备名称”的格式进行填写。 例如，要把光盘设备挂载到&#x2F;media&#x2F;iso目录中，可将挂载目录写为iso，而-fstype为文件系统格 式参数，iso9660为光盘设备格式，ro、nosuid及nodev为光盘设备具体的权限参数，&#x2F;dev&#x2F;cdrom 则是定义要挂载的设备名称。配置完成后再顺手将autofs服务程序启动并加入到系统启动项中：</strong></p>
+<p><img src="/media/b1bb99990582af0452b8f49bef846168.png" alt="截图.png"></p>
+<p><strong>查看当前的光盘设备挂载情况，确认光盘设备没 有被挂载上，而且&#x2F;media目录中根本就没有iso子目录：</strong></p>
+<p><img src="/media/7a375aa8d011a7296425f13ae99e16b0.png" alt="截图.png"></p>
+<p><strong>但却可以使用cd命令切换到这个iso子目录中，而且光盘设备会被立即自动挂 载上，然后也就能顺利查看光盘内的内容了。</strong></p>
+<p><img src="/media/b40a82da9fbc2f6c3b8c0cd728f57787.png" alt="截图.png"></p>
+<p><strong>光盘设备的名称变成了&#x2F;dev&#x2F;sr0，实际上它和&#x2F;dev&#x2F;cdrom是快捷方式的 关系，只是名称不同</strong>。</p>
+<p><img src="/media/25bd108fad995ef83e536d9967345b9d.png" alt="截图.png"></p>
+<p><strong>再对NFS服务动测试该功:</strong></p>
+<p><strong>首先把NFS共享目录卸载掉。</strong></p>
+<p><strong>在autofs服务程序的主配置文件中会有一个”&#x2F;misc &#x2F;etc&#x2F;auto.misc”参数，这个auto.misc相当于自动挂载的参考文件，它默认就已经存在，所以 这里不需要进行任何操作：</strong></p>
+<p><img src="/media/d0ec45ab47a6af0a86fe04e3b25f5c9e.png" alt="截图.png"></p>
+<p><img src="/media/799d6a4a3a65bda0873c2dcdf649ffae.png" alt="截图.png"></p>
+<p><strong>找到对应的auto.misc文件(etc&#x2F;auto.misc)，填写本地挂载的路径和NFS服务器的挂载信息：</strong></p>
+<p><img src="/media/344f69b0060ca18faa789ddcd3724ff9.png" alt="截图.png"></p>
+<p><strong>填写后重启autofs服务程序，当用户进入到&#x2F;misc&#x2F;nfsfile目录时，便会自动挂载共 享信息：</strong></p>
+<p><img src="/media/a2ab6e69eefb7e9bee3c847820d9749e.png" alt="截图.png"></p>
+<h1 id="6-使用BIND提供域名解析服务"><a href="#6-使用BIND提供域名解析服务" class="headerlink" title="6 使用BIND提供域名解析服务"></a>6 使用BIND提供域名解析服务</h1><h2 id="待完善"><a href="#待完善" class="headerlink" title="待完善"></a>待完善</h2><h1 id=""><a href="#" class="headerlink" title=""></a></h1><h2 id="6-1-DNS域名解析服务"><a href="#6-1-DNS域名解析服务" class="headerlink" title="6.1 DNS域名解析服务"></a>6.1 DNS域名解析服务</h2><p>​        相较于数字构成的IP地址，域名更容易被理解和记忆，通常更习惯通过域名的方式来访问网络中的资源</p>
+<p>​        网络中的计算机之间只能基于IP地址来相互识别对方的 身份，而且要想在互联网中传输数据，也必须基于外网的IP地址来完成</p>
+<p>​        为了降低用户访问网络资源的门槛，域名系统(DNS)技术应运而而生，这是用于管理和解析域名与IP地址对应关系的技术</p>
+<p>​        接受用户输入的域名或IP地址，然后自动查找与之匹配(具有映射关系)的IP地址或域名， 即将域名解析为IP地址(正向解析)</p>
+<p>​        将IP地址解析为域名(反向解析)。这样一来，只 需要在浏览器中输入域名就能打开想要访问的网站了</p>
+<p>​        DNS域名解析技术的正向解析是最常使用的一种工作模式</p>
+<p>​        鉴于互联网中的域名和IP地址对应关系数据库太过庞大，DNS域名解析服务采用了类似目录树的层次结构来记录域名与IP地址之间的对应关系，从而形成了一个分布式的数据库系统</p>
+<p>​       DNS域名解析服务采用的目录树层次结构：</p>
+<p><img src="/media/bdd8ea58a8fe35d8476588367b75ecc8.png" alt="截图.png"></p>
+<p>​        域名后缀一般分为国际域名和国内域名。原则上来讲，域名后缀都有严格的定义，但在 实际使用时可以不必严格遵守</p>
+<p>​        目前最常见的域名后缀有.com(商业组织)、.org(非营利组 织)、.gov(政府部门)、.net(网络服务商)、.edu(教育机构)、.pub(公共大众)、.cn(中国国家顶级域名)等</p>
+<p>​        DNS技术作为互联网基础设施中重要的一环，为了为网民提供不间断、 稳定且快速的域名查询服务，保证互联网的正常运转，提供了下面3种类型的服务器：</p>
+<p>​        主服务器:在特定区域内具有唯一性，负责维护该区域内的域名与IP地址之间的对 应关系</p>
+<p>​        从服务器:从主服务器中获得域名与IP地址的对应关系并进行维护，以防主服务器宕机等情况</p>
+<p>​        缓存服务器:通过向其他域名解析服务器查询获得域名与IP地址的对应关系，并将经常查询的域名信息保存到服务器本地，以此来提高重复查询时的效率</p>
+<p>​        主服务器是用于管理域名和IP地址对应关系的真正服务器，从服务器帮助主 服务器“打下手”，分散部署在各个国家、省市或地区，以便让用户就近查询域名，从而减轻主服务器的负载压力。缓存服务器不太常用，一般部署在企业内网的网关位置，用于加速用 户的域名查询请求</p>
+<p>​        DNS域名解析服务采用分布式的数据结构来存放海量的“区域数据”信息，在执行用户发起的域名查询请求时，具有递归查询和迭代查询两种方式：</p>
+<p>​        递归查询:DNS服务器在收到用户发起的请求时，必须向用户返回一个准确的查询结果</p>
+<p>​                         如果DNS服务器本地没有存储与之对应的信息，则该服务器需要询问其他服务器，并将返回的查询结果提交给用户</p>
+<p>​       迭代查询:DNS服务器在收到用户发起的请求时，并不直接回复查询结果，而是告诉另一台 DNS服务器的地址，用户再向这台DNS 服务器提交请求，这样依次反复，直到返回查询结果</p>
+<p>​       当用户向就近的一台DNS服务器发起对某个域名的查询请求之后(以 <a href="http://www.linuxprobe.com为例)，其查询流程大致如下图所示：">www.linuxprobe.com为例)，其查询流程大致如下图所示：</a></p>
+<p><img src="/media/c62aaa437591f1c71a3b577afe37e10a.png" alt="截图.png"></p>
+<p>​        当用户向网络指定的DNS服务器发起一个域名请求时，通常情况下会有本地DNS服务器向上级的DNS服务器发送迭代查询请求；如果该DNS服务器没有要查询的信息，则会进一步向上级DNS服务器发送迭代查询请求，直到获得准确的查询结果为止。其中最高级、最权威的根DNS服务器总共有13台，分布在世界各地，其管理单位、具体的地理位置，以及IP地址如下表所示：</p>
+<p><img src="/media/993f5f782c1447290d6deb3e9ed9b27b.png" alt="截图.png"></p>
+<p>​        实际上用于根域名的服务器总共有504台，从A到M进行了排序，并共用13个IP地址，以此进行负载均衡， 以抵抗分布式拒绝服务(DDoS)攻击</p>
+<p>​        随着互联网接入设备数量的增长，原有的IPv4体系已经不能满足需求，IPv6协议在全球 开始普及。基于IPv6的新型地址结构为新增根服务器提供了契机。我国的“下一代互联网国家工程中心”于 2013年联合日本、美国相关运营机构和专业人士发起“雪人计划”，提出以 IPv6为基础、面向新兴应用、自主可控的一整套根服务器解决方案和技术体系，并于2017 年11月在全球完成25台IPv6根服务器的架设(我国部署了其中的4台，打破了我国过去没 有根服务器的困境)</p>
+<h2 id="6-2-安装bind服务程序"><a href="#6-2-安装bind服务程序" class="headerlink" title="6.2 安装bind服务程序"></a>6.2 安装bind服务程序</h2><p>​        BIND服务是全球范围内使用最广泛、最安全可靠且高效的域名解析服务程序</p>
+<p>​        DNS域名解析服务作为互联网基础设施服务， 责任之重可想而知，生产环境中安装部署bind服务程序时加上chroot(牢笼机制)扩展包，有效地限制bind服务程序仅能对自身配置文件进行操作，确保整个服务器的安全</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# yum -y install bind-chroot</span><br></pre></td></tr></table></figure>
+
+<p>​       如果要为用户提供健全的DNS查询服务，需要本地保存相关的域名数据库，把所有域名和IP地址的对应关系都写入到某个配置文件中，估 计要有上千万条的参数，这样既不利于程序的执行效率，也不方便日后的修改和维护。因此在bind服务程序中有以下3个比较关键的文件：</p>
+<p>​       主配置文件(&#x2F;etc&#x2F;named.conf):只有59行，去除注释信息和空行之后，有效的参数仅有30行左右，用来定义bind服务程序的运行</p>
+<p>​       区域配置文件(&#x2F;etc&#x2F;named.rfc1912.zones):</p>
+<p>​       保存域名和IP地址对应关系的所在位置，对应着每个域和相应IP地址所在的具体位置，需要查看或修改时，可根据这个位置找到相关文件</p>
+<p>​       数据配置文件目录(&#x2F;var&#x2F;named):用来保存域名和IP地址真实对应关系的数据配置文件</p>
+<p>​       Linux系统中，bind服务程序的名称为named</p>
+<p>​       首先找到主配置文件(&#x2F;etc&#x2F;named.conf)，把第11行和第19行的地址均修改为any，分别表示服务器上的所有IP地址均可提供DNS域名解析服务、允许所有人对本服务器发送DNS查询请求</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/named.conf</span><br><span class="line">options &#123;</span><br><span class="line">        listen-on port 53 &#123; any; &#125;;       <span class="comment"># 修改地址为any</span></span><br><span class="line">        listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line">        directory       <span class="string">&quot;/var/named&quot;</span>;</span><br><span class="line">        dump-file       <span class="string">&quot;/var/named/data/cache_dump.db&quot;</span>;</span><br><span class="line">        statistics-file <span class="string">&quot;/var/named/data/named_stats.txt&quot;</span>;</span><br><span class="line">        memstatistics-file <span class="string">&quot;/var/named/data/named_mem_stats.txt&quot;</span>;</span><br><span class="line">        secroots-file   <span class="string">&quot;/var/named/data/named.secroots&quot;</span>;</span><br><span class="line">        recursing-file  <span class="string">&quot;/var/named/data/named.recursing&quot;</span>;</span><br><span class="line">        allow-query     &#123; any; &#125;;     <span class="comment"># 修改地址为any</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>​       bind服务程序的区域配置文件(&#x2F;etc&#x2F;named.rfc1912.zones)用来保存域名和IP地址对应关系的所在位置</p>
+<p>​       定义了域名与IP地址解析规则保存的文件位置以及服务类型等内容，而没有包含具体的域名、IP地址对应关系等信息</p>
+<p>​       服务类型有3种，分 别为hint(根区域)、master(主区域)、slave(辅助区域)，其中常用的master和slave指的就是主服务器和从服务器</p>
+<p>​       将域名解析为IP地址的正向解析参数和将IP地址解析为域名的反向解析参数分别如下所示：</p>
+<p>​       1.正向解析参数:</p>
+<p><img src="/media/ee2764c4cfe3983f25488c66a9c220ff.png" alt="截图.png"></p>
+<p>​        2.反向解析参数:</p>
+<p><img src="/media/6e7810b71ee12b5a501ae6e60475f060.png" alt="截图.png"></p>
+<p>​         分别修改bind服务程序的主配置文件、区域配置文件与数据配置文件</p>
+<p>​         遇到bind服务程序启动失败的情况，若认为这是由于参数写错而导致的， 则可以执行named-checkconf命令和named-checkzone命令，分别检查主配置文件与数据配置 文件中语法或参数的错误</p>
+<p>​       1.正向解析</p>
+<p>​          DNS域名解析服务中，正向解析是指根据域名(主机名)查找到对应的IP地址</p>
+<p>​          当用户输入了一个域名后，bind服务程序会自动进行查找，并将匹配到的IP地址返 给用户，如下所示。这是最常用的 DNS工作模式</p>
+<p>​          第1步：编辑区域配置文件(&#x2F;etc&#x2F;named.rfc1912.zones)</p>
+<p>​                       该文件中默认已经有了一些无关紧要的解析参数，旨在让 用户有一个参考</p>
+<p>​                       可将下面的参数添加到区域配置文件的最下面，也可以将该文件 中的原有信息全部清空，而只保留自己的域名解析信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/named.rfc1912.zones</span><br><span class="line">zone <span class="string">&quot;linuxprobe.com&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> master;</span><br><span class="line">        file <span class="string">&quot;linuxprobe.com.zone&quot;</span>;</span><br><span class="line">        allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>​       第2步:编辑数据配置文件</p>
+<p>​                  从&#x2F;var&#x2F;named目录中复制一份正向解析的模板文件 (named.localhost)</p>
+<p>​                 把域名和IP地址的对应数据填写数据配置文件中并保存。复制时加上-a参数，这可以保留原始文件的所有者、所属组、权限属性等信息，以便让bind服 务程序顺利读取文件内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# <span class="built_in">cd</span> /var/named/</span><br><span class="line">[root@linuxprobe named]# <span class="built_in">ls</span> -al named.localhost</span><br><span class="line">-rw-r-----. 1 root named 152 6月  21 2007 named.localhost</span><br><span class="line">[root@linuxprobe named]# <span class="built_in">cp</span> -a named.localhost linuxprobe.com.zone</span><br><span class="line">[root@linuxprobe named]# vim linuxprobe.com.zone</span><br><span class="line"><span class="variable">$TTL</span> 1D</span><br><span class="line">@       IN SOA  linuxprobe.com.  root.linuxprobe.com. (</span><br><span class="line">0       ; serial</span><br><span class="line">1D      ; refresh</span><br><span class="line">1H      ; retry</span><br><span class="line">1W      ; expire</span><br><span class="line">3H )    ; minimum</span><br><span class="line">@       IN NS ns.linuxprobe.com.</span><br><span class="line">ns      IN A 192.168.1.31</span><br><span class="line">www     IN A 192.168.1.31</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查文件有效性</span></span><br><span class="line">[root@linuxprobe named]# named-checkzone linuxprobe.com /var/named/linuxprobe.com.zone</span><br><span class="line">zone linuxprobe.com/IN: loaded serial 0</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<p>​        第3步：保存并退出后文件(&#x2F;var&#x2F;named&#x2F;linuxprobe.com.zone)后重启named服务程序，让新的解析数据生效</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe named]# systemctl restart named</span><br><span class="line">[root@linuxprobe named]# systemctl <span class="built_in">enable</span> named</span><br><span class="line">Created symlink /etc/systemd/system/multi-user.target.wants/named.service → /usr/lib/systemd/system/named.service.</span><br><span class="line">[root@linuxprobe named]# systemctl status named</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">zone文件详解：</span><br><span class="line"><span class="comment"># $TTL  缓存的生存周期</span></span><br><span class="line"><span class="comment"># @ = zonename = test.hhy  当前域</span></span><br><span class="line"><span class="comment"># IN  互联网</span></span><br><span class="line"><span class="comment"># SOA 开始授权</span></span><br><span class="line"><span class="comment"># NS  dns服务端	nameserver</span></span><br><span class="line"><span class="comment"># A   ipv4 正向</span></span><br><span class="line"><span class="comment"># AAAA IPV6</span></span><br><span class="line"><span class="comment"># CNAME 别名</span></span><br><span class="line"><span class="comment"># MX  邮件交互记录  5 数字代表优先级 数字越小优先级越高</span></span><br><span class="line"><span class="comment"># 0       ; serial    更新序列号	</span></span><br><span class="line"><span class="comment"># 1D      ; refresh   更新间隔（从服务器下载数据）</span></span><br><span class="line"><span class="comment"># 1H      ; retry     失败重试</span></span><br><span class="line"><span class="comment"># 1W      ; expire    区域文件的过期时间</span></span><br><span class="line"><span class="comment"># 3H )    ; minimum   缓存的最小生存周期</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># D Day（天）、H Hour（时）、W Week（周）</span></span><br></pre></td></tr></table></figure>
+
+<p>​             在解析文件中，A记录类型表示将域名指向一个IPv4地址，而AAAA表示将域名指向 一个IPv6地址。还有8种记录类型，如下表所示:</p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>将域名指向一个IPv4地址</td>
+</tr>
+<tr>
+<td>CNAME</td>
+<td>将域名指向另外一个域名</td>
+</tr>
+<tr>
+<td>AAAA</td>
+<td>将域名指向一个IPv6地址</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>将子域名指定由其他DNS服务器解析</td>
+</tr>
+<tr>
+<td>MX</td>
+<td>将域名指向邮件服务器地址</td>
+</tr>
+<tr>
+<td>SRV</td>
+<td>记录提供特定的服务的服务器</td>
+</tr>
+<tr>
+<td>TXT</td>
+<td>文本内容一般为512字节，常作为反垃圾邮件的SPF(发送方策略框架)记录</td>
+</tr>
+<tr>
+<td>CAA</td>
+<td>CA证书颁发机构授权校验</td>
+</tr>
+<tr>
+<td>显性URL</td>
+<td>将域名重定向到另外一个地址</td>
+</tr>
+<tr>
+<td>隐形URL</td>
+<td>与显性URL类似，但会隐藏真实目标地址</td>
+</tr>
+</tbody></table>
+<p>​          第4步:检验解析结果</p>
+<p>​                      为了检验解析结果，先把Linux系统网卡中的DNS地址参数修改成本机IP地址(下图)，就可以使用由本机提供的DNS查询服务了        </p>
+<p><img src="/Linux%E6%9C%8D%E5%8A%A1.assets/DNS%E6%AD%A3%E5%90%91%E8%A7%A3%E6%9E%90.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# nmcli connection down ens160</span><br><span class="line">成功停用连接 <span class="string">&quot;ens160&quot;</span>（D-Bus 活动路径：/org/freedesktop/NetworkManager/ActiveConnection/6）</span><br><span class="line">[root@linuxprobe ~]# nmcli connection up ens160</span><br><span class="line">连接已成功激活（D-Bus 活动路径：/org/freedesktop/NetworkManager/ActiveConnection/4）</span><br><span class="line">[root@linuxprobe ~]# nslookup</span><br><span class="line">&gt; ns.linuxprobe.com</span><br><span class="line">Server:		192.168.1.31</span><br><span class="line">Address:	192.168.1.31#53</span><br><span class="line"></span><br><span class="line">Name:	ns.linuxprobe.com</span><br><span class="line">Address: 192.168.1.31</span><br><span class="line"><span class="comment"># nslookup命令用于检测能否从DNS服务器中查询到域名与IP地址的解析记录，进而更准确地检验DNS服务器是否已经能够为用户提供服务</span></span><br></pre></td></tr></table></figure>
+
+<p>​      若解析出的结果不是192.168.1.31，很有可能是虚拟机选择了联网模式，并由互联网 DNS服务器进行了解析</p>
+<p>​      此时应确认服务器信息是否为”Address: 192.168.1.31#53”，即由本地服务器192.168.1.31的53端口号进行解析；若不是，则重启网络后再试一下</p>
+<p>​      2.反向解析</p>
+<p>​         反向解析是将用户提交的IP地址解析为对应的域名信息，一般用于对某个IP地址上绑定的所有域名进行整体屏蔽</p>
+<p>​         屏蔽由某些域名发送的垃圾邮件</p>
+<p>​         可以针对某个IP地址进行反向解析，大致判断出有多少个网站运行在上面</p>
+<p>​         第1步：编辑区域配置文件(&#x2F;etc&#x2F;named.rfc1912.zones)</p>
+<p>​                       编辑该文件时，除了不要写错格式之外，还需记住此处定义的数据配置文件名称，因为还需在&#x2F;var&#x2F;named目录中建立与其对应的同名文 件。</p>
+<p>​                      反向解析是把IP地址解析成域名格式，因此在定义zone(区域)时应该要把IP地址反写，比如原来是192.168.1.0，反写后应该就1.168.192，只需写出IP地址的网络位即可，把下列参数添加至正向解析参数的后面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/named.rfc1912.zones</span><br><span class="line">zone <span class="string">&quot;linuxprobe.com&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> master;</span><br><span class="line">        file <span class="string">&quot;linuxprobe.com.zone&quot;</span>;</span><br><span class="line">        allow-update &#123; none; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">zone <span class="string">&quot;1.168.192.in-addr.arpa&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> master;</span><br><span class="line">        file <span class="string">&quot;192.168.1.arpa&quot;</span>;</span><br><span class="line">        allow-update &#123;none;&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>​         第2步:编辑数据配置文件:</p>
+<p>​                    从&#x2F;var&#x2F;named目录中复制一份反向解析的模板文件 (named.loopback)，然后把下面的参数填写到文件中。IP地址仅需要写主机位，如下图 所示：</p>
+<p><img src="/media/d4254f27921d36ddce7fd780e84a8a27.png" alt="截图.png"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# <span class="built_in">cd</span> /var/named</span><br><span class="line">[root@linuxprobe named]# <span class="built_in">cp</span> -a named.loopback 192.168.1.arpa</span><br><span class="line">[root@linuxprobe named]# vim 192.168.1.arpa</span><br><span class="line"><span class="variable">$TTL</span> 1D</span><br><span class="line">@       IN SOA  @ rname.invalid. (</span><br><span class="line">                                        0       ; serial</span><br><span class="line">                                        1D      ; refresh</span><br><span class="line">                                        1H      ; retry</span><br><span class="line">                                        1W      ; expire</span><br><span class="line">                                        3H )    ; minimum</span><br><span class="line">        NS      @</span><br><span class="line">        A       127.0.0.1</span><br><span class="line">        AAAA    ::1</span><br><span class="line">        PTR     localhost.</span><br><span class="line">31      PTR     ns.linuxprobe.com</span><br><span class="line">41      PTR     www.linux.com</span><br><span class="line"><span class="comment"># 增加反向解析：把192.168.1.41通过PTR解析成www.linux.com</span></span><br><span class="line">[root@linuxprobe named]# systemctl restart named</span><br></pre></td></tr></table></figure>
+
+<p>​           第3步:检验解析结果：</p>
+<p>​                     正向解析实验中，已经把系统网卡中的DNS地址参数 修改成了本机IP地址，因此可以直接使用nslookup命令来检验解析结果</p>
+<p>​                     仅需输入IP地址即可查询到对应的域名信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# nslookup</span><br><span class="line">&gt; 127.0.0.1</span><br><span class="line">1.0.0.127.in-addr.arpa	name = localhost.</span><br><span class="line">&gt; 192.168.1.31</span><br><span class="line">31.1.168.192.in-addr.arpa	name = ns.linuxprobe.com.1.168.192.in-addr.arpa.</span><br><span class="line">&gt; 192.168.1.41</span><br><span class="line">41.1.168.192.in-addr.arpa	name = www.linux.com.1.168.192.in-addr.arpa.</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-3-部署从服务器"><a href="#6-3-部署从服务器" class="headerlink" title="6.3 部署从服务器"></a>6.3 部署从服务器</h2><p>​       作为重要的互联网基础设施服务，保证DNS域名解析服务的正常运转至关重要</p>
+<p>​       在DNS域名解析服务中，从服务器可以从主服务器上获取指定的区域数据文件，从而起到备份解析记录与负载均衡的作用</p>
+<p>​       通过部署从服务器不仅可以减轻主服务器的负载压力，还可以提升用户的查询效率</p>
+<p>​       在本实验中，主服务器与从服务器分别使用的操作系统和IP地址如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主服务器</td>
+<td>RHEL 8</td>
+<td>192.168.1.31</td>
+</tr>
+<tr>
+<td>从服务器</td>
+<td>RHEL 8</td>
+<td>192.168.1.41</td>
+</tr>
+</tbody></table>
+<p>​        首先找到主配置文件(&#x2F;etc&#x2F;named.conf)，把第11行和第19行的地址均修改为any，分别表示服务器上的所有IP地址均可提供DNS域名解析服务、允许所有人对本服务器发送DNS查询请求</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/named.conf</span><br><span class="line">options &#123;</span><br><span class="line">        listen-on port 53 &#123; any; &#125;;       <span class="comment"># 修改地址为any</span></span><br><span class="line">        listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line">        directory       <span class="string">&quot;/var/named&quot;</span>;</span><br><span class="line">        dump-file       <span class="string">&quot;/var/named/data/cache_dump.db&quot;</span>;</span><br><span class="line">        statistics-file <span class="string">&quot;/var/named/data/named_stats.txt&quot;</span>;</span><br><span class="line">        memstatistics-file <span class="string">&quot;/var/named/data/named_mem_stats.txt&quot;</span>;</span><br><span class="line">        secroots-file   <span class="string">&quot;/var/named/data/named.secroots&quot;</span>;</span><br><span class="line">        recursing-file  <span class="string">&quot;/var/named/data/named.recursing&quot;</span>;</span><br><span class="line">        allow-query     &#123; any; &#125;;     <span class="comment"># 修改地址为any</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>​        第1步:在主服务器的区域配置文件(&#x2F;etc&#x2F;named.rfc1912.zones)中允许该从服务器的更新请求，即修改allow-update {允许更新区域信息的主机地址;};参数，然后重启主服务器的DNS服务程序</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/named.rfc1912.zones</span><br><span class="line">zone <span class="string">&quot;linuxprobe.com&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> master;</span><br><span class="line">        file <span class="string">&quot;linuxprobe.com.zone&quot;</span>;</span><br><span class="line">        allow-update &#123; 192.168.1.41; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">zone <span class="string">&quot;1.168.192.in-addr.arpa&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> master;</span><br><span class="line">        file <span class="string">&quot;192.168.1.arpa&quot;</span>;</span><br><span class="line">        allow-update &#123; 192.168.1.41; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">[root@linuxprobe ~]# systemctl restart named</span><br><span class="line">在主服务器上配置防火墙放行规则，让 DNS 协议流量可以被顺利传递。</span><br></pre></td></tr></table></figure>
+
+<p>​        第2步：在主服务器上配置防火墙放行规则，让DNS协议流量可以被顺利传递</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# iptables -F</span><br><span class="line">[root@linuxprobe ~]# firewall-cmd --permanent --zone=public --add-service=dns</span><br><span class="line">success</span><br></pre></td></tr></table></figure>
+
+<p>​      第3步：在从服务器上安装 bind-chroot 软件包</p>
+<p>​                    修改配置文件，让从服务器也能够对外提供DNS服务，并且测试其与主服务器的网络连通性</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@Client ~]# dnf -y install bind-chroot</span><br><span class="line">[root@Client ~]# vim /etc/named.conf</span><br><span class="line">options &#123;</span><br><span class="line">        listen-on port 53 &#123; any; &#125;;</span><br><span class="line">        listen-on-v6 port 53 &#123; ::1; &#125;;</span><br><span class="line">        directory       <span class="string">&quot;/var/named&quot;</span>;</span><br><span class="line">        dump-file       <span class="string">&quot;/var/named/data/cache_dump.db&quot;</span>;</span><br><span class="line">        statistics-file <span class="string">&quot;/var/named/data/named_stats.txt&quot;</span>;</span><br><span class="line">        memstatistics-file <span class="string">&quot;/var/named/data/named_mem_stats.txt&quot;</span>;</span><br><span class="line">        secroots-file   <span class="string">&quot;/var/named/data/named.secroots&quot;</span>;</span><br><span class="line">        recursing-file  <span class="string">&quot;/var/named/data/named.recursing&quot;</span>;</span><br><span class="line">        allow-query     &#123; any; &#125;;</span><br><span class="line">......</span><br><span class="line">[root@Client ~]# ping -c 4 192.168.1.31</span><br></pre></td></tr></table></figure>
+
+<p>​        第4步：在从服务器中填写主服务器的IP地址与要抓取的区域信息，然后重启服务</p>
+<p>​                      注意：此时的服务类型应该是 slave（从），而不再是 master（主）</p>
+<p>​                      masters参数后面应该为主服务器的IP地址，而且file参数后面定义的是同步数据配置文件后要保存到的位置，稍后可以在<br>该目录内看到同步的文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@Client ~]# vim /etc/named.rfc1912.zones</span><br><span class="line">zone <span class="string">&quot;linuxprobe.com&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> slave;</span><br><span class="line">        masters &#123; 192.168.1.31; &#125;;</span><br><span class="line">        file <span class="string">&quot;slaves/linuxprobe.com.zone&quot;</span>;</span><br><span class="line">&#125;;</span><br><span class="line">zone <span class="string">&quot;1.168.192.in-addr.arpa&quot;</span> IN &#123;</span><br><span class="line">        <span class="built_in">type</span> slave;</span><br><span class="line">        masters &#123; 192.168.1.31; &#125;;</span><br><span class="line">        file <span class="string">&quot;slaves/192.168.1.arpa&quot;</span>;</span><br><span class="line">&#125;;</span><br><span class="line">[root@Client ~]# systemctl restart named</span><br><span class="line"><span class="comment"># masters参数比正常的主服务类型master多了个字母s，表示可以有多个主服务器</span></span><br></pre></td></tr></table></figure>
+
+<p>​         第5步：检验解析结果</p>
+<p>​                      当从服务器的DNS服务程序在重启后，一般就已经自动从主服务器上同步了数据配置文件，而且该文件默认会放置在区域配置文件中所定义的目录位置中。<br>​                     随后修改从服务器的网络参数，把DNS地址参数修改成 192.168.1.41，这样即可使用从服务器自身提供的DNS域名解析服务</p>
+<p>​                     最后就可以使用 nslookup 命令顺利看到解析结果了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe slaves]# <span class="built_in">cp</span> /var/named/192.168.1.arpa /var/named/slaves/</span><br><span class="line">[root@linuxprobe slaves]# <span class="built_in">ls</span></span><br><span class="line">192.168.1.arpa</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<h1 id="7-使用DHCP动态管理主机地址"><a href="#7-使用DHCP动态管理主机地址" class="headerlink" title="7 使用DHCP动态管理主机地址"></a>7 使用DHCP动态管理主机地址</h1><h2 id="7-1-动态主机配置协议"><a href="#7-1-动态主机配置协议" class="headerlink" title="7.1 动态主机配置协议"></a>7.1 动态主机配置协议</h2><p><strong>动态主机配置协议(DHCP)是一种基于UDP协议且仅限于在局域网内部使用的网络协 议，主要用于大型的局域网环境或者存在较多移动办公设备的局域网环境中，用途是为局域 网内部的设备或网络供应商自动分配IP地址等参数，提供网络配置的”全家桶”服务。</strong></p>
+<p><strong>DHCP就是让局域网中的主机自动获得网络参数的服务。在下图所示的拓扑 图中存在多台主机，如果手动配置每台主机的网络参数会相当麻烦，日后维护起来也让人头大。借助于DHCP，不仅可以为主机自动分配网络参数，还可以 确保主机使用的IP地址是唯一的，还能为特定主机分配固定的IP地址。</strong></p>
+<p><strong>DHCP的拓扑示意图:</strong></p>
+<p><img src="/media/ef72f7424010f498fc18e95f6e0e605f.png" alt="截图.png"></p>
+<p><strong>DHCP的常见术语:</strong></p>
+<p><strong>作用域:一个完整的IP地址段，DHCP根据作用域来管理网络的分布、IP地址的分 配及其他配置参数</strong></p>
+<p><strong>超级作用域:用于管理处于同一个物理网络中的多个逻辑子网段，包含可以统一 管理的作用域列表</strong></p>
+<p><strong>排除范围:把作用域中的某些IP地址排除，确保这些IP地址不会分配给DHCP客 户端</strong></p>
+<p><strong>地址池:在定义了DHCP的作用域并应用了排除范围后，剩余的用来动态分配给客户 端的IP地址范围</strong></p>
+<p><strong>租约:DHCP客户端能够使用动态分配的IP地址的时间</strong></p>
+<p><strong>预约:保证网络中的特定设备总是获取到相同的IP地址</strong></p>
+<h2 id="7-2-部署dhcpd服务程序"><a href="#7-2-部署dhcpd服务程序" class="headerlink" title="7.2 部署dhcpd服务程序"></a>7.2 部署dhcpd服务程序</h2><p><strong>dhcpd是Linux系统中用于提供DHCP的服务程序。</strong></p>
+<p><strong>在确认软件仓库配置妥当之后，安装dhcpd服务程序，其软件包名称为dhcp-server：</strong></p>
+<p><img src="/media/cb42f49dcd6ef49daf2b9e475affb241.png" alt="截图.png"></p>
+<p><strong>查看dhcpd服务程序的配置文件内容：</strong></p>
+<p><img src="/media/630b5ba2434cd04af8c1a953c8ccd9f3.png" alt="截图.png"></p>
+<p><strong>dhcp的服务程序的配置文件中只有3行注释语句，意味着需 自行编写这个文件。如果不知道怎么编写，可以看一下配置文件中第2行的参考示例 文件，其组成架构如下图所示:</strong></p>
+<p><strong>配置文件参考示例路径:&#x2F;usr&#x2F;share&#x2F;doc&#x2F;dhcp-server&#x2F;dhcpd.conf.example</strong></p>
+<p><strong>dhcpd服务程序配置文件的架构:</strong></p>
+<p><img src="/media/f02a7c9065ddd83713d87c192605bafe.png" alt="截图.png"></p>
+<p><strong>一个标准的配置文件应包括全局配置参数、子网网段声明、地址配置选项以及地址配 置参数:</strong></p>
+<p><strong>全局配置参数用于定义dhcpd服务程序的整体运行参数</strong></p>
+<p><strong>子网网段声明用于 配置整个子网段的地址属性</strong></p>
+<p><strong>考虑到dhcpd服务程序配置文件的可用参数比较多，以下为最常用的参数(下表):</strong></p>
+<p><img src="/media/b1f2c3d2c55993fa50d0b4bd47fcd587.png" alt="截图.png"></p>
+<h2 id="7-3-自动管理IP地址"><a href="#7-3-自动管理IP地址" class="headerlink" title="7.3 自动管理IP地址"></a>7.3 自动管理IP地址</h2><p><strong>DHCP的设计初衷是为了更高效地集中管理局域网内的IP地址资源。DHCP服务器会自 动把IP地址、子网掩码、网关、DNS地址等网络信息分配给有需要的客户端，当客户端 的租约时间到期后还可以自动回收所分配的IP地址，以便交给新加入的客户端。</strong></p>
+<p><strong>为了让实验更有挑战性，模拟一个真实生产环境的需求：</strong></p>
+<p><strong>机房运营部门:明天会有100名学员自带笔记本电脑来我司培训学习，请保证他们能够 使用机房的本地DHCP服务器自动获取IP地址并正常上网。</strong></p>
+<p><strong>机房所用的网络地址及参数信息如下表所示:</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>默认租约时间</td>
+<td>21600秒</td>
+</tr>
+<tr>
+<td>最大租约时间</td>
+<td>43200秒</td>
+</tr>
+<tr>
+<td>IP地址范围</td>
+<td>192.168.1.50~192.168.1.150</td>
+</tr>
+<tr>
+<td>子网掩码</td>
+<td>255.255.255.0</td>
+</tr>
+<tr>
+<td>网关地址</td>
+<td>192.168.1.1</td>
+</tr>
+<tr>
+<td>DNS服务器地址</td>
+<td>192.168.1.1</td>
+</tr>
+<tr>
+<td><strong>搜索域</strong></td>
+<td><strong>linuxprobe.com</strong></td>
+</tr>
+</tbody></table>
+<p><strong>按照下表来配置DHCP服务器以 及客户端:</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机类型</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DHCP服务器</td>
+<td>RHEL 8</td>
+<td>192.168.1.1</td>
+</tr>
+<tr>
+<td>DHCP客户端</td>
+<td>Windows 11</td>
+<td>使用DHCP自动获取</td>
+</tr>
+</tbody></table>
+<p><strong>作用域一般是个完整的IP地址段，而地址池中的IP地址才是真正供客户端 使用的，因此地址池应该小于或等于作用域的IP地址范围。由于VMware Workstation 虚拟机软件自带DHCP服务，为了避免与自己配置的dhcpd服务程序产生冲突，应先按照 图1和图2将虚拟机软件自带的DHCP功能关闭。</strong></p>
+<p><strong>单击虚拟机软件的“虚拟网络编辑器”菜单:</strong></p>
+<p><img src="/media/9bba371bd56dfa7d6511029f74b6761a.png" alt="截图.png"></p>
+<p><strong>关闭虚拟机自带的DHCP功能:</strong></p>
+<p><img src="/media/0ae3537c998b8b9fb88aa49c3053bb07.png" alt="截图.png"></p>
+<p><strong>DHCP客户端与服务器需要 处于同一种网络模式—仅主机模式(Hostonly)，否则就会产生物理隔离，从而无法获取IP 地址。</strong></p>
+<p><strong>在确认DHCP服务器的IP地址等网络信息配置妥当后，就可以配置dhcpd服务程序了。</strong></p>
+<p><strong>在配置dhcpd服务程序时，配置文件中的每行参数后面都需要以分号(;)结尾，另外，dhcpd服务程序配置文件内的参数都十分重要，在下表中列出了每 一行参数，并对其用途进行了简单介绍。</strong></p>
+<p><strong>配置文件路径:&#x2F;etc&#x2F;dhcp&#x2F;dhcpd.conf</strong></p>
+<p><img src="/media/37195cfa78e7bc4c244723c82e6c8183.png" alt="截图.png"></p>
+<p><strong>dhcpd服务程序配置文件中使用的参数以及作用:</strong></p>
+<p><img src="/media/2583da1823477887b9b041932fcc4848.png" alt="截图.png"></p>
+<p><strong>在红帽认证考试以及生产环境中，都需要把配置过的dhcpd服务加入到开机启动项中， 以确保当服务器下次开机后dhcpd服务依然能自动启动，并顺利地为客户端分配IP地址等信 息。</strong></p>
+<p><img src="/media/dde21ef5fd49a50e709096a203f604a0.png" alt="截图.png"></p>
+<p><strong>dhcpd服务程序配置好后就可以开启客户端来检验IP分配效果了。在日常工 作中，Windows11是主流的桌面操作系统，只要确保两个主机都处于同一个网络模式内， 如图1那样设置Windows系统的网络为DHCP模式，再稍等片刻即可自动获取到 网卡信息了，如图2所示。</strong></p>
+<p><strong>设置网络模式:</strong></p>
+<p><img src="/media/bbddfe3e7cf59ea19a33c47b6ec73741.png" alt="截图.png"></p>
+<p><strong>自动获取到IP地址:</strong></p>
+<p><img src="/media/09335f935ca6f902a774eb3bbaa78299.png" alt="截图.png"></p>
+<p><strong>如果在生产环境中配置dhcpd服务，则有可能会因为DHCP没有被防火墙放行而导致 失败，此时执行下面的命令即可：</strong></p>
+<p><img src="/media/4fb63cdf640bf69aa00aac73b3be8285.png" alt="截图.png"></p>
+<p><strong>正常情况下，DHCP的运作会经历4个过程：请求、提供、选择和确认。当客户端顺 利获得一个IP 地址及相关的网络信息后，就会发送一个ARP( 地址解析协议)请求给服务器。在dhcpd 服务程序收到这条信息后，也会再把这个IP地址分 配给其他主机，从根源上避免了IP地址冲突的情况。</strong></p>
+<h2 id="7-4-分配固定IP地址"><a href="#7-4-分配固定IP地址" class="headerlink" title="7.4 分配固定IP地址"></a>7.4 分配固定IP地址</h2><p><strong>在DHCP协议中有个术语是“预约”，用来确保局域网中特定的设备总是获取到固定 的IP地址。换句话说，就是dhcpd服务程序会把某个IP地址私藏下来，只将其用于相匹配的 特定设备。</strong></p>
+<p><strong>要想把某个IP地址与某台主机进行绑定，就需要用到这台主机的MAC地址。MAC 地址即网卡上一串独立的标识符，具备唯一性，因此不会存在冲突的情况。在Linux系统中 查看MAC地址的示例如图1所示，在Windows系统中查MAC地址的示例如图2所示。</strong></p>
+<p><strong>Linux系统中查看网卡MAC地址:</strong></p>
+<p><img src="/media/e2a0ccf0941f6351578fc61a71afc35b.png" alt="截图.png"></p>
+<p><strong>Windows系统中查看网卡MAC地址:</strong></p>
+<p><img src="/media/5cd320a6c8e6dda1ddb2ec21d724b9dc.png" alt="截图.png"></p>
+<p><strong>在Linux系统或Windows系统中，都可以通过查看网络的状态来获知主机的MAC地址。</strong></p>
+<p><strong>在dhcpd服务程序的配置文件中，按照如下格式将IP地址与MAC地址进行绑定:</strong></p>
+<p><img src="/media/04e2dec92226c8fae17bf0d0e905839d.png" alt="截图.png"></p>
+<p><strong>如果不方便查看主机的MAC地址，该怎么办呢？首先启动dhcpd服务程序，为老板的主机分配一个 IP地址，这样就会在DHCP服务器本地 的日志文件中保存这次的IP地址分配记录。然后查看日志文件，就可以获悉主机的MAC地 址了(即下面加粗的内容)：</strong></p>
+<p><img src="/media/7e1382751dbfcd6a01fd5349b71c4e40.png" alt="截图.png"></p>
+<p><strong>在Windows系统中看到的MAC地址，其格式类似于 00-50-56-c0-00-01，间隔符为减号(-)。但是在 Linux系统中，MAC地址的间隔符则变成 了冒号(:)</strong></p>
+<p><strong>dhcpd服务程序配置文件路径:&#x2F;etc&#x2F;dhcp&#x2F;dhcpd.conf</strong></p>
+<p><img src="/media/00d1d9f25a6f92de424942e5f549e5e3.png" alt="截图.png"></p>
+<p><strong>确认参数填写正确后就可以保存并退出配置文件，然后就可以重启dhcpd服务程序了。</strong></p>
+<p><strong>如果刚刚为这台主机分配了IP地址，由于它的IP地址租约时间还没 有到期，因此不会立即换成新绑定的IP地址。要想立即查看绑定效果，需要重启一下客户 端的网络服务，如下图示。</strong></p>
+<p><img src="/media/bc6e2f261cd988b83789bf4d500a142d.png" alt="截图.png"></p>
+<p><img src="/media/26859404324447299d26cadeeea3274a.png" alt="截图.png">。*</p>
+<h1 id="8-使用Postfix与Dovecot部署邮件系统"><a href="#8-使用Postfix与Dovecot部署邮件系统" class="headerlink" title="8 使用Postfix与Dovecot部署邮件系统"></a>8 使用Postfix与Dovecot部署邮件系统</h1><h2 id="待完善-1"><a href="#待完善-1" class="headerlink" title="待完善"></a>待完善</h2><h2 id="8-1-电子邮件系统"><a href="#8-1-电子邮件系统" class="headerlink" title="8.1 电子邮件系统"></a>8.1 电子邮件系统</h2><p>​              使用”姓名@计算机主机名称”的格式来规范电子信箱的名 称</p>
+<p>​              电子邮件系统基于邮件协议来完成电子邮件的传输，常见的邮件协议有下面这些:</p>
+<p>​              1.简单邮件传输协议(SMTP):用于发送和中转发出的电子邮件，占用服务器的TCP&#x2F;25端口</p>
+<p>​              2.邮局协议版本3:用于将电子邮件存储到本地主机，占用服 务器的TCP&#x2F;110端口</p>
+<p>​              3.Internet消息访问协议版本4:用于在本地主机上访问邮件，占用服务器的TCP&#x2F;143端口</p>
+<p>​              在电子邮件系统中，为用户收发邮件的服务器名为邮件用户代理(MUA)</p>
+<p>​        电子邮件系统能够让用户在离线的情况下依然可以完成数据的接收，肯定得有一个用于保存用户邮件的“信箱”服务器，这个服务器的名字为邮件投递代理(MDA)，工作职责是把来自于邮件传输代理(MTA) 的邮件保存到本地的收件箱中</p>
+<p>​        MTA的工作职责是转发处理不同电子邮件服务供 应商之间的邮件，把来自于MUA的邮件转发到合适的MTA服务器</p>
+<p>​        例如，从新浪信箱 向谷歌信箱发送一封电子邮件，这封电子邮件的传输过程如下图所示：</p>
+<p><img src="/media/145efbe681c943a59beecde3d24c68d3.png" alt="截图.png"></p>
+<p>​         在电子邮件系统中，用户发送邮件后不必等待投递工作完成即可下线</p>
+<p>​         如果对方邮件服务器(MTA)宕机或对方临时离线，则发件服务器(MTA)就会把要发送的内容自动地暂时保存到本地，等检测到对方邮件服务器恢复后会立即再次投递，期间一般无须运维人员维护处 理，随后收信人(MUA)就能在自己的信箱中找到这封邮件了</p>
+<p>​         生产环境中部署企业级的电子邮件系统时，有4个注意事项需留意：</p>
+<p>​        1.添加反垃圾与反病毒模块:有效阻止垃圾邮件或病毒邮件对企业信箱的干扰</p>
+<p>​        2.对邮件加密:保护邮件内容不被黑客盗取和篡改</p>
+<p>​        3.添加邮件监控审核模块:</p>
+<p>​           监控企业全体员工的邮件中是否有敏感词以及透露企业资料等违规行为</p>
+<p>​        4.保障稳定性:</p>
+<p>​           电子邮件系统的稳定性至关重要，运维应做到保证电子邮件系统的稳定运行，及时做好防范分布式拒绝服务(DDoS)攻击的准备</p>
+<h2 id="8-2-部署基础的电子邮件系统"><a href="#8-2-部署基础的电子邮件系统" class="headerlink" title="8.2 部署基础的电子邮件系统"></a>8.2 部署基础的电子邮件系统</h2><p>​            最基础的电子邮件系统要能提供发件服务和收件服务，为此需要使用基于SMTP的Postfix服务程序提供发件服务功能</p>
+<p>​            使用基于POP3协议的Dovecot服务程序提供收件服务功能</p>
+<p>​            用户可以使用Outlook Express或Foxmail等客户端服务程序正常收发邮件</p>
+<p>​            电子邮件系统的工作流程如下图：</p>
+<p><img src="/media/70aafe12e82fdfd2afd04a0e00f11dfe.png" alt="截图.png"></p>
+<p>​           早期的Linux系统中，默认使用的发件服务由Sendmail服务程序提供，在RHEL 8系统中已替换为Postfix服务程序</p>
+<p>​           相较于Sendmail服务程序，Postfix服务程序减少了很多不必要的配置步骤，在稳定性、并发性方面也有很大改进</p>
+<p>​           信箱地址一般类似于<a href="mailto:&#x72;&#x6f;&#x6f;&#116;&#64;&#x6c;&#x69;&#110;&#117;&#x78;&#x70;&#x72;&#x6f;&#98;&#101;&#x2e;&#x63;&#111;&#109;">root@linuxprobe.com</a>这样，也就是按照”用户名@主机 地址(域名)”格式来规范的</p>
+<p>​            要想更好地检验电子邮件系统的 配置效果，需要先部署bind服务程序，为电子邮件服务器和客户端提供DNS域名解析服务</p>
+<p>​           1.配置服务器主机名称(&#x2F;etc&#x2F;hostname)，保证服务器主机名称与发信域名保持一致</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/hostname</span><br><span class="line">mail.linuxprobe.com</span><br><span class="line">[root@linuxprobe ~]# hostname</span><br><span class="line">linuxprobe.com</span><br><span class="line">[root@linuxprobe ~]# hostnamectl set-hostname mail.linuxprobe.com</span><br><span class="line">[root@linuxprobe ~]# hostname</span><br><span class="line">mail.linuxprobe.com</span><br><span class="line"><span class="comment"># 修改主机名称文件后如果没有立即生效，可以重启服务器；或者再执行一条：</span></span><br><span class="line">hostnamectl set-hostname mail.linuxprobe.com命令，立即设置主机名称</span><br></pre></td></tr></table></figure>
+
+<p>​          2.清空iptables防火墙默认策略，并保存策略状态，避免因防火墙中默认存在的策略阻止了客户端DNS解析域名及收发邮件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# iptables -F</span><br><span class="line">[root@linuxprobe ~]# iptables-save</span><br></pre></td></tr></table></figure>
+
+<p>​         3.把DNS协议加入到firewalld防火墙的允许列表中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# firewall-cmd --permanent --zone=public --add-service=dns</span><br><span class="line">success</span><br><span class="line">[root@linuxprobe ~]# firewall-cmd --reload</span><br><span class="line">success</span><br></pre></td></tr></table></figure>
+
+<p>​         4.为电子邮件系统提供域名解析</p>
+<p><strong>1.安装bind服务程序</strong></p>
+<p><img src="/media/1a03bb5512332d5a88bddd77207a7752.png" alt="截图.png"></p>
+<p><strong>2.在&#x2F;etc目录中找到该服务程序 的主配置文件(&#x2F;etc&#x2F;named.conf)，把第11行和第19行的地址均修改为any，分别表示服务器上的所有IP 地址均可提供DNS域名解析服务，以及允许所有人对本服务器发送DNS查询请求</strong></p>
+<p><img src="/media/2fb35b0e183ecaa3d034f918bbcb28ed.png" alt="截图.png"></p>
+<p><strong>3.编辑区域配置文件(&#x2F;etc&#x2F;named.rfc1912.zones):</strong></p>
+<p><strong>该文件中默认已经有了一些无关紧要的解析参数，旨在让 用户有一个参考。可以将下面的参数添加到区域配置文件的最下面。当然，也可以将该文件 中的原有信息全部清空，而只保留自己的域名解析信息。</strong></p>
+<p><img src="/media/4c62c18ea5dbbd3de05754fd8234cb74.png" alt="截图.png"></p>
+<p><strong>4.编辑数据配置文件:</strong></p>
+<p><strong>从&#x2F;var&#x2F;named目录中复制一份正向解析的模板文件件 (named.localhost)，然后把域名和IP地址的对应数据填写数据配置文件中并保存。在复制正向解析模板文件时，在cp命令后面追加-a参数，以便让新文件继承原文件 的属性和权限信息：</strong></p>
+<p><img src="/media/34a724ace85fae69e73c342c74f66e82.png" alt="截图.png"></p>
+<p><strong>编辑&#x2F;var&#x2F;named&#x2F;linuxprobe.com.zone文件如下:</strong></p>
+<p><img src="/media/b6632cb98b7afc4243a30fe905475d17.png" alt="截图.png"></p>
+<p><strong>5.在保存并退出后文件后记得重启named服务程序:</strong></p>
+<p><img src="/media/1ba8d07a1a2f5e991970fa95c9bb3a58.png" alt="截图.png"></p>
+<p><strong>第4步:修改好配置文件后重启bind服务程序，这样电子邮件系统所对应的服务器主机名为mail.linuxprobe.com，而邮件域为@linuxprobe.com。把服务器的DNS地址修改成本地IP 地址，如下图所示:</strong></p>
+<p><img src="/media/f3e5c443b8fc46dbf32f5ae5a71b8c85.png" alt="截图.png"></p>
+<p><strong>第5步:让新配置的网卡参数立即生效：</strong></p>
+<p><img src="/media/f08d1ba09a183b7dec74a975911d1fb1.png" alt="截图.png"></p>
+<p><strong>对主机名执行ping命令，若能ping通，则证明上述操作全部正确:</strong></p>
+<p><img src="/media/bf5609e701ef9556a8cbcac23d2cd4c5.png" alt="截图.png"></p>
+<p><strong>注明:在执行 ping操作时，也会获得主机名对应的IP地址，证明上述操作全部正确</strong></p>
+<p><strong>1.配置Postfix服务程序</strong></p>
+<p><strong>Postfix是一款由IBM资助研发的免费开源电子邮件服务程序，能够很好地兼容Sendmail 服务程序，可以方便Sendmail用户迁移到Postfix服务上。Postfix服务程序的邮件收发能力强 于Sendmail 服务，而且能自动增加、减少进程的数量来保证电子邮件系统的高性能与稳定性。 另外，Postfix服务程序由许多小模块组成，每个小模块都可以完成特定的功能，因此可在生 产工作环境中根据需求灵活搭配。</strong></p>
+<p><strong>第1步:安装Postfix服务程序</strong></p>
+<p><img src="/media/2b4b22a99f16a414826cf7d030a2c903.png" alt="截图.png"></p>
+<p><strong>第2步:配置Postfix服务程序。</strong></p>
+<p><strong>Postfix服务程序主配置文件(&#x2F;etc&#x2F; postfix&#x2F;main.cf)中7个最应该掌握的参数，如下表:</strong></p>
+<p><strong>Postfix服务程序主配置文件中的重要参数:</strong></p>
+<p><img src="/media/a83f3987b7c118b26ea2e8ae7951b03a.png" alt="截图.png"></p>
+<p><strong>在Postfix服务程序的主配置文件中，总计需要修改5处:</strong></p>
+<p><strong>1.在第95 行定义一个名 为myhostname的变量，用来保存服务器的主机名称:</strong></p>
+<p><img src="/media/88a439c147b2716ca43400653dcdffa3.png" alt="截图.png"></p>
+<p><strong>2.在第102行定义一个名为mydomain的变量，用来保存邮件域的名称:</strong></p>
+<p><img src="/media/0747d7e6ff5865ccde9a92e3dadccec1.png" alt="截图.png"></p>
+<p><strong>3.在第118行调用前面的mydomain变量，用来定义发出邮件的域。调用变量的好处是避 免重复写入信息，以及便于日后统一修改：</strong></p>
+<p><img src="/media/aa7c89d8489a31d2f2b018b7264f824a.png" alt="截图.png"></p>
+<p><strong>4.在第135行定义网卡监听地址。可以指定要使用服务器的哪些IP地址对外 提供电子邮件服务；也可以写成all，表示所有IP地址都能提供电子邮件服务：</strong></p>
+<p><img src="/media/6eb14a5e0130b2a54774bad2f2523257.png" alt="截图.png"></p>
+<p><strong>5.在第183行定义可接收邮件的主机名或域名列表。可以直接调用前 面定义好的myhostname和mydomain变量(如果不想调用变量，也可以直接调用变量中的值)：</strong></p>
+<p><img src="/media/9c0981f3e1990d5d8ccfd9dfc39f6ef3.png" alt="截图.png"></p>
+<p><strong>第3步:创建电子邮件系统的登录账户:</strong></p>
+<p><strong>Postfix与vsftpd服务程序一样，都可以调用本 地系统的账户和密码，因此在本地系统创建常规账户即可。最后重启配置妥当的postfix服务 程序，并将其添加到开机启动项中。</strong></p>
+<p><img src="/media/513154f0441b2d4694ba64fec03ffcf1.png" alt="截图.png"></p>
+<p><strong>2.配置Dovecot服务程序</strong></p>
+<p><strong>Dovecot是一款能够为Linux系统提供IMAP和POP3电子邮件服务的开源服务程序，安 全性极高，配置简单，执行速度快，而且占用的服务器硬件资源也较少，因此是一款值得推 荐的收件服务程序。</strong></p>
+<p><strong>第1步:安装Dovecot服务程序软件包</strong></p>
+<p><img src="/media/2a7144772bd474c7f1e42030b6ff797d.png" alt="截图.png"></p>
+<p><strong>第2步:配置部署Dovecot服务程序。Dovecot服务程序的主配置文件(&#x2F;etc&#x2F;dovecot&#x2F;dovecot.conf)需进行如下修 改:</strong></p>
+<p><strong>1.首先是第24行，把Dovecot服务程序支持的电子邮件协议修改为imap、pop3和lmtp。</strong></p>
+<p><strong>然后在这一行下面添加一行参数，允许用户使用明文进行密码验证。因 为Dovecot服务程序为了保证电子邮件系统的安全而默认强制用户使用加密方式进行登录， 而由于当前还没有加密系统，因此需要添加该参数来允许用户的明文登录。</strong></p>
+<p><img src="/media/0515217d5d23abbcac7cf2d1bdb42548.png" alt="截图.png"></p>
+<p><strong>2.在主配置文件的第49行，设置允许登录的网段地址，可以在这里限制只有 来自于某个网段的用户才能使用电子邮件系统。如果想允许所有人都能使用，则不用修改本 参数：</strong></p>
+<p><img src="/media/fc57e9932fdc13eaf030f8f4b74714b4.png" alt="截图.png"></p>
+<p><strong>第3步:配置邮件格式与存储路径:</strong></p>
+<p><strong>在Dovecot服务程序单独的子配置文件(&#x2F;etc&#x2F;dovecot&#x2F;conf.d&#x2F;10-mail.conf)中，定义一 个路径，用于指定将收到的邮件存放到服务器本地的哪个位置。路径默认已经定义好 了，只需将该配置文件中第25行前面的井号(#)删除即可。</strong></p>
+<p><img src="/media/8d25fdc444d26f7cd911da9f7e96af14.png" alt="截图.png"></p>
+<p><strong>第4步:切换到配置Postfix服务程序时创建的boss账户，在家目录中建立用于保存邮件的 目录。重启Dovecot服务并将其添加到开机启动项中。至此，对Dovecot服务程序的 配置部署步骤全部结束。</strong></p>
+<p><img src="/media/0094d9b4cf392480cb7131b4b83621a4.png" alt="截图.png"></p>
+<p><strong>把上面提到的邮件协议在防火墙中的策略 予以放行，这样客户端就能正常访问了：</strong></p>
+<p><img src="/media/8d44d2e75398d059ace28766268fe8b5.png" alt="截图.png"></p>
+<p><strong>3.客户使用电子邮件系统</strong></p>
+<p><strong>使用Windows操作系统中自带 的Outlook软件来进行测试(也可以使用其他电子邮件客户端来测试，比如Foxmail)。按 下表设置电子邮件系统及DNS服务器和客户端主机的IP地址，以便能正常解析邮件</strong></p>
+<p><strong>域名。设置后的结果如下图所示。</strong></p>
+<p><img src="/media/9fccd3d8e55c25857b1417ac698573a6.png" alt="截图.png"></p>
+<p><strong>服务器与客户端的操作系统与IP地址:</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>电子邮件系统及DNS服务器</td>
+<td>RHEL 8</td>
+<td>192.168.1.31</td>
+</tr>
+<tr>
+<td>客户端主机</td>
+<td>Windows 11</td>
+<td>192.168.1.41</td>
+</tr>
+</tbody></table>
+<p><strong>第1步:在Windows 11系统中运行Outlook软件程序。在初次运行该软件时会出现一个”Microsoft Outlook 2010 启动” 页面，引导完成软件的配置过程</strong></p>
+<p><img src="/media/20e89b1929c4e217bfed035c2b8ac19f.png" alt="截图.png"></p>
+<p><strong>第2步:配置电子邮件账户:</strong></p>
+<p><strong>在下图所示的“账户配置”页面中单击“是”单选按钮， 然后单击“下一步”按钮。</strong></p>
+<p><img src="/media/bb62528e2e8f48ff7b08324763b5b110.png" alt="截图.png"></p>
+<p><strong>第3步:填写电子邮件账户信息，在下图所示的页面中，在“您的姓名”文本框中输 入您的名字（可以为自定义的任意名字），在“电子邮件地址”文本框中输入服务器系统内的 账户名和发件域，在“密码”文本框中输入该账户在服务器内的登录密码。填写完毕之后， 单击“下一步”按钮。</strong></p>
+<p><img src="/media/0f0265da2a9ef5255616fd59b7bf2a40.png" alt="截图.png"></p>
+<p><strong>第4步:进行电子邮件服务登录验证。由于当前没有可用的SSL加密服务，因此在Dovecot 服务程序的主配置文件中写入了一条参数，让用户可以使用明文登录到电子邮件服务。 Outlook软件默认会通过 SSL加密协议尝试登录电子邮件服务，所以在进行图1所示的“搜 索<a href="mailto:&#108;&#117;&#111;&#x79;&#117;&#64;&#x6c;&#x69;&#x6e;&#117;&#x78;&#112;&#x72;&#x6f;&#98;&#101;&#46;&#99;&#111;&#109;">luoyu@linuxprobe.com</a>服务器设置”大约30～60秒后，系统会出现登录失败的报错信息。 此时只需再次单击“下一步”按钮，即可让Outlook软件通过非加密的方式验证登录，如图2所示。最后验证成功的界面如图3所示，点击“完成”按钮:</strong></p>
+<p><img src="/media/f1381cb46a7f17d753e203659d070272.png" alt="截图.png"></p>
+<p><img src="/media/d821fb0204300373f02628ef88bdfde6.png" alt="截图.png"></p>
+<p><img src="/media/59ea6f15e34cf24134bd246b17cffd5d.png" alt="截图.png"></p>
+<p><strong>第5步:向其他信箱发送邮件。在成功登录Outlook软件后即可尝试编写并发送新邮件 了。只需在软件界面的空白处单击鼠标右键，在弹出的菜单中单击“新建电子邮件”选项，然后在邮件界面中填写收件人的信箱地址以及完整的邮件内容后单击“发送”按 钮:</strong></p>
+<h1 id="10-使用iSCSI服务部署网络存储"><a href="#10-使用iSCSI服务部署网络存储" class="headerlink" title="10 使用iSCSI服务部署网络存储"></a>10 使用iSCSI服务部署网络存储</h1><h2 id="10-1-iSCSI技术介绍"><a href="#10-1-iSCSI技术介绍" class="headerlink" title="10.1 iSCSI技术介绍"></a>10.1 iSCSI技术介绍</h2><p><strong>硬盘是计算机硬件设备中重要的组成部分之一，硬盘存储设备读写速度的快慢也会对服 务器的整体性能造成影响。硬盘存储结构、RAID磁盘阵列技术以及 LVM技术等都是用于存储设备的技术，尽管这些技术有软件层面和硬件层面之分，但都旨在解决硬盘存储设备的读写速度问题，或者竭力保障存储数据的安全。</strong></p>
+<p><strong>为了进一步提升硬盘存储设备的读写速度和性能，一直在努力改进物理硬盘设备的 接口协议。当前的硬盘接口类型主要有IDE、SCSI和SATA这3种:</strong></p>
+<p><strong>IDE:成熟稳定、价格便宜的并行传输接口</strong></p>
+<p><strong>SATA:传输速度更快、数据校验更完整的串行传输接口</strong></p>
+<p><strong>SCSI:用于计算机和硬盘、光驱等设备之间系统级接口的通用标准，具有系统资源占用率低、转速高、传输速度快等优点</strong></p>
+<p><strong>无论使用什么类型的硬盘接口，硬盘上的数据总是要通过计算机主板上的总线与CPU、 内存设备进行数据交换，物理环境上的限制给硬盘资源的共享带来了各种不便。后来， IBM公司开始动手研发基于TCP&#x2F;IP协议和SCSI接口协议的新型存储技术，就是目 前能看到的互联网小型计算机系统接口(iSCSI)。这是一种将SCSI接口与以太网技术相结合的新型存储技术，用来在网络中传输SCSI接 口的命令和数据。不仅克服了传统SCSI接口设备的物理局限性，实现了跨区域的存储 资源共享，而且可以在不停机的状态下扩展存储容量。</strong></p>
+<p><strong>首先，iSCSI存储技术非常便捷，在访问存储 资源的形式上发生了很大变化，摆脱了物理环境的限制，同时还可以把存储资源分给多个服 务器共同使用，因此是一种非常推荐使用的存储技术。但是，iSCSI存储技术受到了网速的制 约。以往硬盘设备直接通过主板上的总线进行数据传输，现在则需要让互联网作为数据传输 的载体和通道，因此传输速率和稳定性是iSCSI技术的瓶颈。随着网络技术的持续发展，相 信iSCSI技术也会随之得以改善。</strong></p>
+<p><strong>既然要通过以太网来传输硬盘设备上的数据，那么数据是通过网卡传入到计算机中的 么？与一般的网卡不同(连接网络总 线和内存，供计算机上网使用)，iSCSI-HBA卡连接的是SCSI接口或FC(光纤通道)总线 和内存，专门用于在主机之间交换存储数据，其使用的协议也与一般网卡有本质的不同。运</strong></p>
+<p><strong>行Linux系统的服务器会基于iSCSI协议把硬盘设备命令与数据打包成标准的TCP&#x2F;IP数据包， 然后通过以太网传输到目标存储设备，而当目标存储设备接收到这些数据包后，需要基于 iSCSI协议把TCP&#x2F;IP数据包解压成硬盘设备命令与数据。</strong></p>
+<p><strong>iSCSI-HBA卡实拍图:</strong></p>
+<p><img src="/media/01948e8638d11e346d799890cf14d4ce.png" alt="截图.png"></p>
+<p><strong>iSCSI技术具有硬件成本低、操作简单、维护方便以及扩展性强等优势，为 我们提供了数据集中化存储的服务，而且其以区块为单位的数据存储空间，在简化了存储空 间管理步骤的前提下，还增添了存储空间的弹性。对于用户而言，仿佛计算机上多了一块新 的”本地硬盘”，可以使用本地的计算机操作系统进行管理，就像是使用本地硬盘那样来使用 远程存储空间。这种高扩展性和低组建成本、低维护成本的整合存储方式，正是大部分预算 受限的中小企业和办公室所需要的。</strong></p>
+<h2 id="10-2-创建RAID磁盘阵列"><a href="#10-2-创建RAID磁盘阵列" class="headerlink" title="10.2 创建RAID磁盘阵列"></a>10.2 创建RAID磁盘阵列</h2><p><strong>使用iSCSI存储技术为远程用户提供共享存储资源的前提是保障用于存放资源的服务器的稳定性与可用性，否则一旦在使用过程中出现故障，则维护的难度相较于本地硬盘 设备要更加复杂、困难。</strong></p>
+<p><strong>首先在虚拟机中添加4块新硬盘，用于创建RAID 5磁盘阵列和备份盘，如下图所示:</strong></p>
+<p><strong>添加4块用于创建RAID 5级别磁盘阵列的新硬盘:</strong></p>
+<p><img src="/media/2736c793a0ce63d66efe528e572bea00.png" alt="截图.png"></p>
+<p><strong>启动虚拟机系统，使用mdadm命令创建RAID磁盘阵列。-Cv参数为创建阵列并 显示过程，&#x2F;dev&#x2F;md0 为生成的阵列组名称，-n 3参数为创建RAID 5磁盘阵列所需的硬盘个数， -l 5参数为RAID磁盘阵列的级别，-x 1参数为磁盘阵列的备份盘个数。在命令后面要逐一写 上使用的硬盘名称:</strong></p>
+<p><img src="/media/569ad77a605fe6d1991484fd4666c37b.png" alt="截图.png"></p>
+<p><strong>上述命令成功执行之后，得到一块名称为&#x2F;dev&#x2F;md0的新设备，这是一块RAID 5 级别的磁盘阵列，并且还有一块备份盘为硬盘数据保驾护航，可使用mdadm -D命 令查看设备的详细信息。另外，由于在使用远程设备时极有可能出现设备识别顺序发 生变化的情况，因此，如果直接在fstab挂载配置文件中写入&#x2F;dev&#x2F;sdb、&#x2F;dev&#x2F;sdc等设备 名称的话，就有可能在下一次挂载了错误的存储设备。而UUID值是设备的唯一标识符， 用于精确地区分本地或远程设备。可以把这个值记录下来，一会儿准备填写到 挂载配置文件中。</strong></p>
+<p><img src="/media/7a51a080a277400906b7ea383298caf4.png" alt="截图.png"></p>
+<h2 id="10-3-配置iSCSI服务端"><a href="#10-3-配置iSCSI服务端" class="headerlink" title="10.3 配置iSCSI服务端"></a>10.3 配置iSCSI服务端</h2><p><strong>iSCSI技术在工作形式上分为服务端(target)与客户端(initiator):</strong></p>
+<p><strong>iSCSI服务端即用于 存放硬盘存储资源的服务器，作为前面创建的RAID磁盘阵列的存储端，为用户提供 可用的存储资源。</strong></p>
+<p><strong>iSCSI客户端则是用户使用的软件，用于访问远程服务端的存储资源。</strong></p>
+<p><strong>按下表配置iSCSI服务端和客户端所用的IP地址:</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>iSCSI服务端</strong></td>
+<td>RHEL 8</td>
+<td>192.168.1.61</td>
+</tr>
+<tr>
+<td><strong>iSCSI客户端</strong></td>
+<td>RHEL 8</td>
+<td>192.168.1.31</td>
+</tr>
+</tbody></table>
+<p><strong>第1步:RHEL 8&#x2F;CentOS 8系统中默认安装了iSCSI服务端程序，配置好软件仓库后安装iSCSI服务端的交换式配置工具。相较于直接修改配置文件，通 过交互式的配置过程来完成对参数的设定既又方便又安全。在 dnf命令的后面添加-y参数后， 在安装过程中就不需要再进行手动确认了：</strong></p>
+<p><img src="/media/e5744f5b1c59305116e4de0b2f91cf8a.png" alt="截图.png"></p>
+<p><strong>iSCSI是跨平台的协议，因此用户也可以在Windows系统下搭建iSCSI服务端，再共享 给Linux系统主机。不过类似于DataCore软件公司推出的 SANmelody或FalconStor软件公司推出的iSCSI Server for Windows等软件，在Windows 系统上使用都是要收费的。</strong></p>
+<p><strong>第2步:配置iSCSI服务端共享资源:</strong></p>
+<p><strong>targetcli是用于管理iSCSI服务端存储资源的专用配置命令，提供类似fdisk命令的交互式配置功能，将iSCSI共享资源的配置内容抽 象成”目录”的形式，只需将各类配置信息填入到相应的”目录”中即可。难点 主要在于认识每个”参数目录”的作用。当把配置参数正确地填写到”目录”中后，iSCSI 服务端也就可以提供共享资源服务了。</strong></p>
+<p><strong>执行targetcli命令后就能看到交互式的配置界面了。在该界面中允许使用很多Linux 命令，比如利用ls查看目录参数的结构，使用cd切换到不同的目录中。</strong></p>
+<p><img src="/media/4f42227febdda5f13a1eb80d1aeb292d.png" alt="截图.png"></p>
+<p><strong>&#x2F;backstores&#x2F;block是iSCSI服务端配置共享设备的位置。需要把刚刚创建的RAID 5 磁盘阵列 md0文件加入到配置共享设备的”资源池”中，并将该文件重新命名为disk0，这样 用户就不会知道是由服务器中的哪块硬盘来提供共享存储资源，而只会看到一个名为disk0 的存储设备。</strong></p>
+<p><img src="/media/d0a9b28c6cb1543bbb89265bdd45d711.png" alt="截图.png"></p>
+<p><strong>第3步:创建iSCSI target名称及配置共享资源。iSCSI target名称是由系统自动生成的， 这是一串用于描述共享资源的唯一字符串。在扫描iSCSI服务端时即可看到这个字 符串。</strong></p>
+<p><img src="/media/aa1f7b0c79646dc5ff4e657087fa22fa.png" alt="截图.png"></p>
+<p><strong>注明:在iSCSI自动生成的名称中，最后一个.为句号，不是名称中的一部分。</strong></p>
+<p><strong>系统在生成这个target名称后，还会在&#x2F;iscsi参数目录中创建一个与其字符串同名的新 “目录”用来存放共享资源。需要把前面加入到iSCSI共享资源池中的硬盘设备添加到 这个新目录中，这样用户在登录iSCSI服务端后，即可默认使用这硬盘设备提供的共享存储 资源了。</strong></p>
+<p><img src="/media/de32096b69f2f74a03f0c9ae45ba2c69.png" alt="截图.png"></p>
+<p><strong>第4步:设置访问控制列表(ACL):</strong></p>
+<p><strong>iSCSI协议是通过客户端名称进行验证的。也就是 说，用户在访问存储共享资源时不需要输入密码，只要iSCSI客户端的名称与服务端中设置 的访问控制列表中某一名称条目一致即可，因此需要在 iSCSI服务端的配置文件中写入一串 能够验证用户信息的名称。acls参数目录用于存放能够访问 iSCSI服务端共享存储资源的客户 端名称。在刚刚系统生成的iSCSI target后面追加上类似于:client 的参数，这样既能保证 客户端的名称具有唯一性，又非常便于管理和阅读：</strong></p>
+<p><img src="/media/c9a7b0d995efe6793278d39fd0d82e8e.png" alt="截图.png"></p>
+<p><strong>第5步:设置iSCSI服务端的监听IP地址和端口号。生产环境中的服务器上可能有 多块网卡，那么到底是由哪个网卡或IP地址对外提供共享存储资源呢？配置文件中默认是 允许所有网卡提供iSCSI服务，如果认为这有些许不安全，可以手动删除：</strong></p>
+<p><img src="/media/836f5f095169ed5c18c88130615dbe4d.png" alt="截图.png"></p>
+<p><strong>使系统使用服务器IP地址 192.168.1.61的3260端口向外提供iSCSI共 享存储资源服务：</strong></p>
+<p><img src="/media/1d80039a11c449c7d0721f70af3617f5.png" alt="截图.png"></p>
+<p><strong>第6步:在参数文件配置妥当后，浏览刚刚配置的信息，确保上述提到的“目录”都已 经填写了正确的内容。在确认信息无误后输入exit命令退出配置。</strong></p>
+<p><img src="/media/76ea05b151bbc36e6f3bcfe4614fbfe2.png" alt="截图.png"></p>
+<p><strong>注意，千万不要习惯性地 按Ctrl + C组合键结束进程，这样不会保存配置文件，工作也就白费了。</strong></p>
+<p><strong>清空iptables防火墙中的默认策略，设置firewalld防火墙，使其放行iSCSI服务或3260&#x2F;TCP 端口号：</strong></p>
+<p><img src="/media/fb9fa37b82f6c9af07e3a156a5ddbafd.png" alt="截图.png"></p>
+<p><img src="/media/221d43ba26fa66199f970a903d395da7.png" alt="截图.png"></p>
+<h2 id="10-4-配置Linux客户端"><a href="#10-4-配置Linux客户端" class="headerlink" title="10.4 配置Linux客户端"></a>10.4 配置Linux客户端</h2><p><strong>无论是什么服务，客 户端的配置步骤都要比服务端的配置步骤简单一些。在RHEL 8系统中，已经默认安装了iSCSI 客户端服务程序initiator。如果系统没有安装，可以使用软件仓库手动安装。</strong></p>
+<p><img src="/media/eb644e18d2899abd3eff634160981021.png" alt="截图.png"></p>
+<p><strong>iSCSI协议是通过客户端的名称来进行验证的，而该名称也是iSCSI客户端的 唯一标识，必须与服务端配置文件中访问控制列表中的信息一致，否则客户端在尝试访 问存储共享设备时，系统会弹出验证失败的保存信息。</strong></p>
+<p><strong>编辑iSCSI客户端中的initiator名称文件(&#x2F;etc&#x2F;iscsi&#x2F;initiatorname.iscsi)，把服务端的访问控制列表名称填写进来， 然后重启客户端iscsid服务程序并将其加入到开机启动项中：</strong></p>
+<p><img src="/media/5b17067112a38940b9e781733aae2b24.png" alt="截图.png"></p>
+<p><strong>iSCSI客户端访问并使用共享存储资源的基本操作为”先 发现，再登录，最后挂载并使用”。</strong></p>
+<p><strong>iscsiadm是用于管理、查询、插入、更新或删除iSCSI数据库 配置文件的命令行工具，用户需要先使用这个工具扫描发现远程iSCSI服务端，然后查看找到的 服务端上有哪些可用的共享存储资源。其中，-m discovery参数的目的是扫描并发现可用的存储 资源，-t st参数为执行扫描操作的类型，-p 192.168.1.61参数为iSCSI服务端的IP地址：</strong></p>
+<p><img src="/media/e99fddbf872cdd977d1a8ca5824812a1.png" alt="截图.png"></p>
+<p><strong>在使用iscsiadm命令发现了远程服务器上可用的存储资源后，接下来准备登录iSCSI服 务端。其中，-m node参数为将客户端所在主机作为一台节点服务器，-T参数为要使用的存储 资源，-p 192.168.1.61参数 依然为对方iSCSI服务端的IP地址。最后使用–login或-l参数进行登录验证。</strong></p>
+<p><strong>[root@linuxprobe ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.linuxprobe.x8664:sn.5eeae0bacdc0 -p 192.168.1.61 –login</strong></p>
+<p><strong>在iSCSI客户端成功登录之后，会在客户端主机上多出一块名为&#x2F;dev&#x2F;sdc的设备文件。udev服务在命名硬盘名称时，与硬盘插槽是没有关系的。接下来便能够像使 用本地主机上的硬盘那样来操作这个设备文件了。</strong></p>
+<p><img src="/media/f0f40e37582b283bfd66c6d698ad33d5.png" alt="截图.png"></p>
+<p><strong>下面进入标准的磁盘操作流程。这个 设备文件本身只有40GB的容量，因此不必进行分区，而是直接格式化并挂载使用。</strong></p>
+<p><img src="/media/30a72e835153d6338948f256e7db30c8.png" alt="截图.png"></p>
+<p><strong>使用df命令查看挂载情况:</strong></p>
+<p><img src="/media/31a8dee02fc4fc31a29ba5f2efc29c5c.png" alt="截图.png"></p>
+<p><strong>从此以后，这个设备文件就如同是客户端本机上的硬盘那样工作。由于 udev服务是按照系统识别硬盘设备的顺序来命名硬盘设备的，当客户端主机同时使用多个远程存 储资源时，如果下一次识别远程设备的顺序发生了变化，则客户端挂载目录中的文件也将随之混 乱。为了防止发生这样的问题，应该在&#x2F;etc&#x2F;fstab配置文件中使用设备的UUID进行挂载。这样， 不论远程设备资源的识别顺序再怎么变化，系统也能正确找到设备所对应的目录。</strong></p>
+<p><strong>blkid命令用于查看设备的名称、文件系统及UUID。可使用管道符进 行过滤，只显示与&#x2F;dev&#x2F;sdc设备相关的信息：</strong></p>
+<p><img src="/media/9942a9b1a136f9d7d10be75916649a02.png" alt="截图.png"></p>
+<p><strong>由于&#x2F;dev&#x2F;sdc是一块网络存储设备，而iSCSI协议是基于 TCP&#x2F;IP网络传输数据的，因此必须在&#x2F;etc&#x2F;fstab配置文件中添加上_netdev参数，表示当系统联 网后再进行挂载操作，以免系统开机时间过长或开机失败：</strong></p>
+<p><img src="/media/a13f82fa0674353ff3e4b43374c753e5.png" alt="截图.png"></p>
+<p><strong>如果不再需要使用iSCSI共享设备资源了，可以用iscsiadm命令的-u参数将其设备卸载：</strong></p>
+<p><strong>[root@linuxprobe ~]# iscsiadm -m node -T iqn.2003-01.org.linux-iscsi.linuxprobe.x8664:sn.5eeae0bacdc0 -u</strong></p>
+<p><strong>这种获取iSCSI远程存储的方法依赖的是RHEL 8系统自带的iSCSI initiator软件程序。该 软件程序将以太网卡虚拟成iSCSI卡，进而接收数据，然后基 TCP&#x2F;IP协议在主机与iSCSI存 储设备之间实现数据传输功能。这种方式仅需主机与网络即可实现，因此成本是最低的。但是， 在采用这种方式传输数据时，与iSCSI和TCP&#x2F;IP相关的命令数据会消耗客户端自身的CPU计 算性能，因此存在一定的额外开销。一般建议在低I&#x2F;O或者低带宽要求的环境中使用这种方式。</strong></p>
+<p><strong>如果在后续的生产环境中需要进行大量的远程数据存储，建议自行配备iSCSI HBA(主机总线适配器)硬件卡设备，并将其安装到iSCSI服务器上，从而实现iSCSI 服务器与交换机之间、iSCSI服务器与客户端之间的高效数据传输。与initiator的软件方式相 比，iSCSI HBA硬件卡设备不需要消耗CPU 计算性能，而且它是专用的远程数据存储设备， 因此对iSCSI的支持也会更好。但是，iSCSI HBA硬件卡设备的价格会稍微贵一些，需 要在性能和成本之间进行权衡。</strong></p>
+<h2 id="10-5-配置Windows客户端"><a href="#10-5-配置Windows客户端" class="headerlink" title="10.5 配置Windows客户端"></a>10.5 配置Windows客户端</h2><p><strong>使用Windows系统的客户端也可以正常访问iSCSI服务器上的共享存储资源，操作 原理及步骤与 Linux系统的客户端基本相同。在进行下面的实验之前，请先关闭Linux系统 客户端，以免这两台客户端主机同时使用iSCSI共享存储资源而产生潜在问题。按下表配置iSCSI服务器和Windows客户端所用的IP地址。</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>iSCSI服务端</td>
+<td>RHEL 8</td>
+<td>192.168.1.61</td>
+</tr>
+<tr>
+<td>Windows系统客户端</td>
+<td>Windows 11</td>
+<td>192.168.1.71</td>
+</tr>
+</tbody></table>
+<p><strong>第1步:运行iSCSI发起程序。在 Windows 11操作系统中已经默认安装了iSCSI客户端 程序，在控制面板中找到”Windows 工具”标签，点击后然后单击”iSCSI发起程序”(见图1)，在第一次运行iSCSI 发起程序时，系统会提示“Microsoft iSCSI 服务端未运行”，单击“是”按钮即可自动启动并 运行iSCSI发起程序</strong></p>
+<p><img src="/media/dd3b9866fc8c2dc4493f0f3b67c9c05a.png" alt="截图.png"></p>
+<p><strong>第2步:扫描发现iSCSI服务端上可用的存储资源。不论是Windows系统还是Linux系 统，要想使用iSCSI共享存储资源，都必须先进行扫描发现操作。运行iSCSI发起程序后在 “目标”选项卡的“目标”文本框中写入iSCSI服务端的IP地址，然后单击“快速连接”按 钮，如下图1所示。 在弹出的“快速连接”对话框中可看到共享的硬盘存储资源，此时显示“无法登录到目 标”属于正常情况，单击“完成”按钮即可，如图2所示。</strong></p>
+<p><img src="/media/11d3db3f288db31f38c346e0ed0fe168.png" alt="截图.png"></p>
+<p><strong>回到“目标”选项卡页面，可以看到共享存储资源的名称已经出现，如下图所示。</strong></p>
+<p><img src="/media/42d1da7966ce87b7fe42713b86668da7.png" alt="截图.png"></p>
+<p><strong>第3步:准备连接iSCSI服务端的共享存储资源。由于在iSCSI服务端程序上设置了ACL， 使得只有客户端名称与ACL策略中的名称保持一致时才能使用远程存储资源，因此首先需要在 “配置”选项卡中单击“更改”按钮，随后在修改界面写入iSCSI服务器配置过的 ACL策略名称，最后重新返回到 iSCSI发起程序的“目标”界面。</strong></p>
+<p><img src="/media/01b474fa8ee22ea7e6925d9fe39cfbe8.png" alt="截图.png"></p>
+<p><strong>在确认iSCSI发起程序名称与iSCSI服务器ACL策略一致后，重新单击“连接”按钮，如下图所示，并单击“确认”按钮。大约 1～3 秒后，状态会更新为“已连接”</strong></p>
+<p><img src="/media/7e7f350f9aa1f2b5c10dd375aaa3927c.png" alt="截图.png"></p>
+<p><strong>第4步:访问iSCSI远程共享存储资源。右键单击桌面上的“计算机”图标，打开计算 机管理程序，如下图所示。</strong></p>
+<p><img src="/media/7f8bb906851c6775ba66c4a780024f76.png" alt="截图.png"></p>
+<p><strong>开始对磁盘进行初始化操作，如下图所示。Windows 系统的初始化过程步骤如下面各图所示。</strong></p>
+<p><img src="/media/834f7ec95c99008453517fa3cf331bc7.png" alt="截图.png"></p>
+<p><img src="/media/430def87978109187a958e1f05b7109b.png" alt="截图.png"></p>
+<p><img src="/media/198147341b329ff52ff3e89499b13938.png" alt="截图.png"></p>
+<p><strong>接下来即可进入正常的使用过程。由于整个传输过程是完全透明的，而且像一块本地硬盘 那样稳定，因此不知情的用户可能都察觉不到这是一块远程存储设备。不过，这只是理论状态， 实际上的 iSCSI数据传输速率并不能完全达到本地硬盘的性能，会或多或少地受到网络带宽的 影响，只不过差别不明显罢了。考虑到iSCSI存储技术还有一个优势，就是安全性高，这对于 数据集中存储来讲显得十分重要。因此，在进行数据存储与传输时，iSCSI值得一试！</strong></p>
+<h1 id="11-使用MariaDB数据库管理系统"><a href="#11-使用MariaDB数据库管理系统" class="headerlink" title="11 使用MariaDB数据库管理系统"></a>11 使用MariaDB数据库管理系统</h1><h2 id="11-1-数据库管理系统"><a href="#11-1-数据库管理系统" class="headerlink" title="11.1 数据库管理系统"></a>11.1 数据库管理系统</h2><p><strong>数据库是指按照某些特定结构来存储数据资料的数据仓库。在当今这个大数据技术迅速 崛起的年代，数据库技术发展到了现如今存储海量数据的大型分布式模式。</strong></p>
+<p><strong>数据库管理系统能够对数据库中存放的数据进行建立、修改、删除、查找、维护等操 作的软件程序。通过把计算机中具体的物理数据转换成适合用户理解的抽象逻辑数据，Linux运维工作的工程师也可以对数据库进行基本 的管理操作。</strong></p>
+<p><strong>MariaDB和MySQL的Logo如下图所示:</strong></p>
+<p><img src="/media/046c4c6fc6a8377ffd9c6bba71512522.png" alt="截图.png"></p>
+<p><strong>MariaDB当前由开源社区进行维护，是MySQL的分支产品，与MySQL具有高度的 兼容性，与 MySQL API和命令均保持一致。MariaDB自带了一个新的存储引擎Aria， 用于替代MyISAM。因此，MariaDB与MySQL 一样好用。</strong></p>
+<p><strong>由于各大公司之间存在着竞争关系或利益关系，外加MySQL在被收购之后逐渐 由开源向闭源软件转变，很多公司抛弃了MySQL。谷歌、维基百科等决定将MySQL数据 库上的业务转移到MariaDB数据库，Linux开源系统的领袖红帽公司也决定在RHEL 8、CentOS 8 以及最新的Fedora系统中，将MariaDB作为默认的数据库管理系统，而且红帽公司更是将数据 库知识加入到了RHCE认证的考试内容中。随后，还有数十个常见的Linux系统(如openSUSE、 Slackware等)也做出了同样的表态。</strong></p>
+<p><strong>虽然IT行业巨头都决定采用MariaDB数据库管系统，但并不意味着 MariaDB较之于MySQL有明显的优势。MariaDB和MySQL 在性能上基本保持一致，两者的操作命令也十分相似。从务实的角度来讲，在掌握了MariaDB数据 库的命令和基本操作之后，在今后的工作中即使遇到 MySQL数据库，也可以快速上手。</strong></p>
+<h2 id="11-2-初始化mariadb服务"><a href="#11-2-初始化mariadb服务" class="headerlink" title="11.2 初始化mariadb服务"></a>11.2 初始化mariadb服务</h2><p><strong>MariaDB数据库管理系统有了很多新鲜的扩展特性，例如对微秒级别的支持、线程池、子查询优化、进程报告等。在配置妥当软件仓库后，即可安装部署MariaDB 数据库主程序及服务端程序了。</strong></p>
+<p><img src="/media/f585d6e7e5156dbe4637693a8d06c1c6.png" alt="截图.png"></p>
+<p><strong>安装完毕后，启动服务程序，并将其加入到开机启动项中：</strong></p>
+<p><img src="/media/b0b17969507f54ed3f860d2b6c826456.png" alt="截图.png"></p>
+<p><strong>为了确保数据 库的安全性和正常运转，需要先对数据库程序进行下面5步的初始化操作:</strong></p>
+<p><strong>1.设置root管理员在数据库中的密码值(该密码并非root管理员在系统中的密码， 这里的密码值默认应该为空，可直接按回车键)</strong></p>
+<p><strong>2.设置root管理员在数据库中的专有密码</strong></p>
+<p><img src="/media/677076c4d69f2495873ce5b9d033f5ba.png" alt="截图.png"></p>
+<p><strong>3.删除匿名用户，并使用root管理员从远程登录数据库，以确保数据库上运行的业务的 安全性</strong></p>
+<p><strong>4.删除默认的测试数据库，取消测试数据库的一系列访问权限</strong></p>
+<p><img src="/media/74b7f7fdecec605a427316720905460c.png" alt="截图.png"></p>
+<p><strong>5.刷新授权列表，让初始化的设定立即生效</strong></p>
+<p><img src="/media/cb41a3dc3dde2370b353bc43ac2c1d95.png" alt="截图.png"></p>
+<p><strong>很多生产环境中都需要使用站库分离的技术(网站和数据库不在同一个服务器上)， 如果需要让 root管理员远程访问数据库，可在上面的初始化操作中设置策略，以允许root管 理员从远程访问。然后还需要设置防火墙，使其放行对数据库服务程序的访问请求。数据库 服务程序默认占用3306端口，在防火墙策略中服务名称统一叫作mysql：</strong></p>
+<p><img src="/media/90063158139c5d868bd59b6750d063c4.png" alt="截图.png"></p>
+<p><strong>首次登录MariaDB数据库。管理数据库的命令为mysql，其中， -u参数用来指定以root管理员的身份登录，而-p参数用来验证该用户在数据库中的密码值。</strong></p>
+<p><img src="/media/ce87f310ffbcec1aad2697079955fa0c.png" alt="截图.png"></p>
+<p><strong>输入help命令查看mariadb服务能做的操作，语 句的用法与MySQL一模一样：</strong></p>
+<p><img src="/media/8280170de4f1e81d2020d337fccd04b0.png" alt="截图.png"></p>
+<p><strong>登录MariaDB数据库后执行数据库命令时，都需要在命令后面用分号(;)结尾，这也 是与Linux命令最显著的区别。执行如下命 令查看数据库管理系统中当前都有哪些数据库：</strong></p>
+<p><img src="/media/89f1d09132993269619b3252c5e8743c.png" alt="截图.png"></p>
+<p><strong>使用数据库命令将root管理员在数据库管理系统中的密码值修改 为linuxprobe</strong></p>
+<p><img src="/media/53d7112d26d8645214206ed8459dc4b5.png" alt="截图.png"></p>
+<p><strong>输入新密码(linuxprobe)后，便可顺利进入数据库管理工具中：</strong></p>
+<p><img src="/media/2af85906d0739d500039988e5a52f6ce.png" alt="截图.png"></p>
+<h2 id="11-3-管理用户以及授权"><a href="#11-3-管理用户以及授权" class="headerlink" title="11.3 管理用户以及授权"></a>11.3 管理用户以及授权</h2><p><strong>为了保障数据库系统的安全性，以及让 其他用户协同管理数据库，可以在MariaDB数据库管理系统中创建多个专用的数据库 管理用户，然后再分配合理的权限，以满足工作需求。为此，可使用root 管理员登录 数据库管理系统，然后按照”CREATE USER 用户名@主机名 IDENTIFIED BY ‘密码’;”的格 式创建数据库管理用户。</strong></p>
+<p><img src="/media/8feecb543ee80cf7d59bd83d8fcd1fbb.png" alt="截图.png"></p>
+<p><strong>创建的用户信息可以使用SELECT命令语句来查询。下面命令查询的是用户luke的主机 名称、用户名称以及经过加密的密码值信息：</strong></p>
+<p><img src="/media/fec4cf08748c8b42851384a986d02ab5.png" alt="截图.png"></p>
+<p><strong>用户luke仅仅是一位普通用户，没有数据库的任何操作权限。切 换到luke用户来查询数据库管理系统中当前都有哪些数据库。可以发现，该用户甚至没法查 看完整的数据库列表:</strong></p>
+<p><img src="/media/7cbd02088eedd5a554cb2bfae12bb7ef.png" alt="截图.png"></p>
+<p><strong>数据库管理系统所使用的命令一般都比较复杂。以GRANT命令为例进行说明:</strong></p>
+<p><strong>GRANT命令用于为用户进行授权，常见格式如下表所示。在使用GRANT命令时需要 写上要赋予的权限、数据库及表单名称，以及对应的用户及主机信息。</strong></p>
+<p><strong>GRANT命令的常见格式以及解释:</strong></p>
+<p><img src="/media/e56cc11bf39c30191c84a23d588bc5b7.png" alt="截图.png"></p>
+<p><strong>用户的授权工作肯定是需要数据库管理员来执行的。以root管理员的身份登 录到数据库管理系统中，针对mysql数据库中的user表单向用户luke授予查询、更新、删除 以及插入等权限。</strong></p>
+<p><img src="/media/40bb8647441ad843270d023cea451643.png" alt="截图.png"></p>
+<p><strong>在执行完上述授权操作之后，再查看一下用户luke的权限：</strong></p>
+<p><img src="/media/0d686738294d964ee6f84a4073e113bd.png" alt="截图.png"></p>
+<p><strong>上面输出信息显示用户luke拥有了针对mysql数据库中user表单的一系列权限了。 再切换到用户luke，就能够看到mysql数据库了，而且还能看到表单user(其 余表单会因无权限而被继续隐藏)：</strong></p>
+<p><img src="/media/c0fe9ffcb1b3870f601bc3ca69e1b4d2.png" alt="截图.png"></p>
+<p><img src="/media/b1eadb71cc210dab01435424d8fd55a2.png" alt="截图.png"></p>
+<p><strong>切换回root管 理员用户，移除刚才的授权。</strong></p>
+<p><img src="/media/076c3c243c2dc85ca79e8e226c26cf55.png" alt="截图.png"></p>
+<p><strong>除了移除授权的命令(REVOKE)与授权命令(GRANTS)不同之外，其余部分 都是一致的。执行移除授权命令后，再来查看用户luke的信息：</strong></p>
+<p><img src="/media/d1857db044d1f719c398913b9cfd0a16.png" alt="截图.png"></p>
+<p><strong>不再需要某个用户时，可以直接用DROP命令将其删除</strong>：</p>
+<p><img src="/media/67cc539d76850927239d010a5bae63a9.png" alt="截图.png"></p>
+<h2 id="11-4-创建数据库与表单"><a href="#11-4-创建数据库与表单" class="headerlink" title="11.4 创建数据库与表单"></a>11.4 创建数据库与表单</h2><p><strong>MariaDB数据库管理系统中，一个数据库可以存放多个数据表，数据表单是数据库中最核心的内容。可根据需求定义数据库表结构，然后在其中合理地存放数据， 以便后期轻松地维护和修改。</strong></p>
+<p><strong>用于创建数据库的命令以及作用:</strong></p>
+<p><img src="/media/3e101e59e63d6d426aaad95a96519948.png" alt="截图.png"></p>
+<p><strong>建立数据库是管理数据的起点。</strong></p>
+<p><strong>创建一个名为linuxprobe的数据库，然后再查 看数据库列表，此时就能看到它了</strong>：</p>
+<p><img src="/media/522382af54caede494377f6144d9595e.png" alt="截图.png"></p>
+<p><strong>MariaDB与MySQL同属关系型数据库。关系型数据库有些类似于表格的概念，一个关系型数据库由一个或多个表格&#x2F;表单组成，如下图所示:</strong></p>
+<p><strong>在下图中，表头表示每一列的名称；列表示具有相同数据类型的数据集合；行表示用 来描述事物的具体信息；值表示行的具体信息，每个值均与该列的其他数据类型相同；键表 示用来识别某个特定事物的方法，在当前列中具有唯一性。</strong></p>
+<p><strong>数据库存储概念:</strong></p>
+<p><img src="/media/ca732cde68848de9021fda8df02755ef.png" alt="截图.png"></p>
+<p><strong>在新建的linuxprobe数据库中创建表单mybook，然后进行表单的初始化，即定义 存储数据内容的结构。分别定义3个字段项，其中，字符型字段name(长度为15字符) 用来存放图书名称，整型字段 price和pages分别存储图书的价格和页数。当执行完下述命令 之后，就可以看到表单的结构信息：</strong></p>
+<p><img src="/media/4fe833feedd9283a5f6cd5906119f6ac.png" alt="截图.png"></p>
+<h2 id="11-5-管理表单及数据"><a href="#11-5-管理表单及数据" class="headerlink" title="11.5 管理表单及数据"></a>11.5 管理表单及数据</h2><p><strong>向mybook数据表单中插入一条图书信息。需要使用INSERT命令，并在命 令中写清表单名称以及对应的字段项。使用该 命令插入一条图书信息，书名为linuxprobe，价格和页数分别是60元和518页。命令 执行后也就意味着图书信息已经成功写入到数据表单中，然后就可以查询表单中的内容了。</strong></p>
+<p><strong>在使用SELECT命令查询表单内容时，需要加上想要查询的字段；如果想查看表单中的所有 内容，则可以使用星号(*)通配符来显示：</strong></p>
+<p><img src="/media/e9b3de456046a4f52bc1a8f380946efe.png" alt="截图.png"></p>
+<p><strong>对数据库运维人员来讲，需要会的操作是增、删、改、查。创建数据表 单并在其中插入内容是第一步，还需掌握数据表单内容的修改方法。例如，可以使用 UPDATE命令将刚才插入的linuxprobe图书信息的价格修改为55元，然后再使用SELECT命 令查看该图书的名称和定价信息。注意，因为这里只查看图书的名称和定价，而不涉及页码， 所以无须再用星号通配符来显示所有内容。</strong></p>
+<p><img src="/media/553f56cc81537d8354ccc8860816f545.png" alt="截图.png"></p>
+<p><strong>修改指定的某一条记录，用WHERE命令进行限定即可。先插入两条 图书信息：</strong></p>
+<p><img src="/media/b368e0c200fa18fd93a427d14cdfecce.png" alt="截图.png"></p>
+<p><strong>使用WHERE命令仅将名称为linuxcool的图书价格修改为60元，不影响其他图 书信息：</strong></p>
+<p><img src="/media/8f66f594926f3329426751a3d23f8371.png" alt="截图.png"></p>
+<p><strong>还可以使用DELETE命令删除某个数据表单中的内容。下面使用DELETE命令删除 数据表单mybook中的所有内容，然后再查看该表单中的内容，可以发现该表单内容为 空了：</strong></p>
+<p><img src="/media/010e0c7aa4592928619ffd7af0801fca.png" alt="截图.png"></p>
+<p><strong>数据表单中一般会存放成千上万条数据信息。比如刚刚创建的用于保存图书 信息的mybook表单，随着时间的推移，里面的图书信息也会越来越多。在这样的情况下，</strong></p>
+<p><strong>如果只想查看其价格大于某个数值的图书，又该如何定义查询语句呢？</strong></p>
+<p><strong>先使用INSERT插入命令依次插入4条图书信息：</strong></p>
+<p><img src="/media/b115a82ad88559219fb2d21af22d5219.png" alt="截图.png"></p>
+<p><strong>要想让查询结果更加精准，就需要结合使用SELECT与WHERE命令了。WHERE 命令是在数据库中进行匹配查询的条件命令。通过设置查询条件，就可以仅查找出符合该条 件的数据。下表列出了WHERE命令中常用的查询参数以及作用:</strong></p>
+<p><img src="/media/5405526c630fb6e582ced9ae75052bde.png" alt="截图.png"></p>
+<p><strong>分别在mybook表单中查找出价格大于75元或价格不等于80元的 图书，其对应的命令如下所示:</strong></p>
+<p><img src="/media/403b30481c4ccec897d1d79901d8a004.png" alt="截图.png"></p>
+<p><img src="/media/c55e665ac1f9aa99ee5d2126400443f1.png" alt="截图.png"></p>
+<p><strong>匹配的条件越多，获得的信息就越精准。在WHERE命令的后面追加AND操作符，可 以进行多次匹配。例如，执行下述命令，找到价格为30元、页数为158的图书的名称：</strong></p>
+<p><img src="/media/ec7bd571b566e5533adfb0133ca36c92.png" alt="截图.png"></p>
+<h2 id="11-6-数据库的备份与恢复"><a href="#11-6-数据库的备份与恢复" class="headerlink" title="11.6 数据库的备份与恢复"></a>11.6 数据库的备份与恢复</h2><p><strong>mysqldump命令用于备份数据库数据，格式为”mysqldump [参数] [数据库名称]”。参数与mysql命令大致相同，-u参数用于定义登录数据库的用户名称，-p参数表示密码提示 符。</strong></p>
+<p><strong>将linuxprobe数据库中的内容导出为一个文件，并保存到root管理员的家目录中：</strong></p>
+<p><img src="/media/9f3ab99d6d1ba620cfaf17a3f6c963ac.png" alt="截图.png"></p>
+<p><strong>进入MariaDB数据库管理系统，彻底删除linuxprobe数据库，这样mybook数据表 单也将被彻底删除。然后重新建立linuxprobe数据库：</strong></p>
+<p><img src="/media/05e363f983bd12a479bdc31c81c2c3c1.png" alt="截图.png"></p>
+<p><img src="/media/ae8d36290d8f8c0d983118f0c2c8d701.png" alt="截图.png"></p>
+<p><strong>使用输入重定向符把刚刚备份的数据库文件导入。登录MariaDB数据库，就又能看到linuxprobe数据 库以及mybook数据表单了。</strong></p>
+<p><img src="/media/598b5f99f449e5100fe1feacfa514541.png" alt="截图.png"></p>
+<p><img src="/media/b4f7caf4273110ab58e609ff10d4dab1.png" alt="截图.png"></p>
+<p><img src="/media/cae63999c417b88982d0d6572b6d892b.png" alt="截图.png"></p>
+<h1 id="12-使用PXE-Kickstart无人值守安装服务"><a href="#12-使用PXE-Kickstart无人值守安装服务" class="headerlink" title="12 使用PXE+Kickstart无人值守安装服务"></a>12 使用PXE+Kickstart无人值守安装服务</h1><h2 id="12-1-无人值守系统"><a href="#12-1-无人值守系统" class="headerlink" title="12.1 无人值守系统"></a>12.1 无人值守系统</h2><p><strong>如果生产环境中有数百台服务器都需要安装系统，就需要使用PXE+TFTP+FTP+DHCP+Kickstart服务搭建出一个无人 值守安装系统。这种无人值守安装系统可以自动地为数十台甚至上百台的服务器安装系统。</strong></p>
+<p><strong>无人值守安装系统的工作流程如下图所示:</strong></p>
+<p><img src="/media/28a9e16f380b3dbb93ccd52305367abb.png" alt="截图.png"></p>
+<p><strong>PXE是Intel公司开发的技术， 让计算机通过网络来启动操作系统(前提是计算机上安装的网卡支持PXE技术)，主要用于 在无人值守安装系统中引导客户端主机安装Linux操作系统。Kickstart是一种无人值守的安 装方式，其工作原理是预先把原本需要运维人员手工填写的参数保存成一个ks.cfg文件，当 安装过程中需要填写参数时则自动匹配Kickstart生成的文件。所以只要Kickstart文件包含了安装过程中需要人工填写的所有参数，那么从理论上来讲完全不需要运维人员的干预，就可 以自动完成安装工作。</strong></p>
+<p><strong>由于当前的客户端主机并没有完整的操作系统，因此也就不能完成 FTP 协议的验证了， 所以需要使用TFTP协议帮助客户端获取引导及驱动文件。vsftpd服务程序用于将完整的系统 安装镜像通过网络传输给客户端。当然，只要能将系统安装镜像成功传输给客户端即可，因 此也可以使用httpd来替代vsftpd服务程序。</strong></p>
+<h2 id="12-2-部署相关服务程序"><a href="#12-2-部署相关服务程序" class="headerlink" title="12.2 部署相关服务程序"></a>12.2 部署相关服务程序</h2><p><strong>在本章会部署多款服务，这些服务以及作用如下表所示:</strong></p>
+<p><strong>接下来实验中即将用到的服务及作用:</strong></p>
+<p><img src="/media/2ce47057ae119b6ef98a5938203b92cd.png" alt="截图.png"></p>
+<p><strong>1.配置DHCP服务程序</strong></p>
+<p><strong>DHCP服务程序用于为客户端主机分配可用的IP地址，这是服务器与客户端主机进 行文件传输的基础，因此要先行配置DHCP服务程序。</strong></p>
+<p><strong>首先按下表为无人值守系统设置 IP地址，然后按照图1和图2在虚拟机的虚拟网络编辑器中关闭自身的DHCP服务， 避免与配置的服务冲突。</strong></p>
+<table>
+<thead>
+<tr>
+<th>主机名称</th>
+<th>操作系统</th>
+<th>IP地址</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>无人值守系统</td>
+<td>RHEL 8</td>
+<td>192.168.1.41</td>
+</tr>
+<tr>
+<td>客户端</td>
+<td>未安装操作系统</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><img src="/media/00534647c37e496a95ed5bf77f46efca.png" alt="截图.png"></p>
+<p><img src="/media/fa38f07721ea329afe04780b18c879f8.png" alt="截图.png"></p>
+<p><strong>除了上面提及的服务之外，PXE+KickStart无人值守安装系统还会用到诸如sips、slp、 mountd 等多项相关的服务协议，因此本实验会临时关闭firewalld防火墙和selinux，以便数据能够正常 地传送：</strong></p>
+<p><img src="/media/b57af88723f9736eec89f35732633019.png" alt="截图.png"></p>
+<p><strong>selinux的配置文件路径:&#x2F;etc&#x2F;selinux&#x2F;config，修改后重启生效</strong></p>
+<p><img src="/media/10db296ae2f6bc9bb3ccb5db4a84ca99.png" alt="截图.png"></p>
+<p><strong>挂载好光盘镜像并把仓库文件配置妥当后，就可以安装DHCP服务程序软件包了：</strong></p>
+<p><img src="/media/bc2f44f7967962f82c396ac170a4c79f.png" alt="截图.png"></p>
+<p><strong>这里使用的配置文件(&#x2F;etc&#x2F;dhcp&#x2F;dhcpd.conf)与第14章中的配置文件有两个主要区别:</strong></p>
+<p><strong>1.允许了BOOTP引导程序协议，旨在让局域网内暂时没有操作系统的主机也能获取 静态IP地址</strong></p>
+<p><strong>2.在配置文件的最下面加载了引导驱动文件pxelinux.0，目的是让客户端主机获取到IP地址后主动获取引导驱动文件，自行进入下一 步的安装过程。</strong></p>
+<p><img src="/media/686c75d368cf09adac56c9cb7b97090c.png" alt="截图.png"></p>
+<p><strong>确认DHCP服务程序的参数都填写正确后，重新启动该服务程序，并将其添加到开机启动 项中。这样在设备下一次重启之后，可以在无须人工干预的情况下，自动为客户端主机安装系统。</strong></p>
+<p><img src="/media/90a74dc9b69710b09c4b08690c494eed.png" alt="截图.png"></p>
+<p><strong>RHEL 8系统中存在一些”讨厌”的服务，参数错误会 导致服务启动失败，但有时却不会在屏幕上向用户显示任何提示信息。建议在启动dhcpd后 查看一下服务状态，以免后续实验中客户端分配不到网卡信息。若输出状态为”active (running)”则表示服务已正常运行:</strong></p>
+<p><img src="/media/84c816a653c35389e097ad7931317bea.png" alt="截图.png"></p>
+<p><strong>2.配置TFTP服务程序</strong></p>
+<p><strong>vsftpd是一款功能丰富的文件传 输服务程序，允许用户以匿名开放模式、本地用户模式、虚拟用户模式来进行访问认证。但 当前的客户端主机还没有安装操作系统，该如何进行登录认证呢？TFTP作为一种基于 UDP协议的简单文件传输协议，不需要进行用户认证即可获取到所需的文件资源。因此接下 来配置TFTP服务程序，为客户端主机提供引导及驱动文件。当客户端主机有了基本的驱动 程序之后，再通过vsftpd服务程序将完整的光盘镜像文件传输过去。</strong></p>
+<p><img src="/media/bb4459cbc3761261e3c43b2be043bf65.png" alt="截图.png"></p>
+<p><strong>TFTP是一种非常精简的文件传输服务程序，运行和关闭是由xinetd网络守护进程服 务来管理的。xinetd服务程序会同时监听系统的多个端口，然后根据用户请求的端口号调取相 应的服务程序来响应用户的请求。需要开启TFTP服务程序时，只需在xinetd服务程序的配 置文件中把disable参数改成no 就可以了。如果配置文件不存在，则复制下面的内容进来， 手动创建一下：</strong></p>
+<p><strong>xinetd服务程序的配 置文件路径:&#x2F;etc&#x2F;xinetd.d&#x2F;tftp</strong></p>
+<p><img src="/media/3aedf8e610700f13e771b927c5c93c1f.png" alt="截图.png"></p>
+<p><strong>保存配置文件并退出，然后重启xinetd服务程序，并将其加入到开机启动项中:</strong></p>
+<p><img src="/media/af66b54b85785c7226c2f87495f2b4eb.png" alt="截图.png"></p>
+<p><strong>3.配置SYSLinux服务程序</strong></p>
+<p><strong>SYSLinux是一个用于提供引导加载的服务程序，也是一个包含了很多引导文件的文件夹。在安装好SYSLinux服务程序后，&#x2F;usr&#x2F;share&#x2F;syslinux 目录中会出现很多引导文件。</strong></p>
+<p><img src="/media/d84d7d010627ed608f3e0af75bf193bc.png" alt="截图.png"></p>
+<p><strong>首先需要把SYSLinux提供的引导文件(前文提到的文件pxelinux.0)复制 到TFTP服务程序的默认目录中，这样客户端主机就能够顺利地获取到引导文件了。另外在 RHEL 8系统光盘镜像中也有一些需要调取的引导文件。确认光盘镜像已经被挂载到 &#x2F;media&#x2F;cdrom目录后，使用复制命令将光盘镜像中自带的一些引导文件也复制到TFTP服务 程序的默认目录中</strong>。</p>
+<p><img src="/media/9a4649abb2f3e687c2f260ef39641a36.png" alt="截图.png"></p>
+<p><strong>cp命令后面接的句点(.)表示当前工作目录。上述cp命令表示将文件复制 到当前工作目录(&#x2F;var&#x2F;lib&#x2F;tftpboot)中。复制过程中，若多个目录保存着相同的文件，手动敲击y键进行覆盖即可。</strong></p>
+<p><strong>在TFTP服务程序的目录中新建pxelinux.cfg目录。虽然该目录的名字带有后缀，但 依然也是目录，而非文件！将系统光盘中的开机选项菜单复制到该目录中，并命名为default。 这个default文件就是开机时的选项菜单，如下图所示。</strong></p>
+<p><strong>Linux系统的引导菜单界面:</strong></p>
+<p><img src="/media/fe518b60b5de04cc3659d75cec658f93.png" alt="截图.png"></p>
+<p><img src="/media/834593242ea1e6f4e294596c7dee12e7.png" alt="截图.png"></p>
+<p><strong>默认的开机菜单中有3个选项：安装系统、对安装介质进行检验、排错模式。</strong></p>
+<p><strong>编辑default文件(pxelinux.cfg&#x2F;default)，把第1行的default参数修改为linux，系统在开机 时就会默认执行那个名称为linux的选项了。对应的linux选项大约在第64行，将默认的光盘 镜像安装方式修改成FTP文件传输方式，并指定好光盘镜像的获取网址以及Kickstart应答文 件的获取路径：</strong></p>
+<p><img src="/media/6eef91e96734ee32165503c66a38ad98.png" alt="截图.png"></p>
+<p><img src="/media/2da319acd9d51d583c6049b4112a6242.png" alt="截图.png"></p>
+<p><strong>在安装源的后面加入quiet参数，意为使用静默安装方式，不再需要用户进行确认。 文件修改完毕后保存即可。开机选项菜单是被调用的文件，因此不需要单独重启任何服务。</strong></p>
+<p><strong>4.配置vsftpd服务程序</strong></p>
+<p><strong>在这套无人值守安装系统的服务中，光盘镜像是通过FTP协议传输的，因此要用到 vsftpd服务程序，也可以使用httpd服务程序来提供Web网站访问的方式，只要能确保 将光盘镜像顺利传输给客户端主机即可。如果打算使用Web网站服务来提供光盘镜像，需将上面配置文件中的光盘镜像获取网址和Kickstart应答文件获取网址修改一下。</strong></p>
+<p><img src="/media/fb5996b9709fa97088d8c9e3074ae54f.png" alt="截图.png"></p>
+<p><strong>RHEL 8系统版本的vsftpd服务默认不允许匿名公开访问模式，因此需要手动进行开启：</strong></p>
+<p><strong>vsftpd主配置文件路径:&#x2F;etc&#x2F;vsftpd&#x2F;vsftpd.conf</strong></p>
+<p><img src="/media/f86ba8a424bf07800a3602a86237713c.png" alt="截图.png"></p>
+<p><strong>在配置文件修改正确之后，将相应的服务程序添加到开机启 动项中，这样无论是在生产环境中还是在红帽认证考试中，都可以在设备重启之后依然能提供相应的服务。</strong></p>
+<p><img src="/media/f755e9f4243a2173844b9fc2655f1a46.png" alt="截图.png"></p>
+<p><strong>确认系统光盘镜像已经正常挂载到&#x2F;media&#x2F;cdrom目录后，把目录中的光盘镜像文件全 部复制到vsftpd服务程序的工作目录中：</strong></p>
+<p><img src="/media/58aab7902fbfa61e330b13d5071a6c05.png" alt="截图.png"></p>
+<p><strong>将SELinux安全子系统中放行 FTP传输协议的允许策略，设置成on(开启)。</strong></p>
+<p><img src="/media/8794d4729ba2df63e5ca1413efc79f54.png" alt="截图.png"></p>
+<p><strong>5.创建Kickstart应答文件</strong></p>
+<p><strong>使用PXE + Kickstart 部署的是一套”无人值守安装系统服务”，而不是”无人 值守传输系统光盘镜像服务”，因此还需要让客户端主机能够一边获取光盘镜像，一边自动帮 用户填写好安装过程中出现的选项。如果生产环境中有100台服务器，它们需要 安装相同的系统环境，那么在安装过程中单击的按钮和填写的信息也应该都是相同的。创建一个类似于备忘录的需求清单呢，在无人值守安装系统时，会从这个需 求清单中找到相应的选项值。</strong></p>
+<p><strong>Kickstart其实并不是一个服务程序，而是 一个应答文件了。Kickstart应答文件中包含了系统安装过程中需要使用的选项和参数 信息，系统可以自动调取这个应答文件的内容，从而彻底实现无人值守安装系统。在root管理员的家目录中有一个名为 anaconda-ks.cfg的文件，它就是应答文件。将这个文件复制到vsftpd服务程序的工作目 录中(在开机选项菜单的配置文件中已经定义了该文件的获取路径，也就是vsftpd服务程序 数据目录中的pub子目录)。使用chmod命令设置该文件的权限，确保所有人都有可读的权限， 以保证客户端主机顺利获取到应答文件及里面的内容：</strong></p>
+<p><img src="/media/668cbb8a3f37a491ea4671af23c861a6.png" alt="截图.png"></p>
+<p><strong>Kickstart的应答文件(&#x2F;var&#x2F;ftp&#x2F;pub&#x2F;ks.cfg)共有44行左右的参数和注释内容:</strong></p>
+<p><strong>第1～10行表示安装硬盘的名称为sda及使用LVM技术。这便要求在后续新 建客户端虚拟机时，硬盘一定要选择SCSI或SATA类型的，否则会变成&#x2F;dev&#x2F;hd 或&#x2F;dev&#x2F;nvme开头的名称，进而会因找不到硬盘设备而终止安装进程。</strong></p>
+<p><img src="/media/68a849722bd15a7e0c5fc72c90740aa1.png" alt="截图.png"></p>
+<p><strong>第8行的软件仓库，应改为由FTP服务器提供的网络路径。</strong></p>
+<p><strong>第10行的安装源，也需要 由CDROM改为网络安装源：</strong></p>
+<p><img src="/media/61b6de76a440d75558f6ad9885d7133d.png" alt="截图.png"></p>
+<p><strong>第11～20行，keyboard参数为硬盘类型，一般都不需要修改。但第17行 的网卡信息，要让网卡默认处于DHCP模式，否则几十、上百台主机同时被创建出来 后，会因IP地址相互冲突而导致后续无法管理。</strong></p>
+<p><img src="/media/805120b088890d2db8a578221e15dddf.png" alt="截图.png"></p>
+<p><strong>第21行～30行，timezone参数定义了系统默认时区为”上海”。如果服务器时 间不准确，则按照如下修改即可。第29行，创建了一个普通用户，密码值可复制&#x2F;etc&#x2F;shadow 文件中的加密密文，它由系统自动创建。</strong></p>
+<p><img src="/media/cd48281aa288102c68653db0cee4c828.png" alt="截图.png"></p>
+<p><strong>第31～44行表示要安装的软件来源。graphical-server-environment即带有图形化界 面的服务器环境，它对应的是安装界面中的Server With GUI选项。</strong></p>
+<p><img src="/media/c49acbd381850ec6a989d47b5e405924.png" alt="截图.png"></p>
+<p><strong>实际算下来的修改并不多，默认参数就已经非常合适了。最后预览一下ks.cfg 文件的全貌。生产环境中需要用到这个文件，则可以直接复制并使用下面的内容：</strong></p>
+<p><img src="/media/3a7e741d40f55e572c717bad061988ab.png" alt="截图.png"></p>
+<p><strong>Kickstart应答文件将使用FTP服务进行传输，然后由安装向导进行调用，因此也不需要</strong></p>
+<p><strong>重启任何服务。</strong></p>
+<h2 id="12-3-自动部署客户机"><a href="#12-3-自动部署客户机" class="headerlink" title="12.3 自动部署客户机"></a>12.3 自动部署客户机</h2><p><strong>按上文的方法成功部署各个相关的服务程序后，就可以使用PXE + Kickstart无 人值守安装系统了。在采用下面的步骤建立虚拟主机时，一定要把客户端的网络模式设定成 与服务端一致的“仅主机模式”，否则两台设备无法进行通信，也就更别提自动安装系统了。 其余硬件配置选项并没有强制性要求，参考这里的配置选项来设定。</strong></p>
+<p><strong>第1步:打开”新建虚拟机向导”程序，选择”自定义(高级)”配置类型，然后单击”下 一步”按钮，如下图所示。在随后的虚拟机硬件兼容性选项中，选择默认的”Workstation 17.5 or later”</strong></p>
+<p><img src="/media/074168db08c492e34a1a8e8aeed8ce74.png" alt="截图.png"></p>
+<p><strong>第2步:将虚拟机操作系统的安装来源设置为”稍后安装操作系统”。这样做是让 虚拟机真正从网络中获取系统安装镜像，同时避免VMware Workstation虚拟机软件按照 内设的方法自行安装系统。单击”下一步”按钮，如下图所示。</strong></p>
+<p><img src="/media/3a85a7914bed80c389f8f739e9fe5e62.png" alt="截图.png"></p>
+<p><strong>第3步:将”客户机操作系统”设置为Linux，版本为”Red Hat Enterprise Linux 8 64位”， 然后单击”下一步”按钮，如下图所示。</strong></p>
+<p><img src="/media/59235c446b854e21c2b7cd88a285787f.png" alt="截图.png"></p>
+<p><strong>第4步:对虚拟机进行命名并设置安装位置。然后单击”下一步”按钮，如下图所示。在随后设置</strong></p>
+<p><strong>虚拟机处理器的个数及核心数、内存容量值时，根据实际情况自行选择。</strong></p>
+<p><img src="/media/086e734f8b1eb93f5e13c3b4bf0cbbdb.png" alt="截图.png"></p>
+<p><strong>第5步:设置虚拟机主机的网络连接类型为”使用仅主机模式网络”，如下图所示。 一定要确保服务器与客户端同处于相同的网络模式，否则客户端无法获得从服务器传送过来 的系统镜像及应答文件。随后的SCSI控制器类型选择默认的LSI Logic</strong></p>
+<p><img src="/media/6fb9d0e0437de1b00fe7abd6d372a3b9.png" alt="截图.png"></p>
+<p><strong>第6步:设置硬盘类型并指定容量。设置”虚拟磁盘类型”为SCSI或SATA，如下图1所示。随后在硬盘创建确认界面，选择”创建新虚拟磁盘”选项。 将”最大磁盘大小”设置为20GB。这个20GB指的是虚拟机系统能 够使用的最大上限，而不是会被立即占满，因此设置得稍微大一些也没有关系。然后单击”下一步”按钮，如下图2所示。随后的确认硬盘文件名称界面选择默认值即可</strong></p>
+<p><img src="/media/f8141810b538c63d4dd06cf5961bdd0a.png" alt="截图.png"></p>
+<p><strong>第7步:结束”新建虚拟机向导程序”后，先不要着急打开虚拟机系统。单 击图1中的”自定义硬件”按钮，在弹出的如图2所示的界面中，把”网络适配器” 设备同样也设置为”仅主机模式”，移除其他不需要的硬件，然后单击 “确定”按钮。</strong></p>
+<p><img src="/media/e9049123e3bdf30234240c456d2a9ac0.png" alt="截图.png"></p>
+<p><img src="/media/64719effadabcdd083eeb3eb5c77fda4.png" alt="截图.png"></p>
+<p><strong>现在同时准备好了PXE + Kickstart无人值守安装系统与虚拟主机。生产环境 中，只需要将配置妥当的服务器上架，接通服务器和客户端主机之间的网线，然后启动 客户端主机即可。直到安装完毕时才需要运维人员进行简单的初始化 工作。</strong></p>
+<p><img src="/media/fe16c1015f1212482038dbe8ee41af81.png" alt="截图.png"></p>
+</div><div class="recommend-area"><div class="recommend-post"><span class="is-size-6 has-text-grey has-mr-7"># 相关文章</span><br><span>  1.<a class="is-size-6" href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" target="_blank">Linux的基本使用</a><br></span><span>  2.<a class="is-size-6" href="/2025/04/28/Linux%E8%BF%9B%E9%98%B6/" target="_blank">Linux进阶</a><br></span></div></div><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/css/share.min.css"><div class="social-share"></div><script src="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Linux的基本使用</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/04/28/Linux%E8%BF%9B%E9%98%B6/"><span class="level-item">Linux进阶</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><!--!--><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="罗宇"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">罗宇</p><p class="is-size-6 is-block">用开放的思维，解决封闭的问题</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>中国-四川-成都</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives/"><p class="title">6</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories/"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags/"><p class="title">6</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://luovip.github.io" target="_blank" rel="noopener">关注我</a></div></div></div><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo官网</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://mirrors.nju.edu.cn/" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">南京大学镜像站</span></span><span class="level-right"><span class="level-item tag">mirrors.nju.edu.cn</span></span></a></li><li><a class="level is-mobile" href="https://developer.aliyun.com/mirror/" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">阿里云镜像站</span></span><span class="level-right"><span class="level-item tag">developer.aliyun.com</span></span></a></li></ul></div></div></div><!--!--><div class="card widget"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><figure class="media-left"><a class="image" href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><img src="/img/Linux.png" alt="Linux的基本使用"></a></figure><div class="media-content"><p class="date"><time dateTime="2025-04-28T05:50:42.000Z">2025-04-28</time></p><p class="title"><a href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">Linux的基本使用</a></p><p class="categories"><a href="/categories/Linux/">Linux</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/"><img src="/img/Linux.png" alt="Linux的基础服务"></a></figure><div class="media-content"><p class="date"><time dateTime="2025-04-28T05:50:42.000Z">2025-04-28</time></p><p class="title"><a href="/2025/04/28/Linux%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/">Linux的基础服务</a></p><p class="categories"><a href="/categories/Linux/">Linux</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/2025/04/28/Linux%E8%BF%9B%E9%98%B6/"><img src="/img/Linux.png" alt="Linux进阶"></a></figure><div class="media-content"><p class="date"><time dateTime="2025-04-28T05:50:42.000Z">2025-04-28</time></p><p class="title"><a href="/2025/04/28/Linux%E8%BF%9B%E9%98%B6/">Linux进阶</a></p><p class="categories"><a href="/categories/Linux/">Linux</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/2025/04/27/cka-manual/"><img src="/img/cka-exam.jpg" alt="CKA认证课堂笔记"></a></figure><div class="media-content"><p class="date"><time dateTime="2025-04-27T05:50:42.000Z">2025-04-27</time></p><p class="title"><a href="/2025/04/27/cka-manual/">CKA认证课堂笔记</a></p><p class="categories"><a href="/categories/CKA%E8%AE%A4%E8%AF%81/">CKA认证</a></p></div></article><article class="media"><figure class="media-left"><a class="image" href="/2025/04/15/Ansible%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/"><img src="/img/ansible-cover.jpg" alt="Ansible的基本使用"></a></figure><div class="media-content"><p class="date"><time dateTime="2025-04-15T05:50:42.000Z">2025-04-15</time></p><p class="title"><a href="/2025/04/15/Ansible%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BF%90%E7%BB%B4/">Ansible的基本使用</a></p><p class="categories"><a href="/categories/Ansible/">Ansible</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">分类</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/Ansible/"><span class="level-start"><span class="level-item">Ansible</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/CKA%E8%AE%A4%E8%AF%81/"><span class="level-start"><span class="level-item">CKA认证</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Linux/"><span class="level-start"><span class="level-item">Linux</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/"><span class="level-start"><span class="level-item">容器技术</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2025/04/"><span class="level-start"><span class="level-item">四月 2025</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">标签</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Ansible/"><span class="tag">Ansible</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/K8S/"><span class="tag">K8S</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Linux%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/"><span class="tag">Linux的基本使用</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Linux%E7%9A%84%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1/"><span class="tag">Linux的基础服务</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Linux%E8%BF%9B%E9%98%B6/"><span class="tag">Linux进阶</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/podman%E5%AE%B9%E5%99%A8/"><span class="tag">podman容器</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><!--!--><div class="column-right-shadow is-hidden-widescreen"></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.png" alt="墨香笔记@技术博客" height="28"></a><p class="size-small"><span>&copy; 2025 罗宇</span>  Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a> &amp; <a href="https://github.com/removeif/hexo-theme-amazing" target="_blank">Amazing</a> <br><span>© <a href="http://www.beian.miit.gov.cn/" target="_blank">川ICP备88888888号</a><br></span><span>© 版权说明:本网站所有内容均自己创作,方便用于技术交流和日常总结!<br /></span><span><span id="statistic-times">loading...</span><script>function createTime(time) {
+            var n = new Date(time);
+            now.setTime(now.getTime() + 250),
+                days = (now - n) / 1e3 / 60 / 60 / 24,
+                dnum = Math.floor(days),
+                hours = (now - n) / 1e3 / 60 / 60 - 24 * dnum,
+                hnum = Math.floor(hours),
+            1 == String(hnum).length && (hnum = "0" + hnum),
+                minutes = (now - n) / 1e3 / 60 - 1440 * dnum - 60 * hnum,
+                mnum = Math.floor(minutes),
+            1 == String(mnum).length && (mnum = "0" + mnum),
+                seconds = (now - n) / 1e3 - 86400 * dnum - 3600 * hnum - 60 * mnum,
+                snum = Math.round(seconds),
+            1 == String(snum).length && (snum = "0" + snum),
+                document.getElementById("statistic-times").innerHTML = "❤️本站自 <strong>"+time.split(" ")[0].replace(/\//g,".")+"</strong> 已运行 <strong>" + dnum + "</strong> 天 <strong>" + hnum + "</strong> 小时 <strong>" + mnum + "</strong> 分 <strong>" + snum + "</strong> 秒！❤️";
+        }var now = new Date();setInterval("createTime('2025/04/17 00:00:00')", 250,"");</script><br></span><div class="size-small"><span>❤️感谢 <strong><span id="busuanzi_value_site_uv">99+</span></strong> 小伙伴的 <strong><span id="busuanzi_value_site_pv">99+</span></strong> 次光临！❤️</span></div></p></div><div class="level-end"></div></div></div></footer><script src="https://cdnjs.loli.net/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script><script src="https://cdnjs.loli.net/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" async></script><script>moment.locale("zh-cn");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdnjs.loli.net/ajax/libs/lightgallery/1.10.0/js/lightgallery.min.js" defer></script><script src="https://cdnjs.loli.net/ajax/libs/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script data-pjax src="/js/insight.js" defer></script><script data-pjax>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        function loadMathJax() { //加载mathjax
+            $.getScript("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML", function () {
+                MathJax.Hub.Config({ tex2jax: { inlineMath: [['$', '$'], ['\(', '\)']] } });
+                var math = document.getElementsByClassName("entry-content")[0];
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, math]);
+            });
+        };
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(false){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('undefined','undefined','undefined','undefined',undefined);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>
