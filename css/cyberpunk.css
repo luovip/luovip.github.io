@@ -2907,7 +2907,7 @@ a.navbar-item:hover,
 a.navbar-item.is-active,
 .navbar-link.is-active {
   background-color: transparent;
-  color: #000;
+  color: #9561d2;
 }
 .navbar-item {
   display: block;
@@ -3213,7 +3213,7 @@ a.navbar-item.is-active,
   }
   a.navbar-item.is-active,
   .navbar-link.is-active {
-    color: #000;
+    color: #9561d2;
   }
   a.navbar-item.is-active:not(:focus):not(:hover),
   .navbar-link.is-active:not(:focus):not(:hover) {
@@ -11030,7 +11030,7 @@ footer.footer .level-end .field {
   background: #02d7f2;
 }
 .post-navigation {
-  color: #cdcdcd;
+  color: #f00;
   flex-wrap: wrap;
   justify-content: space-around;
 }
@@ -11125,7 +11125,7 @@ footer.footer .level-end .field {
   flex-direction: row;
   line-height: 1.5em;
   font-weight: normal;
-  background-color: #00ff41;
+  background-color: #fff;
   min-height: 3rem;
 }
 .searchbox .searchbox-input-container {
@@ -11137,7 +11137,7 @@ footer.footer .level-end .field {
   color: inherit;
   box-sizing: border-box;
   padding: 0.75em 0 0.75em 1.25em;
-  background: #00ff41;
+  background: #fff;
 }
 .searchbox .searchbox-close {
   display: inline-block;
@@ -11225,7 +11225,7 @@ footer.footer .level-end .field {
   padding: 0.5em 0.8em;
   box-shadow: none, 0 0 1px rgba(0,0,0,0.1);
   border-radius: 0;
-  background-color: #00ff41;
+  background-color: #fff;
 }
 .searchbox .searchbox-pagination .searchbox-pagination-item.active .searchbox-pagination-link {
   color: rgba(0,0,0,0.7);
