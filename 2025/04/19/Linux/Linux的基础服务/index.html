@@ -1265,7 +1265,7 @@
 <p><img src="/media/70aafe12e82fdfd2afd04a0e00f11dfe.png" alt="截图.png"></p>
 <p>​           早期的Linux系统中，默认使用的发件服务由Sendmail服务程序提供，在RHEL 8系统中已替换为Postfix服务程序</p>
 <p>​           相较于Sendmail服务程序，Postfix服务程序减少了很多不必要的配置步骤，在稳定性、并发性方面也有很大改进</p>
-<p>​           信箱地址一般类似于<a href="mailto:&#x72;&#x6f;&#x6f;&#x74;&#64;&#x6c;&#105;&#110;&#x75;&#120;&#112;&#x72;&#x6f;&#x62;&#x65;&#46;&#x63;&#x6f;&#109;">root@linuxprobe.com</a>这样，也就是按照”用户名@主机 地址(域名)”格式来规范的</p>
+<p>​           信箱地址一般类似于<a href="mailto:&#114;&#111;&#111;&#x74;&#64;&#x6c;&#105;&#110;&#117;&#120;&#112;&#114;&#x6f;&#x62;&#101;&#x2e;&#x63;&#x6f;&#109;">root@linuxprobe.com</a>这样，也就是按照”用户名@主机 地址(域名)”格式来规范的</p>
 <p>​            要想更好地检验电子邮件系统的 配置效果，需要先部署bind服务程序，为电子邮件服务器和客户端提供DNS域名解析服务</p>
 <p>​           1.配置服务器主机名称(&#x2F;etc&#x2F;hostname)，保证服务器主机名称与发信域名保持一致</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@linuxprobe ~]# vim /etc/hostname</span><br><span class="line">mail.linuxprobe.com</span><br><span class="line">[root@linuxprobe ~]# hostname</span><br><span class="line">linuxprobe.com</span><br><span class="line">[root@linuxprobe ~]# hostnamectl set-hostname mail.linuxprobe.com</span><br><span class="line">[root@linuxprobe ~]# hostname</span><br><span class="line">mail.linuxprobe.com</span><br><span class="line"><span class="comment"># 修改主机名称文件后如果没有立即生效，可以重启服务器；或者再执行一条：</span></span><br><span class="line">hostnamectl set-hostname mail.linuxprobe.com命令，立即设置主机名称</span><br></pre></td></tr></table></figure>
@@ -1368,7 +1368,7 @@
 <p><img src="/media/bb62528e2e8f48ff7b08324763b5b110.png" alt="截图.png"></p>
 <p><strong>第3步:填写电子邮件账户信息，在下图所示的页面中，在“您的姓名”文本框中输 入您的名字（可以为自定义的任意名字），在“电子邮件地址”文本框中输入服务器系统内的 账户名和发件域，在“密码”文本框中输入该账户在服务器内的登录密码。填写完毕之后， 单击“下一步”按钮。</strong></p>
 <p><img src="/media/0f0265da2a9ef5255616fd59b7bf2a40.png" alt="截图.png"></p>
-<p><strong>第4步:进行电子邮件服务登录验证。由于当前没有可用的SSL加密服务，因此在Dovecot 服务程序的主配置文件中写入了一条参数，让用户可以使用明文登录到电子邮件服务。 Outlook软件默认会通过 SSL加密协议尝试登录电子邮件服务，所以在进行图1所示的“搜 索<a href="mailto:&#x6c;&#x75;&#x6f;&#121;&#x75;&#x40;&#108;&#x69;&#x6e;&#x75;&#120;&#x70;&#x72;&#111;&#x62;&#x65;&#46;&#x63;&#x6f;&#109;">luoyu@linuxprobe.com</a>服务器设置”大约30～60秒后，系统会出现登录失败的报错信息。 此时只需再次单击“下一步”按钮，即可让Outlook软件通过非加密的方式验证登录，如图2所示。最后验证成功的界面如图3所示，点击“完成”按钮:</strong></p>
+<p><strong>第4步:进行电子邮件服务登录验证。由于当前没有可用的SSL加密服务，因此在Dovecot 服务程序的主配置文件中写入了一条参数，让用户可以使用明文登录到电子邮件服务。 Outlook软件默认会通过 SSL加密协议尝试登录电子邮件服务，所以在进行图1所示的“搜 索<a href="mailto:&#x6c;&#117;&#111;&#x79;&#117;&#64;&#108;&#x69;&#x6e;&#x75;&#120;&#112;&#114;&#x6f;&#98;&#x65;&#46;&#99;&#111;&#109;">luoyu@linuxprobe.com</a>服务器设置”大约30～60秒后，系统会出现登录失败的报错信息。 此时只需再次单击“下一步”按钮，即可让Outlook软件通过非加密的方式验证登录，如图2所示。最后验证成功的界面如图3所示，点击“完成”按钮:</strong></p>
 <p><img src="/media/f1381cb46a7f17d753e203659d070272.png" alt="截图.png"></p>
 <p><img src="/media/d821fb0204300373f02628ef88bdfde6.png" alt="截图.png"></p>
 <p><img src="/media/59ea6f15e34cf24134bd246b17cffd5d.png" alt="截图.png"></p>
